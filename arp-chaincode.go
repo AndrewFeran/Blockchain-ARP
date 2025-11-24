@@ -3,6 +3,7 @@ package main
 import (
     "encoding/json"
     "fmt"
+    "time"
     "github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
@@ -16,6 +17,7 @@ type ARPEntry struct {
     MACAddress  string    `json:"macAddress"`
     Interface   string    `json:"interface"`
     Hostname    string    `json:"hostname"`
+    Timestamp   time.Time `json:"timestamp"`
     EntryType   string    `json:"entryType"`   // static, dynamic
     State       string    `json:"state"`       // reachable, stale, delay, probe, failed
     RecordedBy  string    `json:"recordedBy"`  // which system recorded this
@@ -37,12 +39,19 @@ type MACChangeResult struct {
 func (s *SmartContract) RecordARPEntry(ctx contractapi.TransactionContextInterface, 
     ipAddress string, macAddress string, iface string, hostname string, 
     entryType string, state string, recordedBy string) error {
+
+    // Get transaction timestamp (deterministic across all peers)
+    txTimestamp, err := ctx.GetStub().GetTxTimestamp()
+    if err != nil {
+        return fmt.Errorf("failed to get transaction timestamp: %v", err)
+    }
     
     entry := ARPEntry{
         IPAddress:  ipAddress,
         MACAddress: macAddress,
         Interface:  iface,
         Hostname:   hostname,
+        Timestamp:  time.Unix(txTimestamp.Seconds, int64(txTimestamp.Nanos)),
         EntryType:  entryType,
         State:      state,
         RecordedBy: recordedBy,
