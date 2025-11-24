@@ -1,4 +1,4 @@
-# Hyperledger Fabric ARP Tracker
+# Blockchain Backed Address Resolution Protocol
 
 A blockchain-based system for tracking and auditing Address Resolution Protocol (ARP) entries using Hyperledger Fabric. This chaincode provides an immutable ledger for recording ARP table entries, detecting MAC address changes, and maintaining complete history for network security and compliance purposes.
 
@@ -11,6 +11,22 @@ A blockchain-based system for tracking and auditing Address Resolution Protocol 
 - **Immutable Audit Trail**: Blockchain-backed records that cannot be tampered with
 - **Multi-Organization Support**: Built on Hyperledger Fabric's permissioned blockchain model
 
+## 🔐 Security Considerations
+
+- **Permissioned Network**: Only authorized organizations can participate
+- **TLS Enabled**: All communications are encrypted
+- **Access Control**: Based on Fabric's MSP (Membership Service Provider)
+- **Immutable Ledger**: Once recorded, ARP entries cannot be modified (only new entries added)
+- **Audit Trail**: Complete history maintained for compliance
+
+## 📚 Use Cases
+
+1. **Network Security Monitoring**: Detect ARP spoofing attacks by tracking MAC address changes
+2. **Compliance & Auditing**: Maintain immutable records of network topology changes
+3. **Troubleshooting**: Historical ARP data helps diagnose network issues
+4. **Multi-Site Networks**: Share ARP information across multiple locations securely
+5. **IoT Networks**: Track device connectivity and detect unauthorized devices
+
 ## 📋 Table of Contents
 
 - [Prerequisites](#prerequisites)
@@ -21,7 +37,6 @@ A blockchain-based system for tracking and auditing Address Resolution Protocol 
 - [Usage Examples](#usage-examples)
 - [Troubleshooting](#troubleshooting)
 - [Architecture](#architecture)
-- [Contributing](#contributing)
 
 ## 🔧 Prerequisites
 
@@ -138,14 +153,9 @@ echo "✅ ARP Tracker is up and running!"
 
 ```
 hyperledger-fabric-arp-tracker/
-├── README.md                           # This file
-├── arp-chaincode/                      # Chaincode source code
-│   ├── arp-chaincode.go               # Main chaincode implementation
-│   ├── go.mod                         # Go module file
-│   ├── go.sum                         # Go dependencies
-│   └── Dockerfile                     # Chaincode container image
-└── fabric-samples/                     # Hyperledger Fabric test network
-    └── test-network/                   # Test network scripts
+├── README.md                      # This file
+├── arp-chaincode.go               # Main chaincode implementation
+└── Dockerfile                     # Chaincode container image
 ```
 
 ## 🔌 Chaincode Functions
@@ -371,29 +381,29 @@ docker network inspect fabric_test
 ### Network Topology
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Hyperledger Fabric Network               │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  ┌──────────────┐         ┌──────────────┐                  │
-│  │   Orderer    │         │   Channel    │                  │
-│  │              │◄────────┤  "mychannel" │                  │
-│  └──────────────┘         └──────────────┘                  │
-│         │                         │                         │
-│         ├─────────────────────────┼──────────────────┐      │
-│         │                         │                  │      │
-│  ┌──────▼────────┐         ┌──────▼────────┐         │      │
-│  │   Org1 Peer   │         │   Org2 Peer   │         │      │
-│  │ peer0.org1    │         │ peer0.org2    │         │      │
-│  └───────┬───────┘         └───────┬───────┘         │      │
-│          │                         │                 │      │
-│  ┌───────▼────────┐        ┌───────▼────────┐        │      │
-│  │   Chaincode    │        │   Chaincode    │        │      │
-│  │  arptracker    │        │  arptracker    │        │      │
-│  │  (Container)   │        │  (Container)   │        │      │
-│  └────────────────┘        └────────────────┘        │      │
-│                                                      │      │
-└──────────────────────────────────────────────────────┘      
+┌───────────────────────────────────────────────────┐
+│          Hyperledger Fabric Network               │
+├───────────────────────────────────────────────────┤
+│                                                   │
+│  ┌──────────────┐         ┌──────────────┐        │
+│  │   Orderer    │         │   Channel    │        │
+│  │              │◄────────┤  "mychannel" │        │
+│  └──────────────┘         └──────────────┘        │
+│         │                         │               │
+│         │                         │               │
+│         │                         │               │
+│  ┌──────▼────────┐         ┌──────▼────────┐      │
+│  │   Org1 Peer   │         │   Org2 Peer   │      │
+│  │ peer0.org1    │         │ peer0.org2    │      │
+│  └───────┬───────┘         └───────┬───────┘      │
+│          │                         │              │
+│  ┌───────▼────────┐        ┌───────▼────────┐     │
+│  │   Chaincode    │        │   Chaincode    │     │
+│  │  arptracker    │        │  arptracker    │     │
+│  │  (Container)   │        │  (Container)   │     │
+│  └────────────────┘        └────────────────┘     │
+│                                                   │
+└───────────────────────────────────────────────────┘
 ```
 
 ### Chaincode Deployment (CCAAS)
@@ -480,19 +490,3 @@ docker rm -f peer0org1_arptracker_ccaas peer0org2_arptracker_ccaas
 # Remove Docker volumes (complete cleanup)
 docker volume prune -f
 ```
-
-## 🔐 Security Considerations
-
-- **Permissioned Network**: Only authorized organizations can participate
-- **TLS Enabled**: All communications are encrypted
-- **Access Control**: Based on Fabric's MSP (Membership Service Provider)
-- **Immutable Ledger**: Once recorded, ARP entries cannot be modified (only new entries added)
-- **Audit Trail**: Complete history maintained for compliance
-
-## 📚 Use Cases
-
-1. **Network Security Monitoring**: Detect ARP spoofing attacks by tracking MAC address changes
-2. **Compliance & Auditing**: Maintain immutable records of network topology changes
-3. **Troubleshooting**: Historical ARP data helps diagnose network issues
-4. **Multi-Site Networks**: Share ARP information across multiple locations securely
-5. **IoT Networks**: Track device connectivity and detect unauthorized devices
