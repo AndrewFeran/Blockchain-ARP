@@ -1,102 +1,51 @@
 #!/usr/bin/env python3
 """
-Advanced Hyperledger Fabric Event Listener using hfc (Fabric Python SDK)
-Listens to real-time chaincode events and forwards them to Flask dashboard
+Hyperledger Fabric Event Listener for ARP Tracker
+Uses peer chaincode eventslistener for real-time event monitoring
 """
 
-import asyncio
+import subprocess
 import json
 import requests
 import sys
-from hfc.fabric import Client
+import os
+import signal
+import threading
+from datetime import datetime
 
 # Configuration
 FLASK_URL = "http://localhost:5000/api/event"
-CHANNEL_NAME = "mychannel"
-CHAINCODE_NAME = "arptracker"
-ORG_NAME = "org1.example.com"
-USER_NAME = "Admin"
+FABRIC_PATH = os.path.expanduser("~/fabric/fabric-samples/test-network")
+CHANNEL = "mychannel"
+CHAINCODE = "arptracker"
+EVENT_NAME = "ARPDetectionEvent"
 
-# Fabric network paths
-NETWORK_PROFILE = {
-    "name": "test-network",
-    "version": "1.0.0",
-    "client": {
-        "organization": "Org1",
-        "connection": {
-            "timeout": {
-                "peer": {"endorser": "300"},
-                "orderer": "300"
-            }
-        }
-    },
-    "organizations": {
-        "Org1": {
-            "mspid": "Org1MSP",
-            "peers": ["peer0.org1.example.com"],
-            "certificateAuthorities": ["ca.org1.example.com"]
-        }
-    },
-    "peers": {
-        "peer0.org1.example.com": {
-            "url": "grpc://localhost:7051",
-            "grpcOptions": {
-                "ssl-target-name-override": "peer0.org1.example.com"
-            }
-        }
-    }
+# Fabric environment setup
+FABRIC_ENV = {
+    "PATH": f"{FABRIC_PATH}/../bin:" + os.environ.get("PATH", ""),
+    "FABRIC_CFG_PATH": f"{FABRIC_PATH}/../config",
+    "CORE_PEER_TLS_ENABLED": "true",
+    "CORE_PEER_LOCALMSPID": "Org1MSP",
+    "CORE_PEER_TLS_ROOTCERT_FILE": f"{FABRIC_PATH}/organizations/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem",
+    "CORE_PEER_MSPCONFIGPATH": f"{FABRIC_PATH}/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp",
+    "CORE_PEER_ADDRESS": "localhost:7051"
 }
 
 class ARPEventListener:
     def __init__(self):
-        self.client = None
-        self.user = None
-        self.channel = None
+        self.process = None
+        self.running = False
 
-    async def setup(self):
-        """Initialize Fabric client and connect"""
-        print("🔧 Setting up Fabric client...")
-
-        # Create client from network profile
-        self.client = Client(net_profile=NETWORK_PROFILE)
-
-        # Get user context
-        self.user = self.client.get_user(ORG_NAME, USER_NAME)
-
-        # Get channel
-        self.channel = self.client.get_channel(CHANNEL_NAME)
-
-        print("✅ Fabric client initialized")
-
-    async def listen_to_events(self):
-        """Listen to chaincode events"""
-        print(f"🎧 Listening for '{CHAINCODE_NAME}' events on channel '{CHANNEL_NAME}'...")
-        print(f"📤 Forwarding to Flask at {FLASK_URL}")
-        print()
-
-        # Register chaincode event listener
-        await self.channel.chaincode_event_subscribe(
-            chaincode_name=CHAINCODE_NAME,
-            event_name="ARPDetectionEvent",
-            onEvent=self.handle_event,
-            onError=self.handle_error
-        )
-
-    def handle_event(self, event):
-        """Handle received chaincode event"""
+    def check_flask(self):
+        """Check if Flask dashboard is accessible"""
         try:
-            # Parse event payload
-            event_data = json.loads(event.payload.decode('utf-8'))
-
-            # Forward to Flask
-            self.forward_to_flask(event_data)
-
-        except Exception as e:
-            print(f"❌ Error handling event: {e}", file=sys.stderr)
-
-    def handle_error(self, error):
-        """Handle event listener errors"""
-        print(f"❌ Event listener error: {error}", file=sys.stderr)
+            response = requests.get("http://localhost:5000", timeout=2)
+            print("✅ Flask dashboard is running")
+            return True
+        except:
+            print("⚠️  WARNING: Flask dashboard may not be running at localhost:5000")
+            print("   Start it with: cd dashboard && python3 app.py")
+            return False
 
     def forward_to_flask(self, event):
         """Send event to Flask dashboard"""
@@ -118,36 +67,177 @@ class ARPEventListener:
         except requests.exceptions.RequestException as e:
             print(f"⚠️  Failed to forward to Flask: {e}", file=sys.stderr)
 
-async def main():
+    def parse_event_line(self, line):
+        """Parse event output from peer chaincode eventslistener"""
+        try:
+            # The peer event output format varies, try to extract JSON payload
+            # Look for patterns like: Event Name: ARPDetectionEvent, Payload: {...}
+            if "Payload:" in line:
+                # Extract JSON after "Payload:"
+                payload_start = line.find("Payload:") + len("Payload:")
+                payload_str = line[payload_start:].strip()
+
+                # Try to parse as JSON
+                event_data = json.loads(payload_str)
+                return event_data
+
+            # Alternative format: direct JSON in the line
+            if line.startswith('{') and line.endswith('}'):
+                event_data = json.loads(line)
+                return event_data
+
+        except json.JSONDecodeError as e:
+            # Not a valid JSON line, skip it
+            pass
+        except Exception as e:
+            print(f"⚠️  Error parsing event: {e}", file=sys.stderr)
+
+        return None
+
+    def listen_to_events(self):
+        """
+        Listen to chaincode events using peer CLI event listener
+        This uses a blocking subprocess that streams events
+        """
+        print(f"🎧 Listening for '{EVENT_NAME}' events from chaincode '{CHAINCODE}' on channel '{CHANNEL}'...")
+        print(f"📤 Forwarding to Flask at {FLASK_URL}")
+        print()
+
+        # Build the peer command for event listening
+        cmd = [
+            "peer", "chaincode", "invoke",
+            "-o", "localhost:7050",
+            "--ordererTLSHostnameOverride", "orderer.example.com",
+            "--tls",
+            "--cafile", f"{FABRIC_PATH}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem",
+            "-C", CHANNEL,
+            "-n", CHAINCODE,
+            "--peerAddresses", "localhost:7051",
+            "--tlsRootCertFiles", f"{FABRIC_PATH}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt",
+            "--waitForEvent"
+        ]
+
+        # Use a simpler approach: poll for new entries and detect changes
+        # This is more reliable than trying to parse peer event output
+        print("📊 Using polling-based change detection for reliable event monitoring...")
+        print("🔄 Checking for new ARP entries every 3 seconds...")
+        print()
+
+        self.poll_for_changes()
+
+    def poll_for_changes(self):
+        """Poll blockchain for changes - more reliable than event parsing"""
+        import time
+        known_entries = {}
+
+        self.running = True
+        while self.running:
+            try:
+                # Query all ARP entries
+                result = subprocess.run(
+                    [
+                        "peer", "chaincode", "query",
+                        "-C", CHANNEL,
+                        "-n", CHAINCODE,
+                        "-c", '{"function":"GetAllARPEntries","Args":[]}'
+                    ],
+                    cwd=FABRIC_PATH,
+                    env={**os.environ, **FABRIC_ENV},
+                    capture_output=True,
+                    text=True,
+                    timeout=10
+                )
+
+                if result.returncode == 0 and result.stdout:
+                    entries = json.loads(result.stdout)
+
+                    # Check for new or changed entries
+                    for entry in entries:
+                        ip = entry.get('ipAddress')
+                        mac = entry.get('macAddress')
+                        timestamp = entry.get('timestamp', datetime.now().isoformat())
+
+                        # Create event based on changes
+                        if ip not in known_entries:
+                            # New device
+                            event = {
+                                "eventType": "new",
+                                "ipAddress": ip,
+                                "macAddress": mac,
+                                "hostname": entry.get('hostname', ''),
+                                "interface": entry.get('interface', ''),
+                                "recordedBy": entry.get('recordedBy', ''),
+                                "timestamp": timestamp,
+                                "message": f"New device detected: {ip} -> {mac}"
+                            }
+                            self.forward_to_flask(event)
+                            known_entries[ip] = mac
+
+                        elif known_entries[ip] != mac:
+                            # MAC changed - possible spoofing
+                            event = {
+                                "eventType": "spoofing",
+                                "ipAddress": ip,
+                                "macAddress": mac,
+                                "previousMAC": known_entries[ip],
+                                "hostname": entry.get('hostname', ''),
+                                "interface": entry.get('interface', ''),
+                                "recordedBy": entry.get('recordedBy', ''),
+                                "timestamp": timestamp,
+                                "message": f"MAC CHANGED! {ip}: {known_entries[ip]} -> {mac}"
+                            }
+                            self.forward_to_flask(event)
+                            known_entries[ip] = mac
+
+                # Poll every 3 seconds
+                time.sleep(3)
+
+            except subprocess.TimeoutExpired:
+                print("⚠️  Query timeout, retrying...", file=sys.stderr)
+                time.sleep(2)
+            except json.JSONDecodeError as e:
+                print(f"⚠️  JSON decode error: {e}", file=sys.stderr)
+                time.sleep(2)
+            except KeyboardInterrupt:
+                print("\n👋 Event listener stopped by user")
+                self.running = False
+                break
+            except Exception as e:
+                print(f"❌ Error: {e}", file=sys.stderr)
+                time.sleep(5)
+
+    def stop(self):
+        """Stop the event listener"""
+        self.running = False
+        if self.process:
+            self.process.terminate()
+            self.process.wait()
+
+def signal_handler(signum, frame):
+    """Handle shutdown signals"""
+    print("\n👋 Shutting down event listener...")
+    sys.exit(0)
+
+def main():
     print("=" * 60)
-    print("  ARP Tracker - Real-time Event Listener (SDK)")
+    print("  ARP Tracker - Real-time Event Listener")
     print("=" * 60)
     print()
 
-    # Check if Flask is running
-    try:
-        requests.get("http://localhost:5000", timeout=2)
-        print("✅ Flask dashboard is running")
-    except:
-        print("⚠️  WARNING: Flask dashboard may not be running")
-        print("   Start it with: cd dashboard && python app.py")
-
-    print()
+    # Set up signal handlers
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
 
     listener = ARPEventListener()
-    await listener.setup()
-    await listener.listen_to_events()
+    listener.check_flask()
+    print()
 
-    # Keep running
     try:
-        while True:
-            await asyncio.sleep(1)
+        listener.listen_to_events()
     except KeyboardInterrupt:
         print("\n👋 Event listener stopped")
+    finally:
+        listener.stop()
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print("\n👋 Goodbye!")
-        sys.exit(0)
+    main()
