@@ -2,7 +2,11 @@ module arp-chaincode
 
 go 1.21.12
 
-require github.com/hyperledger/fabric-contract-api-go v1.2.2
+require (
+	github.com/hyperledger/fabric-contract-api-go v1.2.2
+	github.com/hyperledger/fabric-gateway v1.4.0
+	google.golang.org/grpc v1.59.0
+)
 
 require (
 	github.com/go-openapi/jsonpointer v0.20.0 // indirect

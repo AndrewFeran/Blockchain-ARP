@@ -92,12 +92,16 @@ After blockchain is running:
 cd ~/fabric/arp-chaincode/dashboard
 python3 app.py
 
-# Terminal 2: Event Listener
+# Terminal 2: Build and run REAL event listener (Go)
 cd ~/fabric/arp-chaincode
-python3 event-listener-sdk.py
+chmod +x build-listener.sh
+./build-listener.sh
+./event-listener
 
 # Access at: http://localhost:5000
 ```
+
+**Note:** The event listener is now written in Go and uses the official Fabric Gateway SDK to subscribe to real blockchain events in real-time (not polling!).
 
 ---
 
