@@ -99,10 +99,3 @@ chmod +x build-listener.sh
 ./event-listener
 
 # Access at: http://localhost:5000
-```
-
-**Note:** The event listener is now written in Go and uses the official Fabric Gateway SDK to subscribe to real blockchain events in real-time (not polling!).
-
----
-
-Enjoy your automated ARP detection system! 🎉
