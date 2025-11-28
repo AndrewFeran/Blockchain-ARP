@@ -1,10 +1,8 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"time"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
@@ -50,18 +48,20 @@ type DetectionEvent struct {
 	Message     string    `json:"message"`
 }
 
-// notifyDashboard sends detection events to Flask dashboard
-func notifyDashboard(event DetectionEvent) {
-	dashboardURL := "http://localhost:5000/api/event"
-
-	jsonData, err := json.Marshal(event)
+// emitEvent sends a chaincode event that can be listened to by external services
+func emitEvent(ctx contractapi.TransactionContextInterface, event DetectionEvent) error {
+	eventJSON, err := json.Marshal(event)
 	if err != nil {
-		return // Silently fail, don't break chaincode
+		return fmt.Errorf("failed to marshal event: %v", err)
 	}
 
-	go func() {
-		_, _ = http.Post(dashboardURL, "application/json", bytes.NewBuffer(jsonData))
-	}()
+	// Emit the event - this is deterministic and proper Fabric way
+	err = ctx.GetStub().SetEvent("ARPDetectionEvent", eventJSON)
+	if err != nil {
+		return fmt.Errorf("failed to set event: %v", err)
+	}
+
+	return nil
 }
 
 // RecordARPEntry adds a new ARP entry to the ledger
@@ -109,8 +109,11 @@ func (s *SmartContract) RecordARPEntry(ctx contractapi.TransactionContextInterfa
 		}
 	}
 
-	// Send notification to dashboard
-	notifyDashboard(event)
+	// Emit chaincode event for external listeners
+	err = emitEvent(ctx, event)
+	if err != nil {
+		return fmt.Errorf("failed to emit event: %v", err)
+	}
 
 	// Store the current entry
 	entry := ARPEntry{
