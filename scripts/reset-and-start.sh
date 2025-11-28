@@ -30,7 +30,7 @@ echo ""
 
 # Step 3: Build chaincode image
 echo "📦 Step 3/5: Building chaincode Docker image..."
-cd ~/fabric/arp-chaincode
+cd ~/fabric/arp-chaincode/chaincode
 go mod vendor
 docker build -t arptracker_ccaas_image:latest .
 if [ $? -ne 0 ]; then
@@ -43,7 +43,7 @@ echo ""
 # Step 4: Deploy chaincode as external service
 echo "🔗 Step 4/5: Deploying chaincode to network..."
 cd ~/fabric/fabric-samples/test-network
-./network.sh deployCCAAS -ccn arptracker -ccp ~/fabric/arp-chaincode
+./network.sh deployCCAAS -ccn arptracker -ccp ~/fabric/arp-chaincode/chaincode
 if [ $? -ne 0 ]; then
     echo "❌ Failed to deploy chaincode!"
     exit 1
@@ -85,6 +85,7 @@ echo "peer chaincode query -C mychannel -n arptracker -c '{\"function\":\"GetAll
 echo ""
 echo "📊 Next Steps:"
 echo "  1. Start Flask dashboard: cd ~/fabric/arp-chaincode/dashboard && python3 app.py"
-echo "  2. Start event listener: cd ~/fabric/arp-chaincode && python3 event-listener-sdk.py"
-echo "  3. Access dashboard: http://localhost:5000"
+echo "  2. Build event listener: cd ~/fabric/arp-chaincode/event-listener && ./build-listener.sh"
+echo "  3. Run event listener: cd ~/fabric/arp-chaincode/event-listener && ./event-listener"
+echo "  4. Access dashboard: http://localhost:5000"
 echo ""
