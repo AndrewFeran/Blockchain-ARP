@@ -36,12 +36,20 @@ echo "⏹️  Stopping Fabric network..."
 cd ~/fabric/fabric-samples/test-network
 ./network.sh down
 
-# Remove ALL Fabric containers
+# Stop and remove ALL Docker containers (including orphans)
 echo "🧹 Removing all Fabric containers..."
+# First stop all containers
+docker stop $(docker ps -aq) 2>/dev/null
+
+# Remove by name filter
 docker rm -f $(docker ps -aq --filter "name=peer") 2>/dev/null
 docker rm -f $(docker ps -aq --filter "name=orderer") 2>/dev/null
 docker rm -f $(docker ps -aq --filter "name=arptracker") 2>/dev/null
 docker rm -f $(docker ps -aq --filter "name=ca_") 2>/dev/null
+docker rm -f $(docker ps -aq --filter "name=fabric") 2>/dev/null
+
+# Remove orphan containers from the fabric_test network
+docker ps -a --filter "network=fabric_test" -q | xargs docker rm -f 2>/dev/null
 
 # Clean up crypto material and channel artifacts
 echo "🧹 Removing crypto material and channel artifacts..."
