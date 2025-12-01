@@ -60,6 +60,9 @@ echo "🧹 Cleaning up Docker volumes and networks..."
 docker volume prune -f
 docker network prune -f
 
+# Return to project directory
+cd ~/fabric/arp-chaincode
+
 echo ""
 echo "✅ Cleanup complete!"
 echo ""

@@ -29,6 +29,9 @@ echo ""
 # Run the comprehensive cleanup script
 bash scripts/cleanup-demo.sh
 
+# Return to project directory after cleanup
+cd ~/fabric/arp-chaincode || { echo "❌ Project directory not found"; exit 1; }
+
 echo "✅ Previous setup cleaned up"
 echo ""
 
