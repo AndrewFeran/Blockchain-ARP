@@ -31,16 +31,23 @@ docker network disconnect arp-test-lan peer0.org2.example.com 2>/dev/null
 docker network disconnect arp-test-lan peer0.org3.example.com 2>/dev/null
 docker network rm arp-test-lan 2>/dev/null
 
-# Stop Fabric network
+# Stop Fabric network with proper cleanup
 echo "⏹️  Stopping Fabric network..."
 cd ~/fabric/fabric-samples/test-network
-./network.sh down
 
-# Stop and remove ALL Docker containers (including orphans)
+# Use docker-compose directly with --remove-orphans flag
+docker-compose -f compose/compose-test-net.yaml -f compose/docker/docker-compose-test-net.yaml down --remove-orphans 2>/dev/null
+docker-compose -f compose/compose-ca.yaml down --remove-orphans 2>/dev/null
+
+# Also run the standard network.sh down
+./network.sh down 2>/dev/null
+
+# Remove any remaining Fabric containers
 echo "🧹 Removing all Fabric containers..."
-
-# Remove ALL containers (both running and stopped)
-docker rm -f $(docker ps -aq) 2>/dev/null
+docker rm -f $(docker ps -aq --filter "name=peer") 2>/dev/null
+docker rm -f $(docker ps -aq --filter "name=orderer") 2>/dev/null
+docker rm -f $(docker ps -aq --filter "name=ca_") 2>/dev/null
+docker rm -f $(docker ps -aq --filter "name=arptracker") 2>/dev/null
 
 # Clean up crypto material and channel artifacts
 echo "🧹 Removing crypto material and channel artifacts..."
