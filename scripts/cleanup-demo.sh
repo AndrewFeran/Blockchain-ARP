@@ -69,6 +69,12 @@ sudo rm -rf organizations/peerOrganizations/org2.example.com/peers/peer0.org2.ex
 
 # Clean up volumes and networks
 echo "🧹 Cleaning up Docker volumes and networks..."
+# Remove specific Fabric volumes that contain channel state
+docker volume rm compose_orderer.example.com 2>/dev/null
+docker volume rm compose_peer0.org1.example.com 2>/dev/null
+docker volume rm compose_peer0.org2.example.com 2>/dev/null
+docker volume rm compose_peer0.org3.example.com 2>/dev/null
+# Prune any remaining volumes
 docker volume prune -f
 docker network prune -f
 
