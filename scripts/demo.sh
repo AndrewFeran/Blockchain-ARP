@@ -7,17 +7,40 @@ echo "  🎓 Blockchain-ARP Demo - Classroom Presentation"
 echo "============================================================"
 echo ""
 echo "This demo will:"
-echo "  1. Set up a 3-organization Hyperledger Fabric network"
-echo "  2. Create a simulated LAN for ARP traffic"
-echo "  3. Start monitoring agents for each organization"
-echo "  4. Generate legitimate network traffic"
-echo "  5. Enable malicious mode on Org3 (on command)"
+echo "  1. Clean up any existing setup"
+echo "  2. Set up a 3-organization Hyperledger Fabric network"
+echo "  3. Create a simulated LAN for ARP traffic"
+echo "  4. Start monitoring agents for each organization"
+echo "  5. Generate legitimate network traffic"
+echo "  6. Enable malicious mode on Org3 (on command)"
 echo ""
 read -p "Press Enter to start the demo..."
 echo ""
 
 # Change to project directory
 cd ~/fabric/arp-chaincode || { echo "❌ Project directory not found"; exit 1; }
+
+# Step 0: Clean up any existing setup
+echo "============================================================"
+echo "📋 Step 0/6: Cleaning up any existing setup"
+echo "============================================================"
+echo ""
+
+# Stop any running containers
+docker-compose -f docker-compose-monitors.yaml down 2>/dev/null
+docker rm -f monitor-org1 monitor-org2 monitor-org3 2>/dev/null
+docker rm -f traffic-org1 traffic-org2 traffic-org3 2>/dev/null
+docker rm -f arp-attacker 2>/dev/null
+
+# Kill any running processes
+pkill -f "event-listener.go" 2>/dev/null
+pkill -f "dashboard/app.py" 2>/dev/null
+
+# Remove old network
+docker network rm arp-test-lan 2>/dev/null
+
+echo "✅ Previous setup cleaned up"
+echo ""
 
 # Step 1: Setup 3-org network
 echo "============================================================"

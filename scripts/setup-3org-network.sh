@@ -10,6 +10,14 @@ echo ""
 # Navigate to test-network directory
 cd ~/fabric/fabric-samples/test-network || { echo "❌ test-network directory not found"; exit 1; }
 
+# Step 0: Clean up any existing network
+echo "🧹 Step 0/5: Cleaning up existing network..."
+./network.sh down
+docker rm -f $(docker ps -aq --filter "name=org3") 2>/dev/null
+docker volume prune -f
+echo "✅ Cleanup complete"
+echo ""
+
 # Step 1: Start base network with Org1 and Org2
 echo "🚀 Step 1/5: Starting base Fabric network (Org1 + Org2)..."
 ./network.sh up createChannel -ca -c mychannel

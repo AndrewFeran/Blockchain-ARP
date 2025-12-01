@@ -347,42 +347,55 @@ Check if MAC changed for an IP
 
 ## 🛠️ Troubleshooting
 
-### Network Issues
+### Quick Fixes
 
+**"Cannot join channel - already exists"**
 ```bash
-# Check what's running
-docker ps
-
-# View logs
-docker logs peer0org1_arptracker_ccaas
-docker logs peer0.org1.example.com
-
-# Restart everything
 cd ~/fabric/arp-chaincode/scripts
-./stop-all.sh
-./reset-and-start.sh
+./cleanup-demo.sh
+./demo.sh
 ```
 
-### Event Listener Not Receiving Events
-
-1. Check chaincode is running: `docker ps | grep arptracker`
-2. Verify Flask is running: `curl http://localhost:5000`
-3. Check listener logs for connection errors
-4. Ensure you're in correct directory when invoking chaincode
-
-### Dashboard Not Loading
-
+**Monitoring agents not working:**
 ```bash
-# Check Flask process
-ps aux | grep app.py
+# Check logs
+docker logs monitor-org1
+docker logs monitor-org2
+docker logs monitor-org3
 
-# Test Flask API
-curl http://localhost:5000/api/stats
-
-# Restart Flask
-cd ~/fabric/arp-chaincode/dashboard
-python3 app.py
+# Restart
+docker-compose -f docker-compose-monitors.yaml restart
 ```
+
+**Dashboard not showing data:**
+```bash
+# Check event listener
+tail -f /tmp/event-listener.log
+
+# Check dashboard
+tail -f /tmp/dashboard.log
+
+# Restart services
+pkill -f event-listener
+pkill -f app.py
+# Then re-run demo.sh
+```
+
+**Complete Reset:**
+```bash
+./cleanup-demo.sh
+./demo.sh
+```
+
+### Detailed Troubleshooting
+
+For comprehensive troubleshooting, see **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** which covers:
+- Common errors and solutions
+- Port conflicts
+- Docker issues
+- Network problems
+- Complete reset procedures
+- Diagnostic commands
 
 ---
 
