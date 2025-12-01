@@ -10,16 +10,8 @@ echo ""
 # Navigate to test-network directory
 cd ~/fabric/fabric-samples/test-network || { echo "❌ test-network directory not found"; exit 1; }
 
-# Step 0: Clean up any existing network
-echo "🧹 Step 0/5: Cleaning up existing network..."
-./network.sh down
-docker rm -f $(docker ps -aq --filter "name=org3") 2>/dev/null
-docker volume prune -f
-echo "✅ Cleanup complete"
-echo ""
-
 # Step 1: Start base network with Org1 and Org2
-echo "🚀 Step 1/5: Starting base Fabric network (Org1 + Org2)..."
+echo "🚀 Step 1/4: Starting base Fabric network (Org1 + Org2)..."
 ./network.sh up createChannel -ca -c mychannel
 if [ $? -ne 0 ]; then
     echo "❌ Failed to start base network!"
@@ -29,7 +21,7 @@ echo "✅ Base network started"
 echo ""
 
 # Step 2: Add Org3 to the network
-echo "🔗 Step 2/5: Adding Org3 to the network..."
+echo "🔗 Step 2/4: Adding Org3 to the network..."
 cd addOrg3
 ./addOrg3.sh up -c mychannel
 if [ $? -ne 0 ]; then
@@ -41,7 +33,7 @@ echo "✅ Org3 added successfully"
 echo ""
 
 # Step 3: Deploy chaincode to all 3 organizations
-echo "📦 Step 3/5: Building chaincode Docker image..."
+echo "📦 Step 3/4: Building chaincode Docker image..."
 cd ~/fabric/arp-chaincode/chaincode || { echo "❌ chaincode directory not found"; exit 1; }
 go mod vendor
 docker build -t arptracker_ccaas_image:latest .
@@ -52,7 +44,7 @@ fi
 echo "✅ Chaincode built"
 echo ""
 
-echo "🔗 Step 4/5: Deploying chaincode to all 3 organizations..."
+echo "🔗 Step 4/4: Deploying chaincode to all 3 organizations..."
 cd ~/fabric/fabric-samples/test-network
 ./network.sh deployCCAAS -ccn arptracker -ccp ~/fabric/arp-chaincode/chaincode
 if [ $? -ne 0 ]; then
@@ -62,8 +54,8 @@ fi
 echo "✅ Chaincode deployed to Org1 and Org2"
 echo ""
 
-# Step 5: Install and approve chaincode for Org3
-echo "🔗 Step 5/5: Installing chaincode on Org3..."
+# Install and approve chaincode for Org3
+echo "🔗 Installing chaincode on Org3..."
 
 # Set environment for Org3
 export PATH=${PWD}/../bin:$PATH

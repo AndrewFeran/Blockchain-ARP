@@ -26,18 +26,8 @@ echo "📋 Step 0/6: Cleaning up any existing setup"
 echo "============================================================"
 echo ""
 
-# Stop any running containers
-docker-compose -f docker-compose-monitors.yaml down 2>/dev/null
-docker rm -f monitor-org1 monitor-org2 monitor-org3 2>/dev/null
-docker rm -f traffic-org1 traffic-org2 traffic-org3 2>/dev/null
-docker rm -f arp-attacker 2>/dev/null
-
-# Kill any running processes
-pkill -f "event-listener.go" 2>/dev/null
-pkill -f "dashboard/app.py" 2>/dev/null
-
-# Remove old network
-docker network rm arp-test-lan 2>/dev/null
+# Run the comprehensive cleanup script
+bash scripts/cleanup-demo.sh
 
 echo "✅ Previous setup cleaned up"
 echo ""
