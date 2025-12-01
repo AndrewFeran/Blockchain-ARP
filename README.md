@@ -26,18 +26,40 @@ Blockchain-ARP/
 ├── dashboard/              # Web dashboard (Flask)
 │   ├── app.py
 │   ├── requirements.txt
-│   └── templates/
-│       └── index.html
+│   ├── templates/
+│   │   └── index.html
+│   └── static/
+│       ├── css/style.css
+│       └── js/app.js
 │
 ├── event-listener/         # Event listener (Go)
 │   ├── event-listener.go
 │   ├── build-listener.sh
 │   └── go.mod
 │
-└── scripts/                # Automation scripts
-    ├── reset-and-start.sh
-    ├── stop-all.sh
-    └── README.md
+├── arp-monitor/            # ARP monitoring agents (Python)
+│   ├── monitor.py          # Honest monitoring agent
+│   ├── monitor-malicious.py # Byzantine/malicious agent
+│   ├── Dockerfile
+│   └── requirements.txt
+│
+├── traffic-generator/      # Network traffic generator (Python)
+│   ├── generator.py
+│   └── Dockerfile
+│
+├── attacker/               # ARP spoofing simulator (Python)
+│   ├── arp-spoof.py
+│   └── Dockerfile
+│
+├── scripts/                # Automation scripts
+│   ├── reset-and-start.sh
+│   ├── setup-3org-network.sh
+│   ├── create-arp-network.sh
+│   ├── demo.sh
+│   ├── cleanup-demo.sh
+│   └── stop-all.sh
+│
+└── docker-compose-monitors.yaml  # Multi-org deployment
 ```
 
 ---
@@ -137,7 +159,106 @@ chmod +x build-listener.sh
 
 ---
 
-## 🧪 Testing the System
+## 🎓 Multi-Organization Demo (Recommended for Presentations)
+
+### What This Demonstrates
+
+This demo shows **3 organizations** on a blockchain network, each monitoring their own ARP traffic:
+- **Org1 (Gateway)**: Honest organization
+- **Org2 (Server)**: Honest organization
+- **Org3 (Laptop)**: Compromised organization (Byzantine actor)
+
+When Org3 is in malicious mode, it reports false ARP data. The blockchain's consensus mechanism exposes this Byzantine behavior, demonstrating why distributed trust matters for security.
+
+### One-Command Demo Setup
+
+```bash
+cd ~/fabric/arp-chaincode/scripts
+chmod +x demo.sh
+./demo.sh
+```
+
+This automated script will:
+1. ✅ Set up 3-organization Fabric network
+2. ✅ Create virtual LAN for ARP traffic
+3. ✅ Build Docker images for monitoring agents
+4. ✅ Start event listener and dashboard
+5. ✅ Deploy monitoring agents for each organization
+6. ✅ Start traffic generators
+
+**Time:** ~5-7 minutes total setup
+
+### Demo Flow (10-Minute Presentation)
+
+#### Phase 1: Normal Operation (2 minutes)
+
+1. Open dashboard: http://localhost:5000
+2. Point out:
+   - All 3 organizations reporting ARP traffic
+   - Equal participation in "Reports by Organization"
+   - Events showing consistent data
+
+#### Phase 2: Trigger Byzantine Attack (1 minute)
+
+```bash
+# Stop Org3's honest monitor
+docker-compose -f docker-compose-monitors.yaml stop monitor-org3
+
+# Start malicious monitor
+docker-compose -f docker-compose-monitors.yaml run -d \
+  -e MALICIOUS_MODE=true \
+  --name monitor-org3 \
+  monitor-org3
+```
+
+#### Phase 3: Observe Detection (2 minutes)
+
+Dashboard now shows:
+- 🔴 Conflicting ARP reports
+- Org1 reports: `192.168.100.2 → MAC AA:BB:CC:DD:EE:FF`
+- Org2 reports: `192.168.100.2 → MAC AA:BB:CC:DD:EE:FF`
+- Org3 reports: `192.168.100.2 → MAC 11:22:33:44:55:66` (DIFFERENT!)
+
+#### Phase 4: Key Talking Points
+
+**Without Blockchain:**
+- Attacker silently poisons ARP caches
+- No way to verify correctness
+- Single point of trust
+
+**With Blockchain:**
+- Multiple organizations cross-verify data
+- Byzantine behavior is exposed (2/3 consensus shows truth)
+- Immutable audit trail for forensics
+- Even compromised peer can't hide attack
+
+### Monitoring the Demo
+
+```bash
+# Watch specific organization logs
+docker logs -f monitor-org1    # Honest reports
+docker logs -f monitor-org2    # Honest reports
+docker logs -f monitor-org3    # Malicious reports (when enabled)
+
+# Watch traffic generation
+docker logs -f traffic-org1
+
+# Watch blockchain events
+tail -f /tmp/event-listener.log
+```
+
+### Cleanup After Demo
+
+```bash
+cd ~/fabric/arp-chaincode/scripts
+./cleanup-demo.sh
+```
+
+This removes all containers, networks, and stops all services.
+
+---
+
+## 🧪 Testing the System (Manual Mode)
 
 From the test-network directory:
 

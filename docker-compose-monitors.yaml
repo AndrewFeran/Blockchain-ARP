@@ -1,0 +1,155 @@
+version: '3.7'
+
+networks:
+  test:
+    name: fabric_test
+    external: true
+  arp-test-lan:
+    name: arp-test-lan
+    external: true
+
+services:
+  # Org1 Monitor (Gateway)
+  monitor-org1:
+    container_name: monitor-org1
+    image: arp-monitor:latest
+    command: python3 monitor.py
+    environment:
+      - ORG_NAME=Org1-Gateway
+      - ORG_MSP_ID=Org1MSP
+      - PEER_ADDRESS=peer0.org1.example.com:7051
+      - NETWORK_INTERFACE=eth1
+      - CHAINCODE_NAME=arptracker
+      - CHANNEL_NAME=mychannel
+      - PEER_TLS_ROOTCERT=/fabric/org1/tls-cert.pem
+      - PEER_MSPCONFIGPATH=/fabric/org1/msp
+      - FABRIC_BIN_PATH=/fabric/bin
+      - FABRIC_CFG_PATH=/fabric/config
+    volumes:
+      - ~/fabric/fabric-samples/bin:/fabric/bin:ro
+      - ~/fabric/fabric-samples/config:/fabric/config:ro
+      - ~/fabric/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt:/fabric/org1/tls-cert.pem:ro
+      - ~/fabric/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp:/fabric/org1/msp:ro
+      - ~/fabric/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem:/fabric/orderer-ca.pem:ro
+    networks:
+      - test
+      - arp-test-lan
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    privileged: true
+    restart: unless-stopped
+
+  # Org2 Monitor (Server)
+  monitor-org2:
+    container_name: monitor-org2
+    image: arp-monitor:latest
+    command: python3 monitor.py
+    environment:
+      - ORG_NAME=Org2-Server
+      - ORG_MSP_ID=Org2MSP
+      - PEER_ADDRESS=peer0.org2.example.com:9051
+      - NETWORK_INTERFACE=eth1
+      - CHAINCODE_NAME=arptracker
+      - CHANNEL_NAME=mychannel
+      - PEER_TLS_ROOTCERT=/fabric/org2/tls-cert.pem
+      - PEER_MSPCONFIGPATH=/fabric/org2/msp
+      - FABRIC_BIN_PATH=/fabric/bin
+      - FABRIC_CFG_PATH=/fabric/config
+    volumes:
+      - ~/fabric/fabric-samples/bin:/fabric/bin:ro
+      - ~/fabric/fabric-samples/config:/fabric/config:ro
+      - ~/fabric/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt:/fabric/org2/tls-cert.pem:ro
+      - ~/fabric/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp:/fabric/org2/msp:ro
+      - ~/fabric/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem:/fabric/orderer-ca.pem:ro
+    networks:
+      - test
+      - arp-test-lan
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    privileged: true
+    restart: unless-stopped
+
+  # Org3 Monitor (Laptop - Compromised)
+  monitor-org3:
+    container_name: monitor-org3
+    image: arp-monitor:latest
+    command: python3 monitor-malicious.py
+    environment:
+      - ORG_NAME=Org3-Laptop
+      - ORG_MSP_ID=Org3MSP
+      - PEER_ADDRESS=peer0.org3.example.com:11051
+      - NETWORK_INTERFACE=eth1
+      - CHAINCODE_NAME=arptracker
+      - CHANNEL_NAME=mychannel
+      - MALICIOUS_MODE=false  # Set to 'true' to enable attack
+      - PEER_TLS_ROOTCERT=/fabric/org3/tls-cert.pem
+      - PEER_MSPCONFIGPATH=/fabric/org3/msp
+      - FABRIC_BIN_PATH=/fabric/bin
+      - FABRIC_CFG_PATH=/fabric/config
+    volumes:
+      - ~/fabric/fabric-samples/bin:/fabric/bin:ro
+      - ~/fabric/fabric-samples/config:/fabric/config:ro
+      - ~/fabric/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt:/fabric/org3/tls-cert.pem:ro
+      - ~/fabric/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp:/fabric/org3/msp:ro
+      - ~/fabric/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem:/fabric/orderer-ca.pem:ro
+    networks:
+      - test
+      - arp-test-lan
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    privileged: true
+    restart: unless-stopped
+
+  # Traffic Generator - Org1
+  traffic-org1:
+    container_name: traffic-org1
+    image: traffic-generator:latest
+    environment:
+      - ORG_NAME=Org1-Gateway
+      - TARGET_IPS=192.168.100.1,192.168.100.2,192.168.100.3
+      - PING_INTERVAL_MIN=5
+      - PING_INTERVAL_MAX=15
+    networks:
+      - arp-test-lan
+    restart: unless-stopped
+
+  # Traffic Generator - Org2
+  traffic-org2:
+    container_name: traffic-org2
+    image: traffic-generator:latest
+    environment:
+      - ORG_NAME=Org2-Server
+      - TARGET_IPS=192.168.100.1,192.168.100.2,192.168.100.3
+      - PING_INTERVAL_MIN=5
+      - PING_INTERVAL_MAX=15
+    networks:
+      - arp-test-lan
+    restart: unless-stopped
+
+  # Traffic Generator - Org3
+  traffic-org3:
+    container_name: traffic-org3
+    image: traffic-generator:latest
+    environment:
+      - ORG_NAME=Org3-Laptop
+      - TARGET_IPS=192.168.100.1,192.168.100.2,192.168.100.3
+      - PING_INTERVAL_MIN=5
+      - PING_INTERVAL_MAX=15
+    networks:
+      - arp-test-lan
+    restart: unless-stopped
+
+  # Attacker container (for manual attack triggering)
+  attacker:
+    container_name: arp-attacker
+    image: arp-attacker:latest
+    networks:
+      - arp-test-lan
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    privileged: true
+    restart: unless-stopped

@@ -207,3 +207,61 @@ h1 {
     color: #94a3b8;
     font-size: 0.9em;
 }
+
+/* Organization stats */
+.org-stats {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.org-stats h3 {
+    color: #60a5fa;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+#org-stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.org-stat-card {
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    transition: transform 0.2s;
+}
+
+.org-stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.org-stat-card.org-org1gateway {
+    border-color: #3b82f6;
+}
+
+.org-stat-card.org-org2server {
+    border-color: #10b981;
+}
+
+.org-stat-card.org-org3laptop {
+    border-color: #f59e0b;
+}
+
+.org-name {
+    font-size: 1em;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 8px;
+}
+
+.org-count {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #60a5fa;
+}

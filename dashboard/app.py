@@ -64,6 +64,18 @@ def get_stats():
         'matches': matches
     })
 
+@app.route('/api/org-stats', methods=['GET'])
+def get_org_stats():
+    """Get statistics by organization"""
+    org_counts = {}
+
+    for event in events:
+        # Extract organization from recordedBy field
+        recorded_by = event.get('recordedBy', 'Unknown')
+        org_counts[recorded_by] = org_counts.get(recorded_by, 0) + 1
+
+    return jsonify(org_counts)
+
 if __name__ == '__main__':
     print("🚀 ARP Detection Dashboard Starting...")
     print("📊 Dashboard: http://localhost:5000")

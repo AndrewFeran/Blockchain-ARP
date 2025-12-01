@@ -15,6 +15,28 @@ function loadStats() {
         .catch(error => console.error('Error loading stats:', error));
 }
 
+function loadOrgStats() {
+    fetch('/api/org-stats')
+        .then(response => response.json())
+        .then(orgStats => {
+            const container = document.getElementById('org-stats-container');
+
+            if (Object.keys(orgStats).length === 0) {
+                container.innerHTML = '<div class="no-events">No data yet...</div>';
+                return;
+            }
+
+            // Create org stat cards
+            container.innerHTML = Object.entries(orgStats).map(([org, count]) => `
+                <div class="org-stat-card org-${org.toLowerCase().replace(/[^a-z0-9]/g, '')}">
+                    <div class="org-name">${org}</div>
+                    <div class="org-count">${count} reports</div>
+                </div>
+            `).join('');
+        })
+        .catch(error => console.error('Error loading org stats:', error));
+}
+
 function loadEvents() {
     fetch('/api/events')
         .then(response => response.json())
@@ -60,6 +82,7 @@ function loadEvents() {
         .catch(error => console.error('Error loading events:', error));
 
     loadStats();
+    loadOrgStats();
 }
 
 // Load events immediately
