@@ -61,6 +61,12 @@ sudo rm -rf organizations/fabric-ca/org1/msp 2>/dev/null
 sudo rm -rf organizations/fabric-ca/org2/msp 2>/dev/null
 sudo rm -rf organizations/fabric-ca/ordererOrg/msp 2>/dev/null
 
+# CRITICAL: Remove orderer and peer ledger data
+echo "🧹 Removing orderer and peer ledger data..."
+sudo rm -rf organizations/ordererOrganizations/example.com/orderers/orderer.example.com/production 2>/dev/null
+sudo rm -rf organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/production 2>/dev/null
+sudo rm -rf organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/production 2>/dev/null
+
 # Clean up volumes and networks
 echo "🧹 Cleaning up Docker volumes and networks..."
 docker volume prune -f
