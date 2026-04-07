@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-04-07T02:24:13Z",
+  "peer_endpoint": "localhost:7051",
+  "write_latency": {
+    "count": 50,
+    "min_ms": 2030.156,
+    "max_ms": 2435.457,
+    "mean_ms": 2052.1450800000007,
+    "p50_ms": 2032.404,
+    "p95_ms": 2230.532,
+    "p99_ms": 2435.457,
+    "stddev_ms": 75.44734880771887
+  },
+  "read_single_latency": {
+    "count": 100,
+    "min_ms": 1.081,
+    "max_ms": 2.113,
+    "mean_ms": 1.2383700000000002,
+    "p50_ms": 1.195,
+    "p95_ms": 1.44,
+    "p99_ms": 1.996,
+    "stddev_ms": 0.15974515047412238
+  },
+  "read_all_latency": {
+    "count": 20,
+    "min_ms": 1.834,
+    "max_ms": 2.455,
+    "mean_ms": 2.0507,
+    "p50_ms": 1.954,
+    "p95_ms": 2.435,
+    "p99_ms": 2.455,
+    "stddev_ms": 0.20874388613801365
+  },
+  "sequential_throughput_tps": 0.49197113441988455,
+  "concurrent_throughput_tps": 220.37879182757513,
+  "concurrent_workers": 10,
+  "write_trials": 50,
+  "read_trials": 100,
+  "throughput_count": 100
+}
