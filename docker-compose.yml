@@ -1,0 +1,213 @@
+version: '3.8'
+
+services:
+  # ============================================
+  # Blockchain Dashboard (Web UI)
+  # ============================================
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    container_name: blockchain-dashboard
+    hostname: dashboard
+    ports:
+      - "5000:5000"
+    networks:
+      - simulated_lan
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+    restart: unless-stopped
+
+  # ============================================
+  # Blockchain Router (ARP Authority)
+  # Monitors ALL ARP traffic and writes to blockchain
+  # ============================================
+  router:
+    build:
+      context: ./router
+      dockerfile: Dockerfile
+    container_name: blockchain-router
+    hostname: router
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      simulated_lan:
+        ipv4_address: 10.5.0.1
+    environment:
+      - ROLE=router
+      - NODE_NAME=router
+      - PEER_ENDPOINT=host.docker.internal:7051
+      - GATEWAY_PEER=peer0.org1.example.com
+      - MSP_ID=Org1MSP
+      - CHANNEL_NAME=mychannel
+      - CHAINCODE_NAME=arptracker
+      - FLASK_URL=http://dashboard:5000/api/event
+    volumes:
+      # Mount Fabric crypto materials (read-only)
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+    depends_on:
+      - dashboard
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # ============================================
+  # LAN Node 1 (Blockchain Peer)
+  # Syncs ARP cache from blockchain
+  # ============================================
+  node1:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: lan-node-1
+    hostname: node1
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      simulated_lan:
+        ipv4_address: 10.5.0.10
+    environment:
+      - ROLE=node
+      - NODE_NAME=node1
+      - PEER_ENDPOINT=host.docker.internal:9051
+      - GATEWAY_PEER=peer0.org2.example.com
+      - MSP_ID=Org2MSP
+      - CHANNEL_NAME=mychannel
+      - CHAINCODE_NAME=arptracker
+    volumes:
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # ============================================
+  # LAN Node 2 (Blockchain Peer)
+  # ============================================
+  node2:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: lan-node-2
+    hostname: node2
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      simulated_lan:
+        ipv4_address: 10.5.0.11
+    environment:
+      - ROLE=node
+      - NODE_NAME=node2
+      - PEER_ENDPOINT=host.docker.internal:9051
+      - GATEWAY_PEER=peer0.org2.example.com
+      - MSP_ID=Org2MSP
+      - CHANNEL_NAME=mychannel
+      - CHAINCODE_NAME=arptracker
+    volumes:
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # ============================================
+  # LAN Node 3 (Blockchain Peer)
+  # ============================================
+  node3:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: lan-node-3
+    hostname: node3
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      simulated_lan:
+        ipv4_address: 10.5.0.12
+    environment:
+      - ROLE=node
+      - NODE_NAME=node3
+      - PEER_ENDPOINT=host.docker.internal:9051
+      - GATEWAY_PEER=peer0.org2.example.com
+      - MSP_ID=Org2MSP
+      - CHANNEL_NAME=mychannel
+      - CHAINCODE_NAME=arptracker
+    volumes:
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # ============================================
+  # Benchmark (run manually, not part of LAN)
+  # Measures write/read latency and throughput
+  # ============================================
+  benchmark:
+    build:
+      context: ./benchmark
+      dockerfile: Dockerfile
+    container_name: fabric-benchmark
+    hostname: benchmark
+    networks:
+      - simulated_lan
+    environment:
+      - MSP_ID=Org1MSP
+      - PEER_ENDPOINT=host.docker.internal:7051
+      - GATEWAY_PEER=peer0.org1.example.com
+      - CHANNEL_NAME=mychannel
+      - CHAINCODE_NAME=arptracker
+      - RESULTS_DIR=/results
+      # Optional overrides (remove to use defaults):
+      # - BENCH_WRITE_TRIALS=50
+      # - BENCH_READ_TRIALS=100
+      # - BENCH_READ_ALL_TRIALS=20
+      # - BENCH_THROUGHPUT_COUNT=100
+      # - BENCH_CONCURRENCY=10
+    volumes:
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+      - ./benchmark-results:/results
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    profiles:
+      - benchmark
+
+  # ============================================
+  # Attacker Node (Optional - For Testing)
+  # Use to simulate ARP spoofing attacks
+  # ============================================
+  attacker:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: lan-attacker
+    hostname: attacker
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      simulated_lan:
+        ipv4_address: 10.5.0.99
+    environment:
+      - ROLE=attacker
+      - NODE_NAME=attacker
+    volumes:
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+    restart: unless-stopped
+    profiles:
+      - testing
+
+networks:
+  simulated_lan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/24
+          gateway: 10.5.0.1

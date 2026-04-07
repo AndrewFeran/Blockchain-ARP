@@ -10,6 +10,37 @@ A complete blockchain-based system for detecting and tracking ARP (Address Resol
 - **Web Dashboard**: Live visualization of network events and spoofing alerts
 - **Historical Tracking**: Complete audit trail of all ARP changes
 - **Multi-Organization Support**: Built on Hyperledger Fabric's permissioned blockchain
+- **🆕 Simulated LAN Environment**: Run a complete containerized network with blockchain-synchronized ARP tables
+
+---
+
+## 🚀 Two Ways to Use This Project
+
+### Option 1: Simulated LAN (Recommended for Demo)
+Run a complete simulated network with multiple containerized nodes that sync ARP via blockchain.
+
+**Features:**
+- Multiple nodes with blockchain-synchronized ARP caches
+- Router monitors all ARP traffic
+- Automated spoofing attack demonstrations
+- Perfect for testing and demos
+
+**Quick Start:**
+```bash
+./start-simulated-lan.sh
+```
+
+📖 **[See Simulated LAN Guide →](SIMULATED-LAN-GUIDE.md)**
+
+### Option 2: Manual Testing (Original Setup)
+Manually invoke chaincode and monitor events.
+
+**Use for:**
+- Understanding chaincode internals
+- Custom integration testing
+- Development
+
+📖 **[See Manual Testing Guide ↓](#manual-testing-original-setup)**
 
 ---
 
@@ -23,7 +54,19 @@ Blockchain-ARP/
 │   ├── go.mod
 │   └── go.sum
 │
+├── router/                 # 🆕 Router container (ARP authority)
+│   ├── Dockerfile
+│   ├── router-monitor.go   # Captures ARP, writes to blockchain
+│   └── start-router.sh
+│
+├── node/                   # 🆕 Node container (LAN hosts)
+│   ├── Dockerfile
+│   ├── node-sync.go        # Syncs ARP from blockchain
+│   ├── start-node.sh
+│   └── spoof-attack.sh     # Attack simulation
+│
 ├── dashboard/              # Web dashboard (Flask)
+│   ├── Dockerfile
 │   ├── app.py
 │   ├── requirements.txt
 │   └── templates/
@@ -34,10 +77,15 @@ Blockchain-ARP/
 │   ├── build-listener.sh
 │   └── go.mod
 │
-└── scripts/                # Automation scripts
-    ├── reset-and-start.sh
-    ├── stop-all.sh
-    └── README.md
+├── scripts/                # Automation scripts
+│   ├── reset-and-start.sh
+│   ├── stop-all.sh
+│   └── README.md
+│
+├── docker-compose.yml      # 🆕 Simulated LAN orchestration
+├── start-simulated-lan.sh  # 🆕 One-command startup
+├── demo-spoofing-attack.sh # 🆕 Interactive attack demo
+└── SIMULATED-LAN-GUIDE.md  # 🆕 Complete guide
 ```
 
 ---
@@ -78,7 +126,33 @@ Blockchain-ARP/
 
 ---
 
-## 🚀 Quick Start
+---
+
+## 🚀 Quick Start (Simulated LAN)
+
+For the simulated LAN environment (recommended), see **[SIMULATED-LAN-GUIDE.md](SIMULATED-LAN-GUIDE.md)**.
+
+**TL;DR:**
+```bash
+# 1. Start Fabric network and deploy chaincode (one time)
+cd ~/fabric/fabric-samples/test-network
+./network.sh up createChannel -c mychannel
+./network.sh deployCC -ccn arptracker -ccp ~/fabric/arp-chaincode/chaincode -ccl go
+
+# 2. Start simulated LAN
+cd ~/fabric/arp-chaincode
+./start-simulated-lan.sh
+
+# 3. View dashboard
+# Open http://localhost:5000
+
+# 4. Run attack demo
+./demo-spoofing-attack.sh
+```
+
+---
+
+## 🧪 Manual Testing (Original Setup)
 
 ### 1. Install Hyperledger Fabric
 

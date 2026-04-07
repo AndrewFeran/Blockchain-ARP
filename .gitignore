@@ -1,0 +1,3 @@
+benchmark/benchmark-bin
+.claude/
+chaincode/vendor/
