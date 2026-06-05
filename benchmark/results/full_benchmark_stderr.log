@@ -1,0 +1,26 @@
+time="2026-06-04T23:38:09-04:00" level=warning msg="Docker Compose is configured to build using Bake, but buildx isn't installed"
+ dashboard  Built
+ node1  Built
+ node2  Built
+ node3  Built
+ router  Built
+ Container lan-node-1  Recreate
+ Container lan-node-2  Recreate
+ Container blockchain-dashboard  Recreate
+ Container lan-node-3  Recreate
+ Container lan-node-2  Recreated
+ Container lan-node-1  Recreated
+ Container lan-node-3  Recreated
+ Container blockchain-dashboard  Recreated
+ Container blockchain-router  Recreate
+ Container blockchain-router  Recreated
+ Container lan-node-3  Starting
+ Container lan-node-1  Starting
+ Container lan-node-2  Starting
+ Container blockchain-dashboard  Starting
+ Container blockchain-dashboard  Started
+ Container blockchain-router  Starting
+ Container lan-node-1  Started
+ Container lan-node-2  Started
+ Container lan-node-3  Started
+ Container blockchain-router  Started
