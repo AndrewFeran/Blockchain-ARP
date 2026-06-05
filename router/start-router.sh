@@ -11,5 +11,4 @@ echo "ARP Table (initial):"
 ip neigh show
 echo ""
 
-# Start the router monitor
 exec /app/router-monitor

@@ -1,7 +1,7 @@
 FROM golang:1.23-alpine AS builder
 
 # Install build dependencies
-RUN apk add --no-cache git gcc musl-dev
+RUN apk add --no-cache git gcc musl-dev libpcap-dev
 
 WORKDIR /build
 
@@ -38,8 +38,4 @@ COPY --from=builder /build/router-monitor .
 COPY start-router.sh .
 RUN chmod +x start-router.sh
 
-# Copy helper scripts
-COPY capture-arp.sh .
-RUN chmod +x capture-arp.sh
-
-CMD ["/app/start-router.sh"]
+CMD ["bash", "/app/start-router.sh"]

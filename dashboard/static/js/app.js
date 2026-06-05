@@ -11,6 +11,7 @@ function loadStats() {
             document.getElementById('stat-spoofing').textContent = stats.spoofing;
             document.getElementById('stat-new').textContent = stats.new_devices;
             document.getElementById('stat-match').textContent = stats.matches;
+            document.getElementById('stat-expired').textContent = stats.expired;
         })
         .catch(error => console.error('Error loading stats:', error));
 }

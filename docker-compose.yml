@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # ============================================
   # Blockchain Dashboard (Web UI)
@@ -13,7 +11,9 @@ services:
     ports:
       - "5000:5000"
     networks:
-      - simulated_lan
+      simulated_lan:
+        ipv4_address: 10.5.0.2
+        mac_address: 02:42:0a:05:00:02
     environment:
       - FLASK_APP=app.py
       - FLASK_ENV=development
@@ -36,6 +36,7 @@ services:
     networks:
       simulated_lan:
         ipv4_address: 10.5.0.1
+        mac_address: 02:42:0a:05:00:01
     environment:
       - ROLE=router
       - NODE_NAME=router
@@ -71,6 +72,7 @@ services:
     networks:
       simulated_lan:
         ipv4_address: 10.5.0.10
+        mac_address: 02:42:0a:05:00:0a
     environment:
       - ROLE=node
       - NODE_NAME=node1
@@ -79,6 +81,7 @@ services:
       - MSP_ID=Org2MSP
       - CHANNEL_NAME=mychannel
       - CHAINCODE_NAME=arptracker
+      - DISABLE_BACKGROUND_TRAFFIC=${DISABLE_BACKGROUND_TRAFFIC:-false}
     volumes:
       - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
     restart: unless-stopped
@@ -101,6 +104,7 @@ services:
     networks:
       simulated_lan:
         ipv4_address: 10.5.0.11
+        mac_address: 02:42:0a:05:00:0b
     environment:
       - ROLE=node
       - NODE_NAME=node2
@@ -109,6 +113,7 @@ services:
       - MSP_ID=Org2MSP
       - CHANNEL_NAME=mychannel
       - CHAINCODE_NAME=arptracker
+      - DISABLE_BACKGROUND_TRAFFIC=${DISABLE_BACKGROUND_TRAFFIC:-false}
     volumes:
       - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
     restart: unless-stopped
@@ -131,6 +136,7 @@ services:
     networks:
       simulated_lan:
         ipv4_address: 10.5.0.12
+        mac_address: 02:42:0a:05:00:0c
     environment:
       - ROLE=node
       - NODE_NAME=node3
@@ -139,70 +145,12 @@ services:
       - MSP_ID=Org2MSP
       - CHANNEL_NAME=mychannel
       - CHAINCODE_NAME=arptracker
+      - DISABLE_BACKGROUND_TRAFFIC=${DISABLE_BACKGROUND_TRAFFIC:-false}
     volumes:
       - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
-  # ============================================
-  # Benchmark (run manually, not part of LAN)
-  # Measures write/read latency and throughput
-  # ============================================
-  benchmark:
-    build:
-      context: ./benchmark
-      dockerfile: Dockerfile
-    container_name: fabric-benchmark
-    hostname: benchmark
-    networks:
-      - simulated_lan
-    environment:
-      - MSP_ID=Org1MSP
-      - PEER_ENDPOINT=host.docker.internal:7051
-      - GATEWAY_PEER=peer0.org1.example.com
-      - CHANNEL_NAME=mychannel
-      - CHAINCODE_NAME=arptracker
-      - RESULTS_DIR=/results
-      # Optional overrides (remove to use defaults):
-      # - BENCH_WRITE_TRIALS=50
-      # - BENCH_READ_TRIALS=100
-      # - BENCH_READ_ALL_TRIALS=20
-      # - BENCH_THROUGHPUT_COUNT=100
-      # - BENCH_CONCURRENCY=10
-    volumes:
-      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
-      - ./benchmark-results:/results
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    profiles:
-      - benchmark
-
-  # ============================================
-  # Attacker Node (Optional - For Testing)
-  # Use to simulate ARP spoofing attacks
-  # ============================================
-  attacker:
-    build:
-      context: ./node
-      dockerfile: Dockerfile
-    container_name: lan-attacker
-    hostname: attacker
-    privileged: true
-    cap_add:
-      - NET_ADMIN
-      - NET_RAW
-    networks:
-      simulated_lan:
-        ipv4_address: 10.5.0.99
-    environment:
-      - ROLE=attacker
-      - NODE_NAME=attacker
-    volumes:
-      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
-    restart: unless-stopped
-    profiles:
-      - testing
 
 networks:
   simulated_lan:
@@ -210,4 +158,4 @@ networks:
     ipam:
       config:
         - subnet: 10.5.0.0/24
-          gateway: 10.5.0.1
+          gateway: 10.5.0.254

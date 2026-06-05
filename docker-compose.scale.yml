@@ -1,0 +1,203 @@
+services:
+  node4:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: lan-node-4
+    hostname: node4
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      simulated_lan:
+        ipv4_address: 10.5.0.13
+        mac_address: 02:42:0a:05:00:0d
+    environment:
+      - ROLE=node
+      - NODE_NAME=node4
+      - PEER_ENDPOINT=host.docker.internal:9051
+      - GATEWAY_PEER=peer0.org2.example.com
+      - MSP_ID=Org2MSP
+      - CHANNEL_NAME=mychannel
+      - CHAINCODE_NAME=arptracker
+      - DISABLE_BACKGROUND_TRAFFIC=${DISABLE_BACKGROUND_TRAFFIC:-false}
+    volumes:
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  node5:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: lan-node-5
+    hostname: node5
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      simulated_lan:
+        ipv4_address: 10.5.0.14
+        mac_address: 02:42:0a:05:00:0e
+    environment:
+      - ROLE=node
+      - NODE_NAME=node5
+      - PEER_ENDPOINT=host.docker.internal:9051
+      - GATEWAY_PEER=peer0.org2.example.com
+      - MSP_ID=Org2MSP
+      - CHANNEL_NAME=mychannel
+      - CHAINCODE_NAME=arptracker
+      - DISABLE_BACKGROUND_TRAFFIC=${DISABLE_BACKGROUND_TRAFFIC:-false}
+    volumes:
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  node6:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: lan-node-6
+    hostname: node6
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      simulated_lan:
+        ipv4_address: 10.5.0.15
+        mac_address: 02:42:0a:05:00:0f
+    environment:
+      - ROLE=node
+      - NODE_NAME=node6
+      - PEER_ENDPOINT=host.docker.internal:9051
+      - GATEWAY_PEER=peer0.org2.example.com
+      - MSP_ID=Org2MSP
+      - CHANNEL_NAME=mychannel
+      - CHAINCODE_NAME=arptracker
+      - DISABLE_BACKGROUND_TRAFFIC=${DISABLE_BACKGROUND_TRAFFIC:-false}
+    volumes:
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  node7:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: lan-node-7
+    hostname: node7
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      simulated_lan:
+        ipv4_address: 10.5.0.16
+        mac_address: 02:42:0a:05:00:10
+    environment:
+      - ROLE=node
+      - NODE_NAME=node7
+      - PEER_ENDPOINT=host.docker.internal:9051
+      - GATEWAY_PEER=peer0.org2.example.com
+      - MSP_ID=Org2MSP
+      - CHANNEL_NAME=mychannel
+      - CHAINCODE_NAME=arptracker
+      - DISABLE_BACKGROUND_TRAFFIC=${DISABLE_BACKGROUND_TRAFFIC:-false}
+    volumes:
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  node8:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: lan-node-8
+    hostname: node8
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      simulated_lan:
+        ipv4_address: 10.5.0.17
+        mac_address: 02:42:0a:05:00:11
+    environment:
+      - ROLE=node
+      - NODE_NAME=node8
+      - PEER_ENDPOINT=host.docker.internal:9051
+      - GATEWAY_PEER=peer0.org2.example.com
+      - MSP_ID=Org2MSP
+      - CHANNEL_NAME=mychannel
+      - CHAINCODE_NAME=arptracker
+      - DISABLE_BACKGROUND_TRAFFIC=${DISABLE_BACKGROUND_TRAFFIC:-false}
+    volumes:
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  node9:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: lan-node-9
+    hostname: node9
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      simulated_lan:
+        ipv4_address: 10.5.0.18
+        mac_address: 02:42:0a:05:00:12
+    environment:
+      - ROLE=node
+      - NODE_NAME=node9
+      - PEER_ENDPOINT=host.docker.internal:9051
+      - GATEWAY_PEER=peer0.org2.example.com
+      - MSP_ID=Org2MSP
+      - CHANNEL_NAME=mychannel
+      - CHAINCODE_NAME=arptracker
+      - DISABLE_BACKGROUND_TRAFFIC=${DISABLE_BACKGROUND_TRAFFIC:-false}
+    volumes:
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  node10:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: lan-node-10
+    hostname: node10
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      simulated_lan:
+        ipv4_address: 10.5.0.19
+        mac_address: 02:42:0a:05:00:13
+    environment:
+      - ROLE=node
+      - NODE_NAME=node10
+      - PEER_ENDPOINT=host.docker.internal:9051
+      - GATEWAY_PEER=peer0.org2.example.com
+      - MSP_ID=Org2MSP
+      - CHANNEL_NAME=mychannel
+      - CHAINCODE_NAME=arptracker
+      - DISABLE_BACKGROUND_TRAFFIC=${DISABLE_BACKGROUND_TRAFFIC:-false}
+    volumes:
+      - ../fabric-samples/test-network/organizations:/fabric-config/organizations:ro
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

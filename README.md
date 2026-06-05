@@ -1,387 +1,150 @@
-# 🛡️ Blockchain-Based ARP Spoofing Detection System
+# Blockchain-ARP
 
-A complete blockchain-based system for detecting and tracking ARP (Address Resolution Protocol) spoofing attacks using Hyperledger Fabric, with real-time event monitoring and a web dashboard.
+Blockchain-ARP is a Hyperledger Fabric prototype for detecting ARP spoofing on a simulated LAN. The router container is the trust anchor: it observes real ARP traffic on the Docker bridge network, records authoritative IP-to-MAC mappings on Fabric, and forwards events to the dashboard. LAN node containers subscribe to Fabric events and keep their ARP caches synchronized with the ledger.
 
-## 🎯 Features
+## What This Repo Contains
 
-- **Real-time ARP Monitoring**: Track IP-to-MAC address mappings on immutable blockchain ledger
-- **Spoofing Detection**: Automatically detect when an IP address changes its MAC address (ARP spoofing)
-- **Event-Driven Architecture**: Real-time event notifications using Fabric Gateway SDK
-- **Web Dashboard**: Live visualization of network events and spoofing alerts
-- **Historical Tracking**: Complete audit trail of all ARP changes
-- **Multi-Organization Support**: Built on Hyperledger Fabric's permissioned blockchain
-- **🆕 Simulated LAN Environment**: Run a complete containerized network with blockchain-synchronized ARP tables
+- **Demo runtime**
+  - `docker-compose.yml` starts the dashboard, router, and base three LAN nodes.
+  - `docker-compose.scale.yml` adds `node4` through `node10` for real scaling experiments.
+  - `scripts/start-simulated-lan.sh` and `scripts/stop-simulated-lan.sh` manage the simulated LAN.
 
----
+- **Core implementation**
+  - `chaincode/` contains the Fabric smart contract.
+  - `router/` captures ARP traffic and writes events to Fabric.
+  - `node/` performs cold-start sync, subscribes to Fabric events, and manages ARP cache entries.
+  - `dashboard/` serves the web panel and event API.
 
-## 🚀 Two Ways to Use This Project
+- **Data collection and findings**
+  - `benchmark/benchmark.go` runs latency, throughput, cold-start, and baseline measurements.
+  - `benchmark/run-reproducible.sh` runs a reproducible smoke or full benchmark workflow.
+  - `benchmark/run-scaled-latency.sh` changes the actual running LAN-node topology and measures 3, 5, 7, and 10 real containers.
+  - `scripts/verify-e2e.sh` proves live spoof detection and ledger protection.
 
-### Option 1: Simulated LAN (Recommended for Demo)
-Run a complete simulated network with multiple containerized nodes that sync ARP via blockchain.
+Generated benchmark CSVs/logs/figures live under `benchmark/results/` and `benchmark/figures/`. They are intentionally ignored by git.
 
-**Features:**
-- Multiple nodes with blockchain-synchronized ARP caches
-- Router monitors all ARP traffic
-- Automated spoofing attack demonstrations
-- Perfect for testing and demos
+## Requirements
 
-**Quick Start:**
-```bash
-./start-simulated-lan.sh
+- WSL2 or Linux
+- Docker with Compose v2
+- Go
+- Python 3
+- Hyperledger Fabric test-network checked out at `../fabric-samples/test-network`
+
+The commands below assume this repo and `fabric-samples` are siblings:
+
+```text
+barp/
+  Blockchain-ARP/
+  fabric-samples/
 ```
 
-📖 **[See Simulated LAN Guide →](SIMULATED-LAN-GUIDE.md)**
+## Start Fabric
 
-### Option 2: Manual Testing (Original Setup)
-Manually invoke chaincode and monitor events.
-
-**Use for:**
-- Understanding chaincode internals
-- Custom integration testing
-- Development
-
-📖 **[See Manual Testing Guide ↓](#manual-testing-original-setup)**
-
----
-
-## 📁 Project Structure
-
-```
-Blockchain-ARP/
-├── chaincode/              # Smart contract (Go)
-│   ├── arp-chaincode.go
-│   ├── Dockerfile
-│   ├── go.mod
-│   └── go.sum
-│
-├── router/                 # 🆕 Router container (ARP authority)
-│   ├── Dockerfile
-│   ├── router-monitor.go   # Captures ARP, writes to blockchain
-│   └── start-router.sh
-│
-├── node/                   # 🆕 Node container (LAN hosts)
-│   ├── Dockerfile
-│   ├── node-sync.go        # Syncs ARP from blockchain
-│   ├── start-node.sh
-│   └── spoof-attack.sh     # Attack simulation
-│
-├── dashboard/              # Web dashboard (Flask)
-│   ├── Dockerfile
-│   ├── app.py
-│   ├── requirements.txt
-│   └── templates/
-│       └── index.html
-│
-├── event-listener/         # Event listener (Go)
-│   ├── event-listener.go
-│   ├── build-listener.sh
-│   └── go.mod
-│
-├── scripts/                # Automation scripts
-│   ├── reset-and-start.sh
-│   ├── stop-all.sh
-│   └── README.md
-│
-├── docker-compose.yml      # 🆕 Simulated LAN orchestration
-├── start-simulated-lan.sh  # 🆕 One-command startup
-├── demo-spoofing-attack.sh # 🆕 Interactive attack demo
-└── SIMULATED-LAN-GUIDE.md  # 🆕 Complete guide
-```
-
----
-
-## 🏗️ Architecture
-
-```
-┌─────────────────┐       Blockchain Events      ┌──────────────────┐
-│  ARP Chaincode  │ ═══════════════════════════> │  Event Listener  │
-│   (Fabric)      │   Real-time via Gateway SDK  │   (Go)           │
-└─────────────────┘                              └─────────┬────────┘
-                                                           │
-                                                    HTTP POST
-                                                           │
-                                                           ▼
-                                                  ┌─────────────────┐
-                                                  │ Flask Dashboard │
-                                                  │   (Web UI)      │
-                                                  └─────────────────┘
-```
-
-### How It Works
-
-1. **Chaincode** runs on blockchain, detects ARP changes, emits events
-2. **Event Listener** subscribes to blockchain events in real-time
-3. **Dashboard** displays events with color-coded alerts
-
----
-
-## 🔧 Prerequisites
-
-- **Ubuntu/Linux** VM (tested on Azure)
-- **Docker** v20.10+
-- **Docker Compose** v2.0+
-- **Go** v1.21+
-- **Python 3** v3.8+
-- **Hyperledger Fabric** v2.5+
-
----
-
----
-
-## 🚀 Quick Start (Simulated LAN)
-
-For the simulated LAN environment (recommended), see **[SIMULATED-LAN-GUIDE.md](SIMULATED-LAN-GUIDE.md)**.
-
-**TL;DR:**
-```bash
-# 1. Start Fabric network and deploy chaincode (one time)
-cd ~/fabric/fabric-samples/test-network
-./network.sh up createChannel -c mychannel
-./network.sh deployCC -ccn arptracker -ccp ~/fabric/arp-chaincode/chaincode -ccl go
-
-# 2. Start simulated LAN
-cd ~/fabric/arp-chaincode
-./start-simulated-lan.sh
-
-# 3. View dashboard
-# Open http://localhost:5000
-
-# 4. Run attack demo
-./demo-spoofing-attack.sh
-```
-
----
-
-## 🧪 Manual Testing (Original Setup)
-
-### 1. Install Hyperledger Fabric
+From WSL:
 
 ```bash
-mkdir -p ~/fabric
-cd ~/fabric
-curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh
-chmod +x install-fabric.sh
-./install-fabric.sh docker binary samples
+cd /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network
+./network.sh up createChannel -ca -c mychannel
+./network.sh deployCC -ccn arptracker \
+  -ccp /mnt/c/Users/Perky/OneDrive/Desktop/barp/Blockchain-ARP/chaincode \
+  -ccl go \
+  -c mychannel
 ```
 
-### 2. Clone This Repository
+## Start The Simulated LAN
+
+Base three-node demo:
 
 ```bash
-cd ~/fabric
-git clone <your-repo-url> arp-chaincode
-cd arp-chaincode
+cd /mnt/c/Users/Perky/OneDrive/Desktop/barp/Blockchain-ARP
+./scripts/start-simulated-lan.sh
 ```
 
-### 3. Start Everything (One Command!)
+Ten-node topology:
 
 ```bash
-cd scripts
-chmod +x *.sh
-./reset-and-start.sh
+NODE_COUNT=10 ./scripts/start-simulated-lan.sh
 ```
 
-This will:
-- Clean old network data
-- Start Fabric network
-- Build and deploy chaincode
-- Set up environment
-- Show you test commands
+Dashboard:
 
-### 4. Start Dashboard (New Terminal)
+```text
+http://localhost:5000
+```
+
+## Verify Spoof Detection
+
+Run the end-to-end verifier:
 
 ```bash
-cd ~/fabric/arp-chaincode/dashboard
-pip3 install -r requirements.txt
-python3 app.py
+./scripts/verify-e2e.sh
 ```
 
-Dashboard runs at: **http://localhost:5000**
+It recreates a quiet three-node demo topology, establishes a legitimate mapping, launches a spoof from `lan-node-3`, checks that the dashboard records a spoofing event, and verifies that the ledger keeps the legitimate MAC. The verifier sets `DISABLE_BACKGROUND_TRAFFIC=true` so the proof is not delayed by ordinary generated ARP traffic; normal demo runs keep background traffic enabled.
 
-### 5. Start Event Listener (New Terminal)
+Manual spoof from `lan-node-3`:
 
 ```bash
-cd ~/fabric/arp-chaincode/event-listener
-go get github.com/hyperledger/fabric-gateway@v1.4.0
-go mod tidy
-go mod vendor
-chmod +x build-listener.sh
-./build-listener.sh
-./event-listener
+docker compose exec node3 /bin/bash /app/spoof-attack.sh 10.5.0.10 10.5.0.1
 ```
 
----
+## Run Benchmarks
 
-## 🧪 Testing the System
-
-From the test-network directory:
+Fast reproducibility check:
 
 ```bash
-cd ~/fabric/fabric-samples/test-network
+./benchmark/run-reproducible.sh
 ```
 
-### Record a New Device
+Full publication-sized workflow:
 
 ```bash
-peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C mychannel -n arptracker --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"RecordARPEntry","Args":["192.168.1.100","AA:BB:CC:DD:EE:FF","eth0","laptop","dynamic","reachable","gateway1"]}'
+./benchmark/run-reproducible.sh full
 ```
 
-**Expected:** `🆕 New device` in event listener and dashboard
-
-### Trigger Spoofing Detection
-
-Same IP, different MAC:
+Real scaled LAN-node latency experiment:
 
 ```bash
-peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C mychannel -n arptracker --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"RecordARPEntry","Args":["192.168.1.100","11:22:33:44:55:66","eth0","laptop","dynamic","reachable","gateway1"]}'
+TRIALS=30 WAIT_SECONDS=30 BENCH_EVENT_TIMEOUT=30s ./benchmark/run-scaled-latency.sh
 ```
 
-**Expected:** `🚨 SPOOFING DETECTED!` alert in red
+Read the benchmark docs:
 
-### Query All Entries
+```text
+benchmark/README.md
+```
+
+## Current Real Scaled Result
+
+Latest real scaled latency result:
+
+```text
+benchmark/results/scaled_latency_real_20260605T015104Z.csv
+```
+
+Summary:
+
+| Running LAN Nodes | Mean | Median | P95 | P99 |
+| --- | ---: | ---: | ---: | ---: |
+| 3 | 1199.77 ms | 1187 ms | 1265 ms | 1409 ms |
+| 5 | 1794.97 ms | 2056 ms | 2373 ms | 3480 ms |
+| 7 | 1312.00 ms | 1663 ms | 2071 ms | 2085 ms |
+| 10 | 2079.17 ms | 2078 ms | 3385 ms | 3388 ms |
+
+Each row was measured with that exact number of real `lan-node-*` containers running.
+
+## Stop
+
+Stop the simulated LAN:
 
 ```bash
-peer chaincode query -C mychannel -n arptracker -c '{"function":"GetAllARPEntries","Args":[]}'
+./scripts/stop-simulated-lan.sh
 ```
 
----
-
-## 📊 Chaincode Functions
-
-### RecordARPEntry
-Records ARP entry to blockchain and emits detection event
-
-**Args:** `[ipAddress, macAddress, interface, hostname, entryType, state, recordedBy]`
-
-### GetCurrentARPEntry
-Get current ARP entry for an IP
-
-**Args:** `[ipAddress]`
-
-### GetARPHistory
-Get complete history of changes for an IP
-
-**Args:** `[ipAddress]`
-
-### GetAllARPEntries
-Get all current ARP entries
-
-**Args:** `[]`
-
-### QueryARPByMAC
-Find all IPs associated with a MAC address
-
-**Args:** `[macAddress]`
-
-### DetectMACChange
-Check if MAC changed for an IP
-
-**Args:** `[ipAddress, currentMAC]`
-
----
-
-## 🌐 Dashboard Features
-
-- **Real-time Statistics**: Total events, spoofing detections, new devices
-- **Event Feed**: Live stream of ARP events with color coding
-- **Auto-refresh**: Updates every 2 seconds
-- **Event Types**:
-  - 🆕 **New** - First time seeing this IP
-  - 🚨 **Spoofing** - MAC changed (potential attack!)
-  - ✅ **Match** - Valid update (MAC unchanged)
-
-### API Endpoints
-
-- `GET /` - Dashboard UI
-- `POST /api/event` - Receive events from listener
-- `GET /api/events?limit=N` - Get recent events (JSON)
-- `GET /api/stats` - Get statistics (JSON)
-
----
-
-## 🛠️ Troubleshooting
-
-### Network Issues
+Stop Fabric:
 
 ```bash
-# Check what's running
-docker ps
-
-# View logs
-docker logs peer0org1_arptracker_ccaas
-docker logs peer0.org1.example.com
-
-# Restart everything
-cd ~/fabric/arp-chaincode/scripts
-./stop-all.sh
-./reset-and-start.sh
+cd /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network
+./network.sh down
 ```
-
-### Event Listener Not Receiving Events
-
-1. Check chaincode is running: `docker ps | grep arptracker`
-2. Verify Flask is running: `curl http://localhost:5000`
-3. Check listener logs for connection errors
-4. Ensure you're in correct directory when invoking chaincode
-
-### Dashboard Not Loading
-
-```bash
-# Check Flask process
-ps aux | grep app.py
-
-# Test Flask API
-curl http://localhost:5000/api/stats
-
-# Restart Flask
-cd ~/fabric/arp-chaincode/dashboard
-python3 app.py
-```
-
----
-
-## 🔐 Security Considerations
-
-- **Permissioned Network**: Only authorized organizations participate
-- **TLS Enabled**: All communications encrypted
-- **Immutable Ledger**: Records cannot be tampered with
-- **Event-Driven**: No polling - instant notification of changes
-- **Audit Trail**: Complete history for compliance
-
----
-
-## 🔄 Stopping the System
-
-```bash
-# Stop everything
-cd ~/fabric/arp-chaincode/scripts
-./stop-all.sh
-
-# This stops:
-# - Fabric network
-# - All peer and orderer containers
-# - Chaincode containers
-```
-
-Then manually stop Flask (Ctrl+C) and event listener (Ctrl+C).
-
----
-
-## 📚 Use Cases
-
-1. **Network Security Monitoring**: Real-time detection of ARP spoofing attacks
-2. **Compliance & Auditing**: Immutable records of network changes
-3. **Incident Response**: Complete history for forensic analysis
-4. **Multi-Site Networks**: Share ARP data securely across locations
-5. **IoT Security**: Track device connectivity and detect rogue devices
-
----
-
-## 🎓 Learn More
-
-- [Hyperledger Fabric Docs](https://hyperledger-fabric.readthedocs.io/)
-- [ARP Spoofing Explained](https://en.wikipedia.org/wiki/ARP_spoofing)
-- [Fabric Gateway SDK](https://hyperledger.github.io/fabric-gateway/)
-
----
-
-**Built with Hyperledger Fabric** | **Blockchain-secured Network Monitoring**

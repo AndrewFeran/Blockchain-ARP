@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/x509"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -32,9 +33,22 @@ var (
 	certPath    = cryptoPath + "/users/User1@org2.example.com/msp/signcerts/cert.pem"
 	keyPath     = cryptoPath + "/users/User1@org2.example.com/msp/keystore/"
 	tlsCertPath = cryptoPath + "/peers/peer0.org2.example.com/tls/ca.crt"
+
+	preventionMode    bool
+	preventionTimeout time.Duration
+	pendingEntries    = make(map[string]DetectionEvent)
+
+	localIPLookup = defaultLocalIPLookup
+	arpReplace    = defaultARPReplace
+	arpDelete     = defaultARPDelete
 )
 
-// DetectionEvent from blockchain
+type ARPEntry struct {
+	IPAddress  string `json:"ipAddress"`
+	MACAddress string `json:"macAddress"`
+	IsExpired  bool   `json:"isExpired"`
+}
+
 type DetectionEvent struct {
 	EventType   string    `json:"eventType"`
 	IPAddress   string    `json:"ipAddress"`
@@ -44,56 +58,53 @@ type DetectionEvent struct {
 	RecordedBy  string    `json:"recordedBy"`
 	Timestamp   time.Time `json:"timestamp"`
 	Message     string    `json:"message"`
+	TrialID     string    `json:"trialId,omitempty"`
 }
 
 func main() {
+	flag.BoolVar(&preventionMode, "prevention-mode", false, "simulate prevention-mode cache holds before ledger confirmation")
+	flag.DurationVar(&preventionTimeout, "prevention-timeout", 500*time.Millisecond, "maximum hold time for prevention-mode pending entries")
+	flag.Parse()
+
 	log.Println("============================================================")
-	log.Printf("  🖥️  LAN NODE - %s (%s)", nodeName, role)
+	log.Printf("  LAN NODE - %s (%s)", nodeName, role)
 	log.Println("============================================================")
 	log.Printf("Peer: %s (%s)\n", gatewayPeer, peerEndpoint)
 	log.Printf("Channel: %s, Chaincode: %s\n", channelName, chaincodeName)
+	log.Printf("Prevention mode: %t\n", preventionMode)
 	log.Println()
 
-	// If attacker role, just sleep (manual control)
-	if role == "attacker" {
-		log.Println("⚠️  ATTACKER MODE - Idle. Use docker exec to run attacks.")
-		log.Println("   Example: docker exec lan-attacker /app/spoof-attack.sh 10.5.0.10 aa:bb:cc:dd:ee:99")
-		select {} // Sleep forever
-	}
-
-	// Wait for Fabric network
-	log.Println("⏳ Waiting 15s for Fabric network and router...")
+	log.Println("Waiting 15s for Fabric network and router...")
 	time.Sleep(15 * time.Second)
 
-	// Connect to Fabric
 	network := connectToFabric()
 	defer network.Disconnect()
 
-	log.Println("✅ Connected to blockchain")
+	log.Println("Connected to blockchain")
 	log.Println()
 
-	// Get initial ARP table from blockchain
-	log.Println("📥 Fetching initial ARP table from blockchain...")
-	populateInitialARPCache(network.contract)
+	// Install current authoritative state before listening for live events.
+	log.Println("Performing cold-start ARP sync from blockchain...")
+	if err := coldStartSync(network.contract); err != nil {
+		log.Printf("Cold-start sync failed: %v", err)
+	}
 
-	// Start background traffic generation
-	go generateTraffic()
+	if backgroundTrafficEnabled() {
+		go generateTraffic()
+	} else {
+		log.Println("Background traffic generation disabled")
+	}
 
-	// Subscribe to ARP events
-	log.Println("🎧 Subscribing to ARP events...")
+	log.Println("Subscribing to ARP events...")
 	log.Println()
 	subscribeToEvents(network)
 }
 
 func connectToFabric() *FabricNetwork {
-	// Create gRPC connection
 	clientConnection := newGrpcConnection()
-
-	// Create identity
 	id := newIdentity()
 	sign := newSign()
 
-	// Connect to gateway
 	gw, err := client.Connect(
 		id,
 		client.WithSign(sign),
@@ -128,48 +139,80 @@ func (fn *FabricNetwork) Disconnect() {
 	fn.conn.Close()
 }
 
-func populateInitialARPCache(contract *client.Contract) {
+func coldStartSync(contract *client.Contract) error {
+	startTime := time.Now()
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	result, err := contract.EvaluateTransaction(ctx, "GetAllARPEntries")
+	result, err := contract.EvaluateWithContext(ctx, "GetAllARPEntries")
 	if err != nil {
-		log.Printf("⚠️  Failed to get ARP entries: %v", err)
-		return
+		return fmt.Errorf("failed to get ARP entries: %w", err)
 	}
 
-	var entries []map[string]interface{}
+	entries, err := parseColdStartEntries(result)
+	if err != nil {
+		return fmt.Errorf("failed to parse ARP entries: %w", err)
+	}
+
+	log.Printf("Found %d existing ARP entries", len(entries))
+
+	installed := installColdStartEntries(entries)
+
+	log.Printf("COLD_START_COMPLETE entries=%d elapsed_ms=%d", installed, time.Since(startTime).Milliseconds())
+	log.Println()
+	return nil
+}
+
+func parseColdStartEntries(result []byte) ([]ARPEntry, error) {
+	if len(result) == 0 {
+		return []ARPEntry{}, nil
+	}
+
+	var entries []ARPEntry
 	if err := json.Unmarshal(result, &entries); err != nil {
-		log.Printf("⚠️  Failed to parse ARP entries: %v", err)
-		return
+		return nil, err
 	}
+	return entries, nil
+}
 
-	log.Printf("📋 Found %d existing ARP entries\n", len(entries))
-
+func installColdStartEntries(entries []ARPEntry) int {
+	installed := 0
 	for _, entry := range entries {
-		ip := entry["ipAddress"].(string)
-		mac := entry["macAddress"].(string)
-
-		// Skip our own IP
-		if strings.HasPrefix(ip, "10.5.0.") && !isLocalIP(ip) {
-			addARPEntry(ip, mac)
-			log.Printf("   ✅ Added: %s -> %s", ip, mac)
+		if entry.IsExpired || entry.IPAddress == "" || entry.MACAddress == "" {
+			continue
+		}
+		if strings.HasPrefix(entry.IPAddress, "10.5.0.") && !isLocalIP(entry.IPAddress) {
+			if err := addARPEntry(entry.IPAddress, entry.MACAddress); err != nil {
+				log.Printf("Failed to add ARP entry %s -> %s: %v", entry.IPAddress, entry.MACAddress, err)
+				continue
+			}
+			installed++
+			log.Printf("Added: %s -> %s", entry.IPAddress, entry.MACAddress)
 		}
 	}
-
-	log.Println()
+	return installed
 }
 
 func subscribeToEvents(network *FabricNetwork) {
+	for {
+		if err := listenToEvents(network); err != nil {
+			log.Printf("Event subscription ended: %v", err)
+		}
+		log.Println("Retrying event subscription in 5s...")
+		time.Sleep(5 * time.Second)
+	}
+}
+
+func listenToEvents(network *FabricNetwork) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	events, err := network.gateway.GetNetwork(channelName).ChaincodeEvents(ctx, chaincodeName)
 	if err != nil {
-		log.Fatalf("Failed to subscribe to events: %v", err)
+		return fmt.Errorf("failed to subscribe to events: %w", err)
 	}
 
-	log.Println("📡 Listening for ARP events from blockchain...")
+	log.Println("Listening for ARP events from blockchain...")
 	log.Println()
 
 	for event := range events {
@@ -177,13 +220,16 @@ func subscribeToEvents(network *FabricNetwork) {
 			var detectionEvent DetectionEvent
 			err := json.Unmarshal(event.Payload, &detectionEvent)
 			if err != nil {
-				log.Printf("⚠️  Failed to parse event: %v", err)
+				log.Printf("Failed to parse event: %v", err)
 				continue
 			}
 
+			logBenchmarkEvent("node_received", detectionEvent)
 			handleARPEvent(detectionEvent)
 		}
 	}
+
+	return fmt.Errorf("event stream closed")
 }
 
 func handleARPEvent(event DetectionEvent) {
@@ -191,58 +237,111 @@ func handleARPEvent(event DetectionEvent) {
 
 	switch event.EventType {
 	case "new":
-		log.Printf("[%s] 🆕 NEW DEVICE: %s -> %s", timestamp, event.IPAddress, event.MACAddress)
-		addARPEntry(event.IPAddress, event.MACAddress)
+		log.Printf("[%s] NEW DEVICE: %s -> %s", timestamp, event.IPAddress, event.MACAddress)
+		if err := confirmARPEntry(event); err != nil {
+			log.Printf("Failed to update ARP cache: %v", err)
+		}
 
 	case "spoofing":
-		log.Printf("[%s] 🚨 SPOOFING DETECTED!", timestamp)
+		log.Printf("[%s] SPOOFING DETECTED!", timestamp)
 		log.Printf("         IP: %s", event.IPAddress)
 		log.Printf("         Old MAC: %s", event.PreviousMAC)
 		log.Printf("         New MAC: %s", event.MACAddress)
-		log.Printf("         ⛔ REJECTING malicious entry!")
-		// Do NOT add to ARP cache - keep the legitimate one
+		log.Printf("         REJECTING malicious entry!")
+		// Do not add to ARP cache; keep the legitimate permanent entry.
 
 	case "match":
-		log.Printf("[%s] ✅ Valid update: %s -> %s", timestamp, event.IPAddress, event.MACAddress)
-		// Update ARP cache (refresh)
-		addARPEntry(event.IPAddress, event.MACAddress)
+		log.Printf("[%s] Valid update: %s -> %s", timestamp, event.IPAddress, event.MACAddress)
+		if err := confirmARPEntry(event); err != nil {
+			log.Printf("Failed to update ARP cache: %v", err)
+		}
+
+	case "expired":
+		if err := removeARPEntry(event.IPAddress); err != nil {
+			log.Printf("Failed to remove expired ARP entry: %v", err)
+		} else {
+			log.Printf("ENTRY_EXPIRED ip=%s mac=%s", event.IPAddress, event.MACAddress)
+			logBenchmarkEvent("node_cache_updated", event)
+		}
 
 	default:
-		log.Printf("[%s] ❓ Unknown event: %s", timestamp, event.EventType)
+		log.Printf("[%s] Unknown event: %s", timestamp, event.EventType)
 	}
 
 	log.Println()
 }
 
-func addARPEntry(ip, mac string) {
-	// Skip local IPs
-	if isLocalIP(ip) {
-		return
+func confirmARPEntry(event DetectionEvent) error {
+	if preventionMode {
+		pendingEntries[event.IPAddress] = event
+		timer := time.NewTimer(preventionTimeout)
+		<-timer.C
+		delete(pendingEntries, event.IPAddress)
 	}
 
-	// Add static ARP entry
-	cmd := exec.Command("ip", "neigh", "replace", ip, "lladdr", mac, "dev", "eth0", "nud", "permanent")
-	if err := cmd.Run(); err != nil {
-		log.Printf("⚠️  Failed to add ARP entry: %v", err)
+	if err := addARPEntry(event.IPAddress, event.MACAddress); err != nil {
+		return err
 	}
+	logBenchmarkEvent("node_cache_updated", event)
+	return nil
+}
+
+func addARPEntry(ip, mac string) error {
+	if isLocalIP(ip) {
+		return nil
+	}
+	return arpReplace(ip, mac)
+}
+
+func removeARPEntry(ip string) error {
+	if isLocalIP(ip) {
+		return nil
+	}
+
+	return arpDelete(ip)
+}
+
+func logBenchmarkEvent(stage string, event DetectionEvent) {
+	log.Printf("BENCHMARK_EVENT stage=%s trial=%s ip=%s mac=%s ts=%d",
+		stage, event.TrialID, event.IPAddress, event.MACAddress, time.Now().UnixMilli())
 }
 
 func isLocalIP(ip string) bool {
-	// Get local IP
-	cmd := exec.Command("hostname", "-i")
-	output, err := cmd.Output()
+	localIP, err := localIPLookup()
 	if err != nil {
 		return false
 	}
-	localIP := strings.TrimSpace(string(output))
 	return ip == localIP
 }
 
+func defaultLocalIPLookup() (string, error) {
+	cmd := exec.Command("hostname", "-i")
+	output, err := cmd.Output()
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(string(output)), nil
+}
+
+func defaultARPReplace(ip, mac string) error {
+	cmd := exec.Command("ip", "neigh", "replace", ip, "lladdr", mac, "dev", "eth0", "nud", "permanent")
+	return cmd.Run()
+}
+
+func defaultARPDelete(ip string) error {
+	cmd := exec.Command("ip", "neigh", "del", ip, "dev", "eth0")
+	return cmd.Run()
+}
+
+func backgroundTrafficEnabled() bool {
+	value := strings.ToLower(strings.TrimSpace(os.Getenv("DISABLE_BACKGROUND_TRAFFIC")))
+	return value != "1" && value != "true" && value != "yes"
+}
+
 func generateTraffic() {
-	// Wait before starting
 	time.Sleep(20 * time.Second)
 
-	log.Println("🔄 Starting background traffic generation...")
+	log.Println("Starting background traffic generation...")
 
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()

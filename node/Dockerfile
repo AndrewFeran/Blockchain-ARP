@@ -25,7 +25,6 @@ RUN apk add --no-cache \
     iproute2 \
     iputils \
     net-tools \
-    arping \
     bash \
     ca-certificates \
     curl
@@ -39,12 +38,8 @@ COPY --from=builder /build/node-sync .
 COPY start-node.sh .
 RUN chmod +x start-node.sh
 
-# Copy helper scripts
-COPY arp-manager.sh .
-RUN chmod +x arp-manager.sh
-
 # Copy attack scripts
 COPY spoof-attack.sh .
 RUN chmod +x spoof-attack.sh
 
-CMD ["/app/start-node.sh"]
+CMD ["bash", "/app/start-node.sh"]

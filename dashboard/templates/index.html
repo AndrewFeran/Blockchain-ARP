@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>🛡️ ARP Spoofing Detection Dashboard</h1>
+        <h1>ARP Spoofing Detection Dashboard</h1>
         <div class="subtitle">Blockchain-Based Network Security Monitor</div>
     </div>
 
@@ -18,16 +18,20 @@
             <div class="stat-value" id="stat-total">0</div>
         </div>
         <div class="stat-card spoofing">
-            <div class="stat-label">🚨 Spoofing Detected</div>
+            <div class="stat-label">Spoofing Detected</div>
             <div class="stat-value" id="stat-spoofing">0</div>
         </div>
         <div class="stat-card new">
-            <div class="stat-label">🆕 New Devices</div>
+            <div class="stat-label">New Devices</div>
             <div class="stat-value" id="stat-new">0</div>
         </div>
         <div class="stat-card match">
-            <div class="stat-label">✅ Valid Updates</div>
+            <div class="stat-label">Valid Updates</div>
             <div class="stat-value" id="stat-match">0</div>
+        </div>
+        <div class="stat-card expired">
+            <div class="stat-label">Expired Mappings</div>
+            <div class="stat-value" id="stat-expired">0</div>
         </div>
     </div>
 
@@ -36,7 +40,7 @@
             <h2>Recent Events</h2>
             <div>
                 <span class="auto-refresh">Auto-refresh: 2s</span>
-                <button class="refresh-btn" onclick="loadEvents()">🔄 Refresh</button>
+                <button class="refresh-btn" onclick="loadEvents()">Refresh</button>
             </div>
         </div>
         <div id="events-list">

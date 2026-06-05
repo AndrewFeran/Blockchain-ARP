@@ -12,7 +12,6 @@ type SmartContract struct {
 	contractapi.Contract
 }
 
-// ARPEntry represents an ARP table entry
 type ARPEntry struct {
 	IPAddress  string    `json:"ipAddress"`
 	MACAddress string    `json:"macAddress"`
@@ -22,23 +21,22 @@ type ARPEntry struct {
 	EntryType  string    `json:"entryType"`  // static, dynamic
 	State      string    `json:"state"`      // reachable, stale, delay, probe, failed
 	RecordedBy string    `json:"recordedBy"` // which system recorded this
+	IsExpired  bool      `json:"isExpired"`
+	ExpiredAt  string    `json:"expiredAt"`
 }
 
-// ARPHistory tracks changes to an IP's MAC address over time
 type ARPHistory struct {
 	IPAddress string     `json:"ipAddress"`
 	Entries   []ARPEntry `json:"entries"`
 }
 
-// MACChangeResult holds the result of MAC change detection
 type MACChangeResult struct {
 	Changed     bool   `json:"changed"`
 	PreviousMAC string `json:"previousMAC"`
 }
 
-// DetectionEvent represents an ARP event for the dashboard
 type DetectionEvent struct {
-	EventType   string    `json:"eventType"`   // "new", "match", "spoofing"
+	EventType   string    `json:"eventType"` // "new", "match", "spoofing", "expired"
 	IPAddress   string    `json:"ipAddress"`
 	MACAddress  string    `json:"macAddress"`
 	PreviousMAC string    `json:"previousMAC,omitempty"`
@@ -46,16 +44,15 @@ type DetectionEvent struct {
 	RecordedBy  string    `json:"recordedBy"`
 	Timestamp   time.Time `json:"timestamp"`
 	Message     string    `json:"message"`
+	TrialID     string    `json:"trialId,omitempty"`
 }
 
-// emitEvent sends a chaincode event that can be listened to by external services
 func emitEvent(ctx contractapi.TransactionContextInterface, event DetectionEvent) error {
 	eventJSON, err := json.Marshal(event)
 	if err != nil {
 		return fmt.Errorf("failed to marshal event: %v", err)
 	}
 
-	// Emit the event - this is deterministic and proper Fabric way
 	err = ctx.GetStub().SetEvent("ARPDetectionEvent", eventJSON)
 	if err != nil {
 		return fmt.Errorf("failed to set event: %v", err)
@@ -64,93 +61,29 @@ func emitEvent(ctx contractapi.TransactionContextInterface, event DetectionEvent
 	return nil
 }
 
-// RecordARPEntry adds a new ARP entry to the ledger
-func (s *SmartContract) RecordARPEntry(ctx contractapi.TransactionContextInterface,
-	ipAddress string, macAddress string, iface string, hostname string,
-	entryType string, state string, recordedBy string) error {
-
-	// Get transaction timestamp (deterministic across all peers)
-	txTimestamp, err := ctx.GetStub().GetTxTimestamp()
+func getTrialID(ctx contractapi.TransactionContextInterface) string {
+	transient, err := ctx.GetStub().GetTransient()
 	if err != nil {
-		return fmt.Errorf("failed to get transaction timestamp: %v", err)
+		return ""
 	}
+	return string(transient["trialID"])
+}
 
-	timestamp := time.Unix(txTimestamp.Seconds, int64(txTimestamp.Nanos))
-
-	// Check if entry already exists (for detection)
-	key := fmt.Sprintf("ARP_%s", ipAddress)
-	existingJSON, _ := ctx.GetStub().GetState(key)
-
-	var event DetectionEvent
-	event.IPAddress = ipAddress
-	event.MACAddress = macAddress
-	event.Hostname = hostname
-	event.RecordedBy = recordedBy
-	event.Timestamp = timestamp
-
-	if existingJSON == nil {
-		// NEW DEVICE DETECTED
-		event.EventType = "new"
-		event.Message = fmt.Sprintf("New device: %s -> %s", ipAddress, macAddress)
-	} else {
-		// Check for MAC change
-		var existingEntry ARPEntry
-		json.Unmarshal(existingJSON, &existingEntry)
-
-		if existingEntry.MACAddress != macAddress {
-			// ARP SPOOFING DETECTED!
-			event.EventType = "spoofing"
-			event.PreviousMAC = existingEntry.MACAddress
-			event.Message = fmt.Sprintf("MAC CHANGED! %s: %s -> %s", ipAddress, existingEntry.MACAddress, macAddress)
-		} else {
-			// Match - normal update
-			event.EventType = "match"
-			event.Message = fmt.Sprintf("Valid update: %s -> %s", ipAddress, macAddress)
-		}
-	}
-
-	// Emit chaincode event for external listeners
-	err = emitEvent(ctx, event)
-	if err != nil {
-		return fmt.Errorf("failed to emit event: %v", err)
-	}
-
-	// Store the current entry
-	entry := ARPEntry{
-		IPAddress:  ipAddress,
-		MACAddress: macAddress,
-		Interface:  iface,
-		Hostname:   hostname,
-		Timestamp:  timestamp,
-		EntryType:  entryType,
-		State:      state,
-		RecordedBy: recordedBy,
-	}
-
-	entryJSON, err := json.Marshal(entry)
-	if err != nil {
-		return err
-	}
-
-	err = ctx.GetStub().PutState(key, entryJSON)
-	if err != nil {
-		return err
-	}
-
-	// Also add to history
-	historyKey := fmt.Sprintf("HISTORY_%s", ipAddress)
+func appendARPHistory(ctx contractapi.TransactionContextInterface, entry ARPEntry) error {
+	historyKey := fmt.Sprintf("HISTORY_%s", entry.IPAddress)
 	historyJSON, err := ctx.GetStub().GetState(historyKey)
+	if err != nil {
+		return err
+	}
 
 	var history ARPHistory
 	if historyJSON == nil {
-		// First entry for this IP
 		history = ARPHistory{
-			IPAddress: ipAddress,
+			IPAddress: entry.IPAddress,
 			Entries:   []ARPEntry{entry},
 		}
 	} else {
-		err = json.Unmarshal(historyJSON, &history)
-		if err != nil {
+		if err := json.Unmarshal(historyJSON, &history); err != nil {
 			return err
 		}
 		history.Entries = append(history.Entries, entry)
@@ -164,7 +97,93 @@ func (s *SmartContract) RecordARPEntry(ctx contractapi.TransactionContextInterfa
 	return ctx.GetStub().PutState(historyKey, historyJSON)
 }
 
-// GetCurrentARPEntry retrieves the current ARP entry for an IP
+func (s *SmartContract) RecordARPEntry(ctx contractapi.TransactionContextInterface,
+	ipAddress string, macAddress string, iface string, hostname string,
+	entryType string, state string, recordedBy string) error {
+
+	// Get transaction timestamp (deterministic across all peers)
+	txTimestamp, err := ctx.GetStub().GetTxTimestamp()
+	if err != nil {
+		return fmt.Errorf("failed to get transaction timestamp: %v", err)
+	}
+
+	timestamp := time.Unix(txTimestamp.Seconds, int64(txTimestamp.Nanos))
+
+	key := fmt.Sprintf("ARP_%s", ipAddress)
+	existingJSON, _ := ctx.GetStub().GetState(key)
+
+	var event DetectionEvent
+	event.IPAddress = ipAddress
+	event.MACAddress = macAddress
+	event.Hostname = hostname
+	event.RecordedBy = recordedBy
+	event.Timestamp = timestamp
+	event.TrialID = getTrialID(ctx)
+
+	entry := ARPEntry{
+		IPAddress:  ipAddress,
+		MACAddress: macAddress,
+		Interface:  iface,
+		Hostname:   hostname,
+		Timestamp:  timestamp,
+		EntryType:  entryType,
+		State:      state,
+		RecordedBy: recordedBy,
+	}
+
+	if existingJSON == nil {
+		// NEW DEVICE DETECTED
+		event.EventType = "new"
+		event.Message = fmt.Sprintf("New device: %s -> %s", ipAddress, macAddress)
+	} else {
+		// Check for MAC change
+		var existingEntry ARPEntry
+		if err := json.Unmarshal(existingJSON, &existingEntry); err != nil {
+			return err
+		}
+
+		if existingEntry.IsExpired {
+			event.EventType = "new"
+			event.Message = fmt.Sprintf("Re-registered expired device: %s -> %s", ipAddress, macAddress)
+		} else if existingEntry.MACAddress != macAddress {
+			// ARP SPOOFING DETECTED!
+			event.EventType = "spoofing"
+			event.PreviousMAC = existingEntry.MACAddress
+			event.Message = fmt.Sprintf("MAC CHANGED! %s: %s -> %s", ipAddress, existingEntry.MACAddress, macAddress)
+		} else {
+			// Match - normal update
+			event.EventType = "match"
+			event.Message = fmt.Sprintf("Valid update: %s -> %s", ipAddress, macAddress)
+		}
+	}
+
+	fmt.Printf("BENCHMARK_EVENT stage=chaincode_processed trial=%s ip=%s mac=%s ts=%d\n",
+		event.TrialID, ipAddress, macAddress, time.Now().UnixMilli())
+
+	err = emitEvent(ctx, event)
+	if err != nil {
+		return fmt.Errorf("failed to emit event: %v", err)
+	}
+
+	// A spoofing event is preserved in history, but does not replace the
+	// current authoritative mapping used by cold-start sync.
+	if event.EventType == "spoofing" {
+		return appendARPHistory(ctx, entry)
+	}
+
+	entryJSON, err := json.Marshal(entry)
+	if err != nil {
+		return err
+	}
+
+	err = ctx.GetStub().PutState(key, entryJSON)
+	if err != nil {
+		return err
+	}
+
+	return appendARPHistory(ctx, entry)
+}
+
 func (s *SmartContract) GetCurrentARPEntry(ctx contractapi.TransactionContextInterface,
 	ipAddress string) (*ARPEntry, error) {
 
@@ -186,7 +205,6 @@ func (s *SmartContract) GetCurrentARPEntry(ctx contractapi.TransactionContextInt
 	return &entry, nil
 }
 
-// GetARPHistory retrieves all historical entries for an IP
 func (s *SmartContract) GetARPHistory(ctx contractapi.TransactionContextInterface,
 	ipAddress string) (*ARPHistory, error) {
 
@@ -208,8 +226,16 @@ func (s *SmartContract) GetARPHistory(ctx contractapi.TransactionContextInterfac
 	return &history, nil
 }
 
-// GetAllARPEntries retrieves all current ARP entries
 func (s *SmartContract) GetAllARPEntries(ctx contractapi.TransactionContextInterface) ([]*ARPEntry, error) {
+	return s.getAllARPEntries(ctx, false)
+}
+
+// GetAllARPEntriesIncludingExpired is the audit path - includes expired entries that GetAllARPEntries skips.
+func (s *SmartContract) GetAllARPEntriesIncludingExpired(ctx contractapi.TransactionContextInterface) ([]*ARPEntry, error) {
+	return s.getAllARPEntries(ctx, true)
+}
+
+func (s *SmartContract) getAllARPEntries(ctx contractapi.TransactionContextInterface, includeExpired bool) ([]*ARPEntry, error) {
 	resultsIterator, err := ctx.GetStub().GetStateByRange("ARP_", "ARP_~")
 	if err != nil {
 		return nil, err
@@ -228,13 +254,69 @@ func (s *SmartContract) GetAllARPEntries(ctx contractapi.TransactionContextInter
 		if err != nil {
 			return nil, err
 		}
+		if entry.IsExpired && !includeExpired {
+			continue
+		}
 		entries = append(entries, &entry)
 	}
 
 	return entries, nil
 }
 
-// DetectMACChange checks if a MAC address has changed for an IP
+// ExpireARPEntry marks an ARP entry as no longer authoritative while keeping
+// the record and history available for audit.
+func (s *SmartContract) ExpireARPEntry(ctx contractapi.TransactionContextInterface, ipAddress string) error {
+	key := fmt.Sprintf("ARP_%s", ipAddress)
+	entryJSON, err := ctx.GetStub().GetState(key)
+	if err != nil {
+		return fmt.Errorf("failed to read from ledger: %v", err)
+	}
+	if entryJSON == nil {
+		return fmt.Errorf("ARP entry for %s does not exist", ipAddress)
+	}
+
+	var entry ARPEntry
+	if err := json.Unmarshal(entryJSON, &entry); err != nil {
+		return err
+	}
+
+	txTimestamp, err := ctx.GetStub().GetTxTimestamp()
+	if err != nil {
+		return fmt.Errorf("failed to get transaction timestamp: %v", err)
+	}
+	timestamp := time.Unix(txTimestamp.Seconds, int64(txTimestamp.Nanos))
+	entry.IsExpired = true
+	entry.ExpiredAt = timestamp.Format(time.RFC3339Nano)
+
+	event := DetectionEvent{
+		EventType:  "expired",
+		IPAddress:  entry.IPAddress,
+		MACAddress: entry.MACAddress,
+		Hostname:   entry.Hostname,
+		RecordedBy: entry.RecordedBy,
+		Timestamp:  timestamp,
+		Message:    fmt.Sprintf("Expired device mapping: %s -> %s", entry.IPAddress, entry.MACAddress),
+		TrialID:    getTrialID(ctx),
+	}
+
+	fmt.Printf("BENCHMARK_EVENT stage=chaincode_processed trial=%s ip=%s mac=%s ts=%d\n",
+		event.TrialID, event.IPAddress, event.MACAddress, time.Now().UnixMilli())
+
+	if err := emitEvent(ctx, event); err != nil {
+		return fmt.Errorf("failed to emit event: %v", err)
+	}
+
+	entryJSON, err = json.Marshal(entry)
+	if err != nil {
+		return err
+	}
+	if err := ctx.GetStub().PutState(key, entryJSON); err != nil {
+		return err
+	}
+
+	return appendARPHistory(ctx, entry)
+}
+
 func (s *SmartContract) DetectMACChange(ctx contractapi.TransactionContextInterface,
 	ipAddress string, currentMAC string) (*MACChangeResult, error) {
 
@@ -251,7 +333,6 @@ func (s *SmartContract) DetectMACChange(ctx contractapi.TransactionContextInterf
 	return result, nil
 }
 
-// QueryARPByMAC finds all IPs associated with a MAC address
 func (s *SmartContract) QueryARPByMAC(ctx contractapi.TransactionContextInterface,
 	macAddress string) ([]*ARPEntry, error) {
 
@@ -280,7 +361,6 @@ func (s *SmartContract) QueryARPByMAC(ctx contractapi.TransactionContextInterfac
 	return entries, nil
 }
 
-// DeleteARPEntry removes an ARP entry (for cleanup)
 func (s *SmartContract) DeleteARPEntry(ctx contractapi.TransactionContextInterface,
 	ipAddress string) error {
 
