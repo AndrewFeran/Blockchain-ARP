@@ -3,49 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARP Spoofing Detection Dashboard</title>
+    <title>Blockchain ARP Operations</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="header">
-        <h1>ARP Spoofing Detection Dashboard</h1>
-        <div class="subtitle">Blockchain-Based Network Security Monitor</div>
-    </div>
-
-    <div class="stats">
-        <div class="stat-card total">
-            <div class="stat-label">Total Events</div>
-            <div class="stat-value" id="stat-total">0</div>
-        </div>
-        <div class="stat-card spoofing">
-            <div class="stat-label">Spoofing Detected</div>
-            <div class="stat-value" id="stat-spoofing">0</div>
-        </div>
-        <div class="stat-card new">
-            <div class="stat-label">New Devices</div>
-            <div class="stat-value" id="stat-new">0</div>
-        </div>
-        <div class="stat-card match">
-            <div class="stat-label">Valid Updates</div>
-            <div class="stat-value" id="stat-match">0</div>
-        </div>
-        <div class="stat-card expired">
-            <div class="stat-label">Expired Mappings</div>
-            <div class="stat-value" id="stat-expired">0</div>
-        </div>
-    </div>
-
-    <div class="events-container">
-        <div class="events-header">
-            <h2>Recent Events</h2>
-            <div>
-                <span class="auto-refresh">Auto-refresh: 2s</span>
-                <button class="refresh-btn" onclick="loadEvents()">Refresh</button>
+    <div class="app-shell">
+        <header class="status-bar" aria-label="System status">
+            <div class="brand-block">
+                <div class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" role="img">
+                        <path d="M12 3l7 3v5c0 4.6-2.8 8.8-7 10-4.2-1.2-7-5.4-7-10V6l7-3z"/>
+                        <path d="M8.5 12.1l2.2 2.2 4.8-5"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1>Blockchain ARP Operations</h1>
+                    <p>Fabric-backed LAN mapping monitor</p>
+                </div>
             </div>
-        </div>
-        <div id="events-list">
-            <div class="no-events">Waiting for events...</div>
-        </div>
+
+            <div class="status-cluster">
+                <span class="live-pill" id="live-state">
+                    <span class="pulse-dot" aria-hidden="true"></span>
+                    <span id="live-label">Live</span>
+                </span>
+                <span class="meta-item">Last event <strong id="last-event-time">Waiting</strong></span>
+                <span class="meta-item">Refresh <strong id="refresh-state">Idle</strong></span>
+                <button class="icon-button" id="refresh-button" type="button" aria-label="Refresh dashboard" title="Refresh dashboard">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 12a8 8 0 1 1-2.3-5.7"/>
+                        <path d="M20 4v6h-6"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <section class="kpi-grid" aria-label="Network counters">
+                <article class="kpi-card total">
+                    <div class="kpi-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </div>
+                    <div>
+                        <span>Total Events</span>
+                        <strong id="stat-total">--</strong>
+                    </div>
+                </article>
+                <article class="kpi-card spoofing" id="spoofing-kpi">
+                    <div class="kpi-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 3l9 16H3L12 3z"/><path d="M12 9v4M12 17h.01"/></svg>
+                    </div>
+                    <div>
+                        <span>Spoofing Alerts</span>
+                        <strong id="stat-spoofing">--</strong>
+                    </div>
+                </article>
+                <article class="kpi-card match">
+                    <div class="kpi-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.6-2.8 8.8-7 10-4.2-1.2-7-5.4-7-10V6l7-3z"/><path d="M8.5 12.1l2.2 2.2 4.8-5"/></svg>
+                    </div>
+                    <div>
+                        <span>Protected Mappings</span>
+                        <strong id="stat-match">--</strong>
+                    </div>
+                </article>
+                <article class="kpi-card new">
+                    <div class="kpi-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M4 17h16"/><path d="M6 17V7h12v10"/><path d="M12 10v5M9.5 12.5h5"/></svg>
+                    </div>
+                    <div>
+                        <span>New Devices</span>
+                        <strong id="stat-new">--</strong>
+                    </div>
+                </article>
+                <article class="kpi-card expired">
+                    <div class="kpi-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 7v5l3 2"/><path d="M21 12a9 9 0 1 1-9-9 9 9 0 0 1 9 9z"/></svg>
+                    </div>
+                    <div>
+                        <span>Expired Mappings</span>
+                        <strong id="stat-expired">--</strong>
+                    </div>
+                </article>
+            </section>
+
+            <section class="operations-grid">
+                <div class="panel event-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Event Stream</h2>
+                            <p id="event-count-label">Loading recent Fabric events</p>
+                        </div>
+                        <div class="filter-tabs" role="tablist" aria-label="Event filter">
+                            <button class="filter-tab active" type="button" data-filter="all">All</button>
+                            <button class="filter-tab" type="button" data-filter="spoofing">Spoofing</button>
+                            <button class="filter-tab" type="button" data-filter="new">New</button>
+                            <button class="filter-tab" type="button" data-filter="match">Valid</button>
+                            <button class="filter-tab" type="button" data-filter="expired">Expired</button>
+                        </div>
+                    </div>
+                    <div class="alert-banner hidden" id="active-alert" role="status"></div>
+                    <div class="event-list loading" id="events-list" aria-live="polite">
+                        <div class="skeleton-row"></div>
+                        <div class="skeleton-row"></div>
+                        <div class="skeleton-row short"></div>
+                    </div>
+                </div>
+
+                <aside class="panel detail-panel" aria-label="Selected event details">
+                    <div class="panel-heading compact">
+                        <div>
+                            <h2>Event Detail</h2>
+                            <p id="detail-subtitle">Select an event to inspect</p>
+                        </div>
+                        <span class="severity-chip neutral" id="detail-severity">None</span>
+                    </div>
+                    <div class="detail-content empty-detail" id="event-detail">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 3l7 3v5c0 4.6-2.8 8.8-7 10-4.2-1.2-7-5.4-7-10V6l7-3z"/>
+                            <path d="M9 12h6"/>
+                        </svg>
+                        <p>No event selected</p>
+                    </div>
+                </aside>
+            </section>
+
+            <section class="panel arp-panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Authoritative ARP Table</h2>
+                        <p id="arp-count-label">Derived from latest authoritative events</p>
+                    </div>
+                </div>
+                <div class="table-wrap" id="arp-table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>IP</th>
+                                <th>Authoritative MAC</th>
+                                <th>Hostname</th>
+                                <th>Last Seen</th>
+                                <th>State</th>
+                            </tr>
+                        </thead>
+                        <tbody id="arp-table-body">
+                            <tr class="table-empty">
+                                <td colspan="5">Waiting for authoritative mappings.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
     </div>
 
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
