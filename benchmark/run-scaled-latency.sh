@@ -9,7 +9,7 @@ NODE_COUNTS="${NODE_COUNTS:-3,5,7,10}"
 WAIT_SECONDS="${WAIT_SECONDS:-30}"
 RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)"
 RESULTS_DIR="${RESULTS_DIR:-"$BENCHMARK_DIR/results"}"
-COMBINED="$RESULTS_DIR/scaled_latency_${RUN_ID}.csv"
+COMBINED="$RESULTS_DIR/scaled_latency_real_${RUN_ID}.csv"
 
 mkdir -p "$RESULTS_DIR"
 

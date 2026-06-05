@@ -21,7 +21,9 @@ Blockchain-ARP is a Hyperledger Fabric prototype for detecting ARP spoofing on a
   - `benchmark/run-scaled-latency.sh` changes the actual running LAN-node topology and measures 3, 5, 7, and 10 real containers.
   - `scripts/verify-e2e.sh` proves live spoof detection and ledger protection.
 
-Generated benchmark CSVs/logs/figures live under `benchmark/results/` and `benchmark/figures/`. They are intentionally ignored by git.
+Generated benchmark CSVs/logs/figures live under `benchmark/results/` and
+`benchmark/figures/`. Bulky generated artifacts are ignored by git, while
+`benchmark/results/README.md` is kept as the current results index.
 
 ## Requirements
 
@@ -109,30 +111,17 @@ Real scaled LAN-node latency experiment:
 TRIALS=30 WAIT_SECONDS=30 BENCH_EVENT_TIMEOUT=30s ./benchmark/run-scaled-latency.sh
 ```
 
-Read the benchmark docs:
+Benchmark methodology, commands, CSV schemas, and reproducibility notes:
 
 ```text
 benchmark/README.md
 ```
 
-## Current Real Scaled Result
-
-Latest real scaled latency result:
+Latest generated benchmark results:
 
 ```text
-benchmark/results/scaled_latency_real_20260605T015104Z.csv
+benchmark/results/README.md
 ```
-
-Summary:
-
-| Running LAN Nodes | Mean | Median | P95 | P99 |
-| --- | ---: | ---: | ---: | ---: |
-| 3 | 1199.77 ms | 1187 ms | 1265 ms | 1409 ms |
-| 5 | 1794.97 ms | 2056 ms | 2373 ms | 3480 ms |
-| 7 | 1312.00 ms | 1663 ms | 2071 ms | 2085 ms |
-| 10 | 2079.17 ms | 2078 ms | 3385 ms | 3388 ms |
-
-Each row was measured with that exact number of real `lan-node-*` containers running.
 
 ## Stop
 

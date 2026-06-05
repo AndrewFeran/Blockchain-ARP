@@ -4,5 +4,6 @@ chaincode/vendor/
 __pycache__/
 *.py[cod]
 .pytest_cache/
-benchmark/results/
+benchmark/results/*
+!benchmark/results/README.md
 benchmark/figures/
