@@ -139,6 +139,31 @@ def save_latency_summary(rows: list[dict[str, str]], path: Path) -> None:
     plt.close()
 
 
+def save_latency_distribution(rows: list[dict[str, str]], path: Path) -> None:
+    if not rows:
+        return
+
+    groups: dict[int, list[float]] = defaultdict(list)
+    for row in rows:
+        groups[int(float(row["node_count"]))].append(float(row["detection_latency_ms"]))
+
+    xs = sorted(groups)
+    plt.figure(figsize=(5.6, 3.2))
+    for x in xs:
+        values = sorted(groups[x])
+        offsets = [((i % 7) - 3) * 0.025 for i in range(len(values))]
+        plt.scatter([x + offset for offset in offsets], values, s=13, color="0.25", alpha=0.62)
+        plt.plot([x - 0.18, x + 0.18], [median(values), median(values)], color="0.05", linewidth=2.0)
+        plt.plot([x - 0.14, x + 0.14], [percentile(values, 95), percentile(values, 95)], color="0.45", linewidth=1.5, linestyle=":")
+
+    plt.xticks(xs, [str(x) for x in xs])
+    plt.xlabel("Node count")
+    plt.ylabel("Detection latency (ms)")
+    plt.title("Latency samples with median and P95 markers")
+    plt.savefig(path)
+    plt.close()
+
+
 def save_bar(xs: list[int | str], ys: list[float], xlabel: str, ylabel: str, path: Path) -> None:
     if not xs:
         return
@@ -263,6 +288,7 @@ def write_results_readme(latency: list[dict[str, str]]) -> None:
     figures = [
         ("Latency mean curve", FIGURES / "latency_vs_nodes.png", latency_path),
         ("Latency summary curve", FIGURES / "latency_summary.png", latency_path),
+        ("Latency sample distribution", FIGURES / "latency_distribution.png", latency_path),
         ("Throughput curve", FIGURES / "throughput_curve.png", throughput_path),
         ("Cold-start curve", FIGURES / "coldstart_vs_ledger.png", coldstart_path),
         ("Protection-rate chart", FIGURES / "protection_rate.png", baseline_path),
@@ -293,6 +319,7 @@ def main() -> None:
     xs, ys = grouped_mean(latency, "node_count", "detection_latency_ms")
     save_line(xs, ys, "Node count", "Latency (ms)", FIGURES / "latency_vs_nodes.png")
     save_latency_summary(latency, FIGURES / "latency_summary.png")
+    save_latency_distribution(latency, FIGURES / "latency_distribution.png")
 
     throughput = read_latest("throughput")
     xs, ys = grouped_mean(throughput, "rate_per_sec", "detection_latency_ms")

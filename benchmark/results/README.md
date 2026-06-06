@@ -7,27 +7,26 @@ It only reports metrics whose source CSV/log files are present in `benchmark/res
 
 | Result | File |
 | --- | --- |
-| Latency source | `latency_20260605T031231Z.csv` |
+| Latency source | `scaled_latency_real_20260606T135116Z.csv` |
 | Throughput source | `throughput_20260605T031810Z.csv` |
 | Cold-start source | `coldstart_20260605T032254Z.csv` |
 | Baseline source | `baseline_20260605T033733Z.csv` |
 | End-to-end proof | `e2e_20260605T033808Z.txt` |
 
-## Configured Latency Summary
+## Real Scaled Latency Summary
 
-| Configured node count | Trials | Mean | Median | P95 | P99 | Nodes observed |
+| Running LAN nodes | Trials | Mean | Median | P95 | P99 | Nodes observed |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| 3 | 30 | 2071.40 ms | 2062.00 ms | 3133.00 ms | 3333.00 ms | 3 |
-| 5 | 30 | 1961.27 ms | 2052.00 ms | 2074.00 ms | 2075.00 ms | 3 |
-| 7 | 30 | 2045.83 ms | 2053.50 ms | 3383.00 ms | 3392.00 ms | 3 |
-| 10 | 30 | 2078.33 ms | 2060.50 ms | 3343.00 ms | 3356.00 ms | 3 |
+| 3 | 100 | 1953.67 ms | 2055.00 ms | 3085.00 ms | 3111.00 ms | 3 |
+| 5 | 100 | 1712.20 ms | 2056.00 ms | 2092.00 ms | 3140.00 ms | 5 |
+| 7 | 100 | 1521.30 ms | 2053.00 ms | 2079.00 ms | 3071.00 ms | 7 |
+| 10 | 100 | 1342.48 ms | 1981.00 ms | 2130.00 ms | 3255.00 ms | 10 |
 
 Notes:
 
 - The latency figure plots mean, median, and P95 so bimodal runs are visible.
 - Non-monotonic node-count results can occur when Fabric submission, Docker log timing, and node event fan-out batch differently between runs.
 - `nodes_observed` confirms how many running node containers emitted cache-update evidence for each topology.
-- This is the standard full-run latency benchmark. Use `benchmark/run-scaled-latency.sh` for measurements where the actual running LAN-node count changes.
 
 ## End-to-End Verification
 
@@ -41,6 +40,7 @@ Source log: `e2e_20260605T033808Z.txt`
 | --- | --- | --- |
 | Latency mean curve | `../figures/latency_vs_nodes.png` | current source present |
 | Latency summary curve | `../figures/latency_summary.png` | current source present |
+| Latency sample distribution | `../figures/latency_distribution.png` | current source present |
 | Throughput curve | `../figures/throughput_curve.png` | current source present |
 | Cold-start curve | `../figures/coldstart_vs_ledger.png` | current source present |
 | Protection-rate chart | `../figures/protection_rate.png` | current source present |
