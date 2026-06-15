@@ -1,0 +1,2 @@
+node_count,trial,trial_id,ip,mac,submit_latency_ms,detection_latency_ms,nodes_observed
+20,1,311db2f0ca4ba6904d149255e91d2485,10.250.20.1,be:bc:f7:3e:75:46,1755.269,1771.000,15

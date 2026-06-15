@@ -5,11 +5,12 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BENCHMARK_DIR="$ROOT/benchmark"
 FABRIC_TEST_NETWORK="${FABRIC_TEST_NETWORK:-"$ROOT/../fabric-samples/test-network"}"
 TRIALS="${TRIALS:-30}"
-NODE_COUNTS="${NODE_COUNTS:-3,5,7,10}"
+NODE_COUNTS="${NODE_COUNTS:-5,10,15,20}"
 WAIT_SECONDS="${WAIT_SECONDS:-30}"
 RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)"
 RESULTS_DIR="${RESULTS_DIR:-"$BENCHMARK_DIR/results"}"
 COMBINED="$RESULTS_DIR/scaled_latency_real_${RUN_ID}.csv"
+MAX_NODE_COUNT="${MAX_NODE_COUNT:-20}"
 
 mkdir -p "$RESULTS_DIR"
 
@@ -37,10 +38,10 @@ extra_node_services_after_count() {
     local count="$1"
     local services=()
     local i
-    if [ "$count" -ge 10 ]; then
+    if [ "$count" -ge "$MAX_NODE_COUNT" ]; then
         return 0
     fi
-    for i in $(seq $((count + 1)) 10); do
+    for i in $(seq $((count + 1)) "$MAX_NODE_COUNT"); do
         services+=("node${i}")
     done
     printf '%s\n' "${services[@]}"

@@ -91,7 +91,7 @@ go run . all
 Run individual metrics:
 
 ```bash
-go run . latency --nodes 3,5,7,10 --trials 30
+go run . latency --nodes 5,10,15,20 --trials 30
 go run . throughput --max-rate 100
 go run . coldstart --ledger-sizes 10,50,100,250 --trials 10
 go run . baseline --trials 10
@@ -104,7 +104,7 @@ cd /mnt/c/Users/Perky/OneDrive/Desktop/barp/Blockchain-ARP
 TRIALS=30 WAIT_SECONDS=30 BENCH_EVENT_TIMEOUT=30s ./benchmark/run-scaled-latency.sh
 ```
 
-This starts/stops real `lan-node-*` containers so the 3, 5, 7, and 10-node
+This starts/stops real `lan-node-*` containers so the 5, 10, 15, and 20-node
 measurements correspond to actual running container counts. The extra node
 services are defined in `docker-compose.scale.yml`.
 
@@ -171,8 +171,8 @@ the repository has one benchmark-results source of truth.
 ## Reproducibility Notes
 
 - The base simulated LAN starts three nodes. For real scaling experiments, use
-  `benchmark/run-scaled-latency.sh`, which brings the topology to 3, 5, 7, and
-  10 running node containers before measuring each point.
+  `benchmark/run-scaled-latency.sh`, which brings the topology to 5, 10, 15,
+  and 20 running node containers before measuring each point.
 - Detection latency depends on Docker log timestamps emitted by the running
   router and node containers. Do not prune logs mid-run.
 - `BENCH_EVENT_TIMEOUT` controls how long each trial waits for node evidence.

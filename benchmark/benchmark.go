@@ -78,7 +78,7 @@ func main() {
 	case "baseline":
 		err = runBaseline(session.contract, os.Args[2:])
 	case "all":
-		err = runLatency(session.contract, []string{"--nodes", "3,5,7,10", "--trials", "30"})
+		err = runLatency(session.contract, []string{"--nodes", "5,10,15,20", "--trials", "30"})
 		if err == nil {
 			err = runThroughput(session.contract, []string{"--max-rate", "100"})
 		}
@@ -102,7 +102,7 @@ func main() {
 
 func usage() {
 	log.Println("Run with:")
-	log.Println("  go run benchmark.go latency --nodes 3,5,7,10 --trials 30")
+	log.Println("  go run benchmark.go latency --nodes 5,10,15,20 --trials 30")
 	log.Println("  go run benchmark.go throughput --max-rate 100")
 	log.Println("  go run benchmark.go coldstart --ledger-sizes 10,50,100,250 --trials 10")
 	log.Println("  go run benchmark.go baseline --trials 10")
@@ -110,7 +110,7 @@ func usage() {
 }
 
 func runLatency(contract *client.Contract, args []string) error {
-	nodesCSV, trials, err := parseCommonFlags(args, "3,5,7,10", 30)
+	nodesCSV, trials, err := parseCommonFlags(args, "5,10,15,20", 30)
 	if err != nil {
 		return err
 	}

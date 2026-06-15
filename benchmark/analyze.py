@@ -24,7 +24,7 @@ def latest_file(patterns: list[str]) -> Path | None:
         files.extend(RESULTS.glob(pattern))
     if not files:
         return None
-    return max(files, key=lambda path: path.stat().st_mtime)
+    return max(files, key=lambda path: path.name)
 
 
 def read_latest(prefix: str) -> list[dict[str, str]]:

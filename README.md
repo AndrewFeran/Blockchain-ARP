@@ -6,7 +6,7 @@ Blockchain-ARP is a Hyperledger Fabric prototype for detecting ARP spoofing on a
 
 - **Demo runtime**
   - `docker-compose.yml` starts the dashboard, router, and base three LAN nodes.
-  - `docker-compose.scale.yml` adds `node4` through `node10` for real scaling experiments.
+  - `docker-compose.scale.yml` adds `node4` through `node20` for real scaling experiments.
   - `scripts/start-simulated-lan.sh` and `scripts/stop-simulated-lan.sh` manage the simulated LAN.
 
 - **Core implementation**
@@ -18,7 +18,7 @@ Blockchain-ARP is a Hyperledger Fabric prototype for detecting ARP spoofing on a
 - **Data collection and findings**
   - `benchmark/benchmark.go` runs latency, throughput, cold-start, and baseline measurements.
   - `benchmark/run-reproducible.sh` runs a reproducible smoke or full benchmark workflow.
-  - `benchmark/run-scaled-latency.sh` changes the actual running LAN-node topology and measures 3, 5, 7, and 10 real containers.
+  - `benchmark/run-scaled-latency.sh` changes the actual running LAN-node topology and measures 5, 10, 15, and 20 real containers.
   - `scripts/verify-e2e.sh` proves live spoof detection and ledger protection.
 
 Generated benchmark CSVs/logs/figures live under `benchmark/results/` and
@@ -63,10 +63,10 @@ cd /mnt/c/Users/Perky/OneDrive/Desktop/barp/Blockchain-ARP
 ./scripts/start-simulated-lan.sh
 ```
 
-Ten-node topology:
+Twenty-node topology:
 
 ```bash
-NODE_COUNT=10 ./scripts/start-simulated-lan.sh
+NODE_COUNT=20 ./scripts/start-simulated-lan.sh
 ```
 
 Dashboard:
