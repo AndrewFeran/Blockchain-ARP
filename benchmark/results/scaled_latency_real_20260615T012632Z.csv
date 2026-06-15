@@ -1,5 +1,0 @@
-node_count,trial,trial_id,ip,mac,submit_latency_ms,detection_latency_ms,nodes_observed
-5,1,ba50981bde6fee01b99b9a356734477a,10.250.5.1,be:bc:c5:a2:ac:6f,175.978,182.000,5
-10,1,6b9f1f03842de5c9e74e81e5c1bfdf84,10.250.10.1,be:bc:3c:8a:5e:8b,1052.862,1059.000,5
-15,1,cc457075d307ce90ec9fbb8cb95d1567,10.250.15.1,be:bc:b8:96:5a:b2,1709.061,1716.000,10
-20,1,311db2f0ca4ba6904d149255e91d2485,10.250.20.1,be:bc:f7:3e:75:46,1755.269,1771.000,15
