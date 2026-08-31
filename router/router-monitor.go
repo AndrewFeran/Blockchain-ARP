@@ -3,16 +3,23 @@ package main
 import (
 	"bytes"
 	"context"
-	"crypto/rand"
+	"crypto/ecdsa"
+	cryptorand "crypto/rand"
+	"crypto/sha256"
 	"crypto/x509"
+	"encoding/asn1"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
+	"encoding/pem"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/big"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -194,17 +201,108 @@ func parseARPObservation(arp *layers.ARP) arpObservation {
 	}
 }
 
+// ---------------------------------------------------------------------------
+// Section IV stub observations — mirrors DHCPObservation / SwitchObservation
+// in the chaincode. Private keys match the public keys embedded there.
+// ---------------------------------------------------------------------------
+
+const stubDHCPPrivateKeyPEM = `-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgj7Es4NtY7dWBCpXu
+6NawD+9SpBFvO85UerOqIqPgFL+hRANCAAQuMsYkDBRTQGue0Fu//yxziDOpJf5d
+9GO4gyKpUDKqg7bpZKxZdH2cqjNFRV3xQmCZCSKB5vdqtB0MiGNkxf1P
+-----END PRIVATE KEY-----`
+
+const stubSwitchPrivateKeyPEM = `-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgJQ3c8Kpj9Mrf27Va
+fgmbAW1qcAksDAkAZ11P5p9NuhyhRANCAAS77LosTfIucmyZMLOiOLt7Ia0X94pO
+pFGSUCocg0BabxVkGE/dlmMfezE7inlmtumlNZF7BGm3OkDZm4bIHs1e
+-----END PRIVATE KEY-----`
+
+type stubDHCPObservation struct {
+	IPAddress   string `json:"ipAddress"`
+	MACAddress  string `json:"macAddress"`
+	Subnet      string `json:"subnet"`
+	LeaseExpiry int64  `json:"leaseExpiry"`
+	Signature   string `json:"signature"`
+}
+
+type stubSwitchObservation struct {
+	MACAddress string `json:"macAddress"`
+	Port       string `json:"port"`
+	VLAN       string `json:"vlan"`
+	Timestamp  int64  `json:"timestamp"`
+	Signature  string `json:"signature"`
+}
+
+// signObsContent signs content with the PKCS8 ECDSA private key and returns
+// a base64-encoded ASN.1 DER (r, s) signature.
+func signObsContent(privKeyPEM, content string) string {
+	block, _ := pem.Decode([]byte(privKeyPEM))
+	if block == nil {
+		log.Fatalf("failed to decode private key PEM")
+	}
+	priv, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+	if err != nil {
+		log.Fatalf("failed to parse private key: %v", err)
+	}
+	ecPriv := priv.(*ecdsa.PrivateKey)
+	hash := sha256.Sum256([]byte(content))
+	r, s, err := ecdsa.Sign(cryptorand.Reader, ecPriv, hash[:])
+	if err != nil {
+		log.Fatalf("failed to sign observation: %v", err)
+	}
+	derBytes, err := asn1.Marshal(struct{ R, S *big.Int }{r, s})
+	if err != nil {
+		log.Fatalf("failed to marshal signature: %v", err)
+	}
+	return base64.StdEncoding.EncodeToString(derBytes)
+}
+
+func makeStubDHCPObsJSON(ip, mac string) string {
+	obs := stubDHCPObservation{
+		IPAddress:   ip,
+		MACAddress:  mac,
+		Subnet:      "10.5.0.0/24",
+		LeaseExpiry: time.Now().Add(24 * time.Hour).Unix(),
+	}
+	content := "dhcp|" + obs.IPAddress + "|" + obs.MACAddress + "|" + obs.Subnet + "|" + strconv.FormatInt(obs.LeaseExpiry, 10)
+	obs.Signature = signObsContent(stubDHCPPrivateKeyPEM, content)
+	b, err := json.Marshal(obs)
+	if err != nil {
+		log.Fatalf("failed to marshal DHCP observation: %v", err)
+	}
+	return string(b)
+}
+
+func makeStubSwitchObsJSON(mac string) string {
+	obs := stubSwitchObservation{
+		MACAddress: mac,
+		Port:       "GigabitEthernet0/1",
+		VLAN:       "100",
+		Timestamp:  time.Now().Unix(),
+	}
+	content := "switch|" + obs.MACAddress + "|" + obs.Port + "|" + obs.VLAN + "|" + strconv.FormatInt(obs.Timestamp, 10)
+	obs.Signature = signObsContent(stubSwitchPrivateKeyPEM, content)
+	b, err := json.Marshal(obs)
+	if err != nil {
+		log.Fatalf("failed to marshal switch observation: %v", err)
+	}
+	return string(b)
+}
+
 func writeToBlockchain(contract *FabricContract, ipAddress, macAddress, trialID string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
+	dhcpObsJSON := makeStubDHCPObsJSON(ipAddress, macAddress)
+	switchObsJSON := makeStubSwitchObsJSON(macAddress)
+
 	_, err := contract.contract.SubmitWithContext(
 		ctx,
-		"RecordARPEntry",
-		client.WithArguments(ipAddress, macAddress, "eth0", nodeName, "dynamic", "reachable", "router"),
+		"RegisterBinding",
+		client.WithArguments(dhcpObsJSON, switchObsJSON),
 		client.WithTransient(map[string][]byte{"trialID": []byte(trialID)}),
 	)
-
 	return err
 }
 
@@ -289,7 +387,7 @@ func postDashboardEvent(event dashboardEvent) {
 
 func newTrialID() string {
 	var b [16]byte
-	if _, err := rand.Read(b[:]); err != nil {
+	if _, err := cryptorand.Read(b[:]); err != nil {
 		return fmt.Sprintf("%d", time.Now().UnixNano())
 	}
 	return hex.EncodeToString(b[:])

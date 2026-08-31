@@ -1,28 +1,80 @@
 package main
 
 import (
+	"crypto/ecdsa"
+	"crypto/sha256"
+	"crypto/x509"
+	"encoding/asn1"
+	"encoding/base64"
 	"encoding/json"
+	"encoding/pem"
 	"fmt"
+	"math/big"
+	"strconv"
 	"time"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
+// Trusted public keys for the stub DHCP server and managed edge switch.
+// In production these would be provisioned through the Fabric MSP or an
+// admin-initialised chaincode state entry.
+const dhcpServerPublicKeyPEM = `-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAELjLGJAwUU0BrntBbv/8sc4gzqSX+
+XfRjuIMiqVAyqoO26WSsWXR9nKozRUVd8UJgmQkigeb3arQdDIhjZMX9Tw==
+-----END PUBLIC KEY-----`
+
+const switchPublicKeyPEM = `-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEu+y6LE3yLnJsmTCzoji7eyGtF/eK
+TqRRklAqHINAWm8VZBhP3ZZjH3sxO4p5ZrbppTWRewRptzpA2ZuGyB7NXg==
+-----END PUBLIC KEY-----`
+
+// switchFreshnessInterval is Δ_S from Section IV: maximum age of a switch
+// observation in seconds. Observations older than this are rejected.
+const switchFreshnessInterval = int64(60)
+
 type SmartContract struct {
 	contractapi.Contract
+}
+
+// DHCPObservation is O_D^H = (IP_H, MAC_H, N_H, T_lease) from Section IV-C.
+// LeaseExpiry == 0 skips the lease-active check (used in unit tests).
+type DHCPObservation struct {
+	IPAddress   string `json:"ipAddress"`
+	MACAddress  string `json:"macAddress"`
+	Subnet      string `json:"subnet"`
+	LeaseExpiry int64  `json:"leaseExpiry"` // Unix timestamp; 0 = no check
+	Signature   string `json:"signature"`   // base64-encoded ASN.1 ECDSA-P256-SHA256
+}
+
+// SwitchObservation is O_{S_i}^H = (MAC_H, P_H, V_H, F_H) from Section IV-C.
+// Timestamp == 0 skips the freshness check (used in unit tests).
+type SwitchObservation struct {
+	MACAddress string `json:"macAddress"`
+	Port       string `json:"port"`
+	VLAN       string `json:"vlan"`
+	Timestamp  int64  `json:"timestamp"` // Unix timestamp; 0 = no check
+	Signature  string `json:"signature"` // base64-encoded ASN.1 ECDSA-P256-SHA256
 }
 
 type ARPEntry struct {
 	IPAddress  string    `json:"ipAddress"`
 	MACAddress string    `json:"macAddress"`
-	Interface  string    `json:"interface"`
-	Hostname   string    `json:"hostname"`
+	// Fields populated by RegisterBinding (Section IV protocol)
+	Subnet          string `json:"subnet,omitempty" metadata:",optional"`
+	LeaseExpiry     int64  `json:"leaseExpiry,omitempty" metadata:",optional"`
+	SwitchPort      string `json:"switchPort,omitempty" metadata:",optional"`
+	VLAN            string `json:"vlan,omitempty" metadata:",optional"`
+	SwitchTimestamp int64  `json:"switchTimestamp,omitempty" metadata:",optional"`
+	// Fields populated by legacy RecordARPEntry
+	Interface  string    `json:"interface,omitempty" metadata:",optional"`
+	Hostname   string    `json:"hostname,omitempty" metadata:",optional"`
 	Timestamp  time.Time `json:"timestamp"`
-	EntryType  string    `json:"entryType"`  // static, dynamic
-	State      string    `json:"state"`      // reachable, stale, delay, probe, failed
-	RecordedBy string    `json:"recordedBy"` // which system recorded this
+	EntryType  string    `json:"entryType,omitempty" metadata:",optional"`
+	State      string    `json:"state,omitempty" metadata:",optional"`
+	RecordedBy string    `json:"recordedBy,omitempty" metadata:",optional"`
 	IsExpired  bool      `json:"isExpired"`
-	ExpiredAt  string    `json:"expiredAt"`
+	ExpiredAt  string    `json:"expiredAt,omitempty" metadata:",optional"`
 }
 
 type ARPHistory struct {
@@ -47,18 +99,55 @@ type DetectionEvent struct {
 	TrialID     string    `json:"trialId,omitempty"`
 }
 
+// dhcpObsContent returns the canonical byte string that the DHCP server signs.
+func dhcpObsContent(obs DHCPObservation) string {
+	return "dhcp|" + obs.IPAddress + "|" + obs.MACAddress + "|" + obs.Subnet + "|" + strconv.FormatInt(obs.LeaseExpiry, 10)
+}
+
+// switchObsContent returns the canonical byte string that the edge switch signs.
+func switchObsContent(obs SwitchObservation) string {
+	return "switch|" + obs.MACAddress + "|" + obs.Port + "|" + obs.VLAN + "|" + strconv.FormatInt(obs.Timestamp, 10)
+}
+
+// verifyECDSA verifies an ECDSA-P256-SHA256 signature over content.
+// sig must be a base64-encoded ASN.1 DER (r, s) pair.
+func verifyECDSA(pubKeyPEM, content, sig string) error {
+	block, _ := pem.Decode([]byte(pubKeyPEM))
+	if block == nil {
+		return fmt.Errorf("failed to decode public key PEM")
+	}
+	pub, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return fmt.Errorf("failed to parse public key: %v", err)
+	}
+	ecPub, ok := pub.(*ecdsa.PublicKey)
+	if !ok {
+		return fmt.Errorf("public key is not ECDSA")
+	}
+
+	sigBytes, err := base64.StdEncoding.DecodeString(sig)
+	if err != nil {
+		return fmt.Errorf("failed to decode signature: %v", err)
+	}
+
+	var rs struct{ R, S *big.Int }
+	if _, err := asn1.Unmarshal(sigBytes, &rs); err != nil {
+		return fmt.Errorf("failed to unmarshal signature: %v", err)
+	}
+
+	hash := sha256.Sum256([]byte(content))
+	if !ecdsa.Verify(ecPub, hash[:], rs.R, rs.S) {
+		return fmt.Errorf("signature verification failed")
+	}
+	return nil
+}
+
 func emitEvent(ctx contractapi.TransactionContextInterface, event DetectionEvent) error {
 	eventJSON, err := json.Marshal(event)
 	if err != nil {
 		return fmt.Errorf("failed to marshal event: %v", err)
 	}
-
-	err = ctx.GetStub().SetEvent("ARPDetectionEvent", eventJSON)
-	if err != nil {
-		return fmt.Errorf("failed to set event: %v", err)
-	}
-
-	return nil
+	return ctx.GetStub().SetEvent("ARPDetectionEvent", eventJSON)
 }
 
 func getTrialID(ctx contractapi.TransactionContextInterface) string {
@@ -78,10 +167,7 @@ func appendARPHistory(ctx contractapi.TransactionContextInterface, entry ARPEntr
 
 	var history ARPHistory
 	if historyJSON == nil {
-		history = ARPHistory{
-			IPAddress: entry.IPAddress,
-			Entries:   []ARPEntry{entry},
-		}
+		history = ARPHistory{IPAddress: entry.IPAddress, Entries: []ARPEntry{entry}}
 	} else {
 		if err := json.Unmarshal(historyJSON, &history); err != nil {
 			return err
@@ -93,32 +179,135 @@ func appendARPHistory(ctx contractapi.TransactionContextInterface, entry ARPEntr
 	if err != nil {
 		return err
 	}
-
 	return ctx.GetStub().PutState(historyKey, historyJSON)
 }
 
-func (s *SmartContract) RecordARPEntry(ctx contractapi.TransactionContextInterface,
-	ipAddress string, macAddress string, iface string, hostname string,
-	entryType string, state string, recordedBy string) error {
+// commitBinding classifies the binding attempt (new / match / spoofing), emits
+// an ARPDetectionEvent, and writes the authoritative entry to the ledger.
+// Spoofing attempts are recorded in history only; they do not overwrite the
+// existing authoritative mapping.
+func (s *SmartContract) commitBinding(ctx contractapi.TransactionContextInterface, entry ARPEntry) error {
+	key := fmt.Sprintf("ARP_%s", entry.IPAddress)
+	existingJSON, _ := ctx.GetStub().GetState(key)
 
-	// Get transaction timestamp (deterministic across all peers)
+	var event DetectionEvent
+	event.IPAddress = entry.IPAddress
+	event.MACAddress = entry.MACAddress
+	event.Hostname = entry.Hostname
+	event.RecordedBy = entry.RecordedBy
+	event.Timestamp = entry.Timestamp
+	event.TrialID = getTrialID(ctx)
+
+	if existingJSON == nil {
+		event.EventType = "new"
+		event.Message = fmt.Sprintf("New device: %s -> %s", entry.IPAddress, entry.MACAddress)
+	} else {
+		var existing ARPEntry
+		if err := json.Unmarshal(existingJSON, &existing); err != nil {
+			return err
+		}
+		if existing.IsExpired {
+			event.EventType = "new"
+			event.Message = fmt.Sprintf("Re-registered expired device: %s -> %s", entry.IPAddress, entry.MACAddress)
+		} else if existing.MACAddress != entry.MACAddress {
+			event.EventType = "spoofing"
+			event.PreviousMAC = existing.MACAddress
+			event.Message = fmt.Sprintf("MAC CHANGED! %s: %s -> %s", entry.IPAddress, existing.MACAddress, entry.MACAddress)
+		} else {
+			event.EventType = "match"
+			event.Message = fmt.Sprintf("Valid update: %s -> %s", entry.IPAddress, entry.MACAddress)
+		}
+	}
+
+	fmt.Printf("BENCHMARK_EVENT stage=chaincode_processed trial=%s ip=%s mac=%s ts=%d\n",
+		event.TrialID, entry.IPAddress, entry.MACAddress, time.Now().UnixMilli())
+
+	if err := emitEvent(ctx, event); err != nil {
+		return fmt.Errorf("failed to emit event: %v", err)
+	}
+
+	if event.EventType == "spoofing" {
+		return appendARPHistory(ctx, entry)
+	}
+
+	entryJSON, err := json.Marshal(entry)
+	if err != nil {
+		return err
+	}
+	if err := ctx.GetStub().PutState(key, entryJSON); err != nil {
+		return err
+	}
+	return appendARPHistory(ctx, entry)
+}
+
+// RegisterBinding is the Section IV binding-registration entry point.
+// It validates both signed observations from the DHCP server and managed edge
+// switch before committing the authoritative IP-to-MAC binding.
+func (s *SmartContract) RegisterBinding(ctx contractapi.TransactionContextInterface,
+	dhcpObsJSON string, switchObsJSON string) error {
+
+	var dhcpObs DHCPObservation
+	if err := json.Unmarshal([]byte(dhcpObsJSON), &dhcpObs); err != nil {
+		return fmt.Errorf("invalid DHCP observation: %v", err)
+	}
+
+	var switchObs SwitchObservation
+	if err := json.Unmarshal([]byte(switchObsJSON), &switchObs); err != nil {
+		return fmt.Errorf("invalid switch observation: %v", err)
+	}
+
+	if dhcpObs.MACAddress != switchObs.MACAddress {
+		return fmt.Errorf("MAC address mismatch between DHCP and switch observations: %s != %s",
+			dhcpObs.MACAddress, switchObs.MACAddress)
+	}
+
 	txTimestamp, err := ctx.GetStub().GetTxTimestamp()
 	if err != nil {
 		return fmt.Errorf("failed to get transaction timestamp: %v", err)
 	}
+	now := time.Unix(txTimestamp.Seconds, int64(txTimestamp.Nanos))
 
+	if dhcpObs.LeaseExpiry > 0 && now.Unix() > dhcpObs.LeaseExpiry {
+		return fmt.Errorf("DHCP lease has expired")
+	}
+
+	if switchObs.Timestamp > 0 && now.Unix()-switchObs.Timestamp > switchFreshnessInterval {
+		return fmt.Errorf("switch observation is stale (%ds ago, limit %ds)",
+			now.Unix()-switchObs.Timestamp, switchFreshnessInterval)
+	}
+
+	if err := verifyECDSA(dhcpServerPublicKeyPEM, dhcpObsContent(dhcpObs), dhcpObs.Signature); err != nil {
+		return fmt.Errorf("DHCP observation signature invalid: %v", err)
+	}
+
+	if err := verifyECDSA(switchPublicKeyPEM, switchObsContent(switchObs), switchObs.Signature); err != nil {
+		return fmt.Errorf("switch observation signature invalid: %v", err)
+	}
+
+	entry := ARPEntry{
+		IPAddress:       dhcpObs.IPAddress,
+		MACAddress:      dhcpObs.MACAddress,
+		Subnet:          dhcpObs.Subnet,
+		LeaseExpiry:     dhcpObs.LeaseExpiry,
+		SwitchPort:      switchObs.Port,
+		VLAN:            switchObs.VLAN,
+		SwitchTimestamp: switchObs.Timestamp,
+		Timestamp:       now,
+		RecordedBy:      "observations",
+	}
+	return s.commitBinding(ctx, entry)
+}
+
+// RecordARPEntry is the legacy entry point kept for backward compatibility.
+func (s *SmartContract) RecordARPEntry(ctx contractapi.TransactionContextInterface,
+	ipAddress string, macAddress string, iface string, hostname string,
+	entryType string, state string, recordedBy string) error {
+
+	txTimestamp, err := ctx.GetStub().GetTxTimestamp()
+	if err != nil {
+		return fmt.Errorf("failed to get transaction timestamp: %v", err)
+	}
 	timestamp := time.Unix(txTimestamp.Seconds, int64(txTimestamp.Nanos))
-
-	key := fmt.Sprintf("ARP_%s", ipAddress)
-	existingJSON, _ := ctx.GetStub().GetState(key)
-
-	var event DetectionEvent
-	event.IPAddress = ipAddress
-	event.MACAddress = macAddress
-	event.Hostname = hostname
-	event.RecordedBy = recordedBy
-	event.Timestamp = timestamp
-	event.TrialID = getTrialID(ctx)
 
 	entry := ARPEntry{
 		IPAddress:  ipAddress,
@@ -130,58 +319,7 @@ func (s *SmartContract) RecordARPEntry(ctx contractapi.TransactionContextInterfa
 		State:      state,
 		RecordedBy: recordedBy,
 	}
-
-	if existingJSON == nil {
-		// NEW DEVICE DETECTED
-		event.EventType = "new"
-		event.Message = fmt.Sprintf("New device: %s -> %s", ipAddress, macAddress)
-	} else {
-		// Check for MAC change
-		var existingEntry ARPEntry
-		if err := json.Unmarshal(existingJSON, &existingEntry); err != nil {
-			return err
-		}
-
-		if existingEntry.IsExpired {
-			event.EventType = "new"
-			event.Message = fmt.Sprintf("Re-registered expired device: %s -> %s", ipAddress, macAddress)
-		} else if existingEntry.MACAddress != macAddress {
-			// ARP SPOOFING DETECTED!
-			event.EventType = "spoofing"
-			event.PreviousMAC = existingEntry.MACAddress
-			event.Message = fmt.Sprintf("MAC CHANGED! %s: %s -> %s", ipAddress, existingEntry.MACAddress, macAddress)
-		} else {
-			// Match - normal update
-			event.EventType = "match"
-			event.Message = fmt.Sprintf("Valid update: %s -> %s", ipAddress, macAddress)
-		}
-	}
-
-	fmt.Printf("BENCHMARK_EVENT stage=chaincode_processed trial=%s ip=%s mac=%s ts=%d\n",
-		event.TrialID, ipAddress, macAddress, time.Now().UnixMilli())
-
-	err = emitEvent(ctx, event)
-	if err != nil {
-		return fmt.Errorf("failed to emit event: %v", err)
-	}
-
-	// A spoofing event is preserved in history, but does not replace the
-	// current authoritative mapping used by cold-start sync.
-	if event.EventType == "spoofing" {
-		return appendARPHistory(ctx, entry)
-	}
-
-	entryJSON, err := json.Marshal(entry)
-	if err != nil {
-		return err
-	}
-
-	err = ctx.GetStub().PutState(key, entryJSON)
-	if err != nil {
-		return err
-	}
-
-	return appendARPHistory(ctx, entry)
+	return s.commitBinding(ctx, entry)
 }
 
 func (s *SmartContract) GetCurrentARPEntry(ctx contractapi.TransactionContextInterface,
@@ -197,11 +335,9 @@ func (s *SmartContract) GetCurrentARPEntry(ctx contractapi.TransactionContextInt
 	}
 
 	var entry ARPEntry
-	err = json.Unmarshal(entryJSON, &entry)
-	if err != nil {
+	if err := json.Unmarshal(entryJSON, &entry); err != nil {
 		return nil, err
 	}
-
 	return &entry, nil
 }
 
@@ -218,11 +354,9 @@ func (s *SmartContract) GetARPHistory(ctx contractapi.TransactionContextInterfac
 	}
 
 	var history ARPHistory
-	err = json.Unmarshal(historyJSON, &history)
-	if err != nil {
+	if err := json.Unmarshal(historyJSON, &history); err != nil {
 		return nil, err
 	}
-
 	return &history, nil
 }
 
@@ -230,7 +364,7 @@ func (s *SmartContract) GetAllARPEntries(ctx contractapi.TransactionContextInter
 	return s.getAllARPEntries(ctx, false)
 }
 
-// GetAllARPEntriesIncludingExpired is the audit path - includes expired entries that GetAllARPEntries skips.
+// GetAllARPEntriesIncludingExpired is the audit path; includes expired entries.
 func (s *SmartContract) GetAllARPEntriesIncludingExpired(ctx contractapi.TransactionContextInterface) ([]*ARPEntry, error) {
 	return s.getAllARPEntries(ctx, true)
 }
@@ -248,10 +382,8 @@ func (s *SmartContract) getAllARPEntries(ctx contractapi.TransactionContextInter
 		if err != nil {
 			return nil, err
 		}
-
 		var entry ARPEntry
-		err = json.Unmarshal(queryResponse.Value, &entry)
-		if err != nil {
+		if err := json.Unmarshal(queryResponse.Value, &entry); err != nil {
 			return nil, err
 		}
 		if entry.IsExpired && !includeExpired {
@@ -259,12 +391,11 @@ func (s *SmartContract) getAllARPEntries(ctx contractapi.TransactionContextInter
 		}
 		entries = append(entries, &entry)
 	}
-
 	return entries, nil
 }
 
-// ExpireARPEntry marks an ARP entry as no longer authoritative while keeping
-// the record and history available for audit.
+// ExpireARPEntry marks an ARP entry as no longer authoritative while preserving
+// the record and history for audit.
 func (s *SmartContract) ExpireARPEntry(ctx contractapi.TransactionContextInterface, ipAddress string) error {
 	key := fmt.Sprintf("ARP_%s", ipAddress)
 	entryJSON, err := ctx.GetStub().GetState(key)
@@ -313,7 +444,6 @@ func (s *SmartContract) ExpireARPEntry(ctx contractapi.TransactionContextInterfa
 	if err := ctx.GetStub().PutState(key, entryJSON); err != nil {
 		return err
 	}
-
 	return appendARPHistory(ctx, entry)
 }
 
@@ -324,13 +454,10 @@ func (s *SmartContract) DetectMACChange(ctx contractapi.TransactionContextInterf
 	if err != nil {
 		return nil, err
 	}
-
-	result := &MACChangeResult{
+	return &MACChangeResult{
 		Changed:     entry.MACAddress != currentMAC,
 		PreviousMAC: entry.MACAddress,
-	}
-
-	return result, nil
+	}, nil
 }
 
 func (s *SmartContract) QueryARPByMAC(ctx contractapi.TransactionContextInterface,
@@ -349,15 +476,12 @@ func (s *SmartContract) QueryARPByMAC(ctx contractapi.TransactionContextInterfac
 		if err != nil {
 			return nil, err
 		}
-
 		var entry ARPEntry
-		err = json.Unmarshal(queryResponse.Value, &entry)
-		if err != nil {
+		if err := json.Unmarshal(queryResponse.Value, &entry); err != nil {
 			return nil, err
 		}
 		entries = append(entries, &entry)
 	}
-
 	return entries, nil
 }
 
@@ -374,7 +498,6 @@ func main() {
 		fmt.Printf("Error creating ARP chaincode: %v\n", err)
 		return
 	}
-
 	if err := chaincode.Start(); err != nil {
 		fmt.Printf("Error starting ARP chaincode: %v\n", err)
 	}
