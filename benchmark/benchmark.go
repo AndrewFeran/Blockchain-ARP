@@ -129,7 +129,7 @@ func runLatency(contract *client.Contract, args []string) error {
 	for _, nodeCount := range nodes {
 		samples := make([]float64, 0, trials)
 		for trial := 1; trial <= trials; trial++ {
-			ip := fmt.Sprintf("10.250.%d.%d", nodeCount, trial)
+			ip := fmt.Sprintf("10.250.%d.%d", nodeCount+trial/256, trial%256)
 			mac := deterministicMAC("latency", nodeCount, trial)
 			started := time.Now()
 			trialID, elapsed, err := submitARPEvent(contract, ip, mac, "benchmark-latency")
@@ -248,7 +248,7 @@ func runBaseline(contract *client.Contract, args []string) error {
 	baselinePoisonMs := getEnvFloat("BENCH_BASELINE_POISON_MS", 50)
 	samples := make([]float64, 0, trials)
 	for trial := 1; trial <= trials; trial++ {
-		ip := fmt.Sprintf("10.252.0.%d", trial)
+		ip := fmt.Sprintf("10.252.%d.%d", trial/256, trial%256)
 		mac := deterministicMAC("baseline", trial, 1)
 		started := time.Now()
 		trialID, elapsed, err := submitARPEvent(contract, ip, mac, "benchmark-baseline")
