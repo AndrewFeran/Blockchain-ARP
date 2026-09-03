@@ -7,20 +7,20 @@ It only reports metrics whose source CSV/log files are present in `benchmark/res
 
 | Result | File |
 | --- | --- |
-| Latency source | `scaled_latency_real_20260827T100521Z.csv` |
-| Throughput source | `throughput_20260827T060822Z.csv` |
-| Cold-start source | `coldstart_20260827T061519Z.csv` |
-| Baseline source | `baseline_20260827T062941Z.csv` |
-| End-to-end proof | `e2e_20260827T063030Z.txt` |
+| Latency source | `scaled_latency_real_20260828T202430Z.csv` |
+| Throughput source | `throughput_20260828T134435Z.csv` |
+| Cold-start source | `coldstart_20260828T134850Z.csv` |
+| Baseline source | `baseline_20260828T140204Z.csv` |
+| End-to-end proof | `e2e_20260615T020840Z.txt` |
 
 ## Real Scaled Latency Summary
 
 | Running LAN nodes | Trials | Mean | Median | P95 | P99 | Nodes observed |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| 3 | 30 | 2006.50 ms | 2080.50 ms | 2116.00 ms | 2209.00 ms | 3 |
-| 5 | 30 | 1817.53 ms | 2076.00 ms | 2511.00 ms | 2641.00 ms | 5 |
-| 7 | 30 | 957.40 ms | 565.50 ms | 2083.00 ms | 2130.00 ms | 7 |
-| 9 | 30 | 1532.87 ms | 1459.50 ms | 1871.00 ms | 2468.00 ms | 9 |
+| 3 | 500 | 16753.35 ms | 2015.00 ms | 32552.16 ms | 32610.22 ms | 0, 3 |
+| 5 | 500 | 16704.44 ms | 2034.50 ms | 32571.74 ms | 32722.49 ms | 0, 5 |
+| 7 | 500 | 16673.73 ms | 2015.00 ms | 32812.13 ms | 32987.78 ms | 0, 7 |
+| 9 | 500 | 16634.09 ms | 2017.00 ms | 33137.78 ms | 33297.59 ms | 0, 9 |
 
 Notes:
 
@@ -32,7 +32,7 @@ Notes:
 
 Latest verdict: **PASS**
 
-Source log: `e2e_20260827T063030Z.txt`
+Source log: `e2e_20260615T020840Z.txt`
 
 ## Figures
 

@@ -1,0 +1,19 @@
+============================================================
+Blockchain-ARP ledger size measurement
+Run ID: 20260724T012442Z   Channel: mychannel   Chaincode: arptracker
+============================================================
+current bindings (ARP_ keys):        834
+per-binding value bytes (stored):    min=237 mean=257.9 max=261
+per-binding KV bytes (value+key):    mean=273.1
+world state logical (values):        215051 B = 210.0 KB
+world state logical (values+keys):   227776 B = 222.4 KB
+
+on-disk (container peer0.org1.example.com):
+  world state (stateLeveldb): 824 KB
+  block store (chains):       2496584 KB
+  total ledgersData:          2497784 KB
+
+NOTE: 'block store (chains)' is the full transaction history and grows with
+the number of transactions ever submitted, not with the number of hosts.
+The registry size is the world state figure.
+Result: /mnt/c/Users/Perky/OneDrive/Desktop/barp/Blockchain-ARP/benchmark/results/ledgersize_20260724T012442Z.txt

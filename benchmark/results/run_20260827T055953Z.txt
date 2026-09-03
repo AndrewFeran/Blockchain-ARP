@@ -1,0 +1,467 @@
+============================================================
+Blockchain-ARP reproducible benchmark run
+Run ID: 20260827T055953Z
+============================================================
+Repository: /mnt/c/barp/Blockchain-ARP
+Fabric test network: /mnt/c/barp/Blockchain-ARP/../fabric-samples/test-network
+Results directory: /mnt/c/barp/Blockchain-ARP/benchmark/results
+Figures directory: /mnt/c/barp/Blockchain-ARP/benchmark/figures
+Peer endpoint: localhost:7051
+Gateway peer: peer0.org1.example.com
+Channel: mychannel
+Chaincode: arptracker
+Benchmark event timeout: 20s
+Matplotlib backend: Agg
+Benchmark profile: full
+Command timeout: 45m
+
+Python: Python 3.12.3
+Go: go version go1.23.4 linux/amd64
+Docker: Docker version 29.7.2, build a7dcaa6
+
+Container snapshot:
+blockchain-router                                                                                            Up 56 seconds   
+lan-node-1                                                                                                   Up 56 seconds   
+lan-node-3                                                                                                   Up 56 seconds   
+lan-node-2                                                                                                   Up 56 seconds   
+blockchain-dashboard                                                                                         Up 56 seconds   0.0.0.0:5000->5000/tcp, [::]:5000->5000/tcp
+dev-peer0.org1.example.com-arptracker_1.0-c0e7b0c09275200af40c285d80f8a2268c32c61fc84d9aa7438c30bc02ed5c0d   Up 5 minutes    
+dev-peer0.org2.example.com-arptracker_1.0-c0e7b0c09275200af40c285d80f8a2268c32c61fc84d9aa7438c30bc02ed5c0d   Up 5 minutes    
+peer0.org2.example.com                                                                                       Up 7 minutes    0.0.0.0:9051->9051/tcp, [::]:9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, [::]:9445->9445/tcp
+peer0.org1.example.com                                                                                       Up 7 minutes    0.0.0.0:7051->7051/tcp, [::]:7051->7051/tcp, 0.0.0.0:9444->9444/tcp, [::]:9444->9444/tcp
+orderer.example.com                                                                                          Up 7 minutes    0.0.0.0:7050->7050/tcp, [::]:7050->7050/tcp, 0.0.0.0:7053->7053/tcp, [::]:7053->7053/tcp, 0.0.0.0:9443->9443/tcp, [::]:9443->9443/tcp
+ca_orderer                                                                                                   Up 7 minutes    0.0.0.0:9054->9054/tcp, [::]:9054->9054/tcp, 7054/tcp, 0.0.0.0:19054->19054/tcp, [::]:19054->19054/tcp
+
+Running benchmark package tests...
+ok  	benchmark	0.005s
+
+Running full benchmark suite...
+latency nodes=5: n=30 mean=1983.23ms p50=2062.00ms p95=2083.00ms p99=2085.00ms
+latency nodes=10: n=30 mean=2023.37ms p50=2064.00ms p95=2090.00ms p99=2094.00ms
+latency nodes=15: n=30 mean=1900.33ms p50=2061.00ms p95=2084.00ms p99=2085.00ms
+latency nodes=20: n=30 mean=1912.50ms p50=2060.00ms p95=2084.00ms p99=2088.00ms
+wrote /mnt/c/barp/Blockchain-ARP/benchmark/results/latency_20260827T060000Z.csv
+throughput rate=1/s: n=10 mean=1880.50ms p50=2061.00ms p95=2088.00ms p99=2088.00ms
+throughput rate=11/s: n=10 mean=1987.20ms p50=2062.00ms p95=2087.00ms p99=2087.00ms
+throughput rate=21/s: n=10 mean=2185.20ms p50=2109.00ms p95=2717.00ms p99=2717.00ms
+throughput rate=31/s: n=10 mean=2262.30ms p50=2099.00ms p95=2735.00ms p99=2735.00ms
+throughput rate=41/s: n=10 mean=1825.10ms p50=2077.00ms p95=2098.00ms p99=2098.00ms
+throughput rate=51/s: n=10 mean=2202.20ms p50=2078.00ms p95=2563.00ms p99=2563.00ms
+throughput rate=61/s: n=10 mean=2048.30ms p50=2077.00ms p95=2097.00ms p99=2097.00ms
+throughput rate=71/s: n=10 mean=2130.10ms p50=2069.00ms p95=2424.00ms p99=2424.00ms
+throughput rate=81/s: n=10 mean=1993.20ms p50=2067.00ms p95=2097.00ms p99=2097.00ms
+throughput rate=91/s: n=10 mean=2045.60ms p50=2065.00ms p95=2098.00ms p99=2098.00ms
+wrote /mnt/c/barp/Blockchain-ARP/benchmark/results/throughput_20260827T060822Z.csv
+coldstart ledger=10: n=10 mean=488.56ms p50=487.90ms p95=493.48ms p99=493.48ms
+coldstart ledger=50: n=10 mean=567.97ms p50=567.79ms p95=569.54ms p99=569.54ms
+coldstart ledger=100: n=10 mean=669.93ms p50=669.64ms p95=671.81ms p99=671.81ms
+coldstart ledger=250: n=10 mean=975.01ms p50=974.53ms p95=978.68ms p99=978.68ms
+wrote /mnt/c/barp/Blockchain-ARP/benchmark/results/coldstart_20260827T061519Z.csv
+baseline protected path: n=10 mean=1954.30ms p50=2071.00ms p95=2104.00ms p99=2104.00ms
+wrote /mnt/c/barp/Blockchain-ARP/benchmark/results/baseline_20260827T062941Z.csv
+Figures written to /mnt/c/barp/Blockchain-ARP/benchmark/figures
+Results summary written to /mnt/c/barp/Blockchain-ARP/benchmark/results/README.md
+
+Collecting benchmark logs...
+wrote /mnt/c/barp/Blockchain-ARP/benchmark/results/raw_20260827T063024Z.log
+
+Running end-to-end spoof verification...
+============================================================
+Blockchain-ARP end-to-end verification
+Run ID: 20260827T063030Z
+============================================================
+Preparing quiet base topology...
+#1 [internal] load local bake definitions
+#1 reading from stdin 2.31kB done
+#1 DONE 0.0s
+
+#2 [node2 internal] load build definition from Dockerfile
+#2 transferring dockerfile: 867B 0.0s done
+#2 DONE 0.1s
+
+#3 [dashboard internal] load build definition from Dockerfile
+#3 transferring dockerfile: 345B 0.0s done
+#3 DONE 0.1s
+
+#4 [router internal] load build definition from Dockerfile
+#4 transferring dockerfile: 825B 0.0s done
+#4 DONE 0.1s
+
+#5 [node2 internal] load metadata for docker.io/library/golang:1.23-alpine
+#5 ...
+
+#6 [dashboard internal] load metadata for docker.io/library/python:3.11-slim
+#6 DONE 0.5s
+
+#7 [node3 internal] load metadata for docker.io/library/alpine:latest
+#7 DONE 0.5s
+
+#5 [node1 internal] load metadata for docker.io/library/golang:1.23-alpine
+#5 DONE 0.5s
+
+#8 [dashboard internal] load .dockerignore
+#8 transferring context: 2B 0.0s done
+#8 DONE 0.1s
+
+#9 [router internal] load .dockerignore
+#9 transferring context: 2B 0.0s done
+#9 DONE 0.1s
+
+#10 [node3 internal] load .dockerignore
+#10 transferring context: 2B 0.0s done
+#10 DONE 0.1s
+
+#11 [dashboard 1/7] FROM docker.io/library/python:3.11-slim@sha256:be1575ed968de893bd54f4c56315ff7c4736ce522c1bca08fd521731aafc0d76
+#11 resolve docker.io/library/python:3.11-slim@sha256:be1575ed968de893bd54f4c56315ff7c4736ce522c1bca08fd521731aafc0d76 0.1s done
+#11 DONE 0.1s
+
+#12 [router internal] load build context
+#12 DONE 0.0s
+
+#13 [dashboard internal] load build context
+#13 transferring context: 293B 0.1s done
+#13 DONE 0.1s
+
+#14 [dashboard 5/7] COPY app.py .
+#14 CACHED
+
+#15 [dashboard 6/7] COPY templates/ templates/
+#15 CACHED
+
+#16 [dashboard 3/7] COPY requirements.txt .
+#16 CACHED
+
+#17 [dashboard 4/7] RUN pip install --no-cache-dir -r requirements.txt
+#17 CACHED
+
+#18 [dashboard 2/7] WORKDIR /app
+#18 CACHED
+
+#19 [dashboard 7/7] COPY static/ static/
+#19 CACHED
+
+#20 [dashboard] exporting to image
+#20 exporting layers
+#20 ...
+
+#21 [node3 stage-1 1/6] FROM docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+#21 resolve docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b 0.1s done
+#21 DONE 0.1s
+
+#22 [node1 builder 1/7] FROM docker.io/library/golang:1.23-alpine@sha256:383395b794dffa5b53012a212365d40c8e37109a626ca30d6151c8348d380b5f
+#22 resolve docker.io/library/golang:1.23-alpine@sha256:383395b794dffa5b53012a212365d40c8e37109a626ca30d6151c8348d380b5f 0.1s done
+#22 DONE 0.1s
+
+#20 [dashboard] exporting to image
+#20 exporting layers done
+#20 exporting manifest sha256:9787fa18d791c6c6310d9541a87445288f4ba80538d9a399d6b3aab50a0033ab 0.0s done
+#20 exporting config sha256:285ee44f922db20fec14f53b9cc7b01de2a93212649a56996d4d870740f586bb 0.0s done
+#20 exporting attestation manifest sha256:537a29d8e1049358e1e2ee61d82350592d50bd913804dc50355bb6756ae571ed
+#20 ...
+
+#12 [router internal] load build context
+#12 transferring context: 168B 0.1s done
+#12 DONE 0.1s
+
+#23 [node2 builder 2/7] RUN apk add --no-cache git gcc musl-dev
+#23 CACHED
+
+#24 [node2 stage-1 6/8] RUN chmod +x start-node.sh
+#24 CACHED
+
+#25 [node2 builder 6/7] COPY *.go ./
+#25 CACHED
+
+#26 [node2 stage-1 2/8] RUN apk add --no-cache     iproute2     iputils     net-tools     bash     ca-certificates     curl
+#26 CACHED
+
+#27 [node2 stage-1 7/8] COPY spoof-attack.sh .
+#27 CACHED
+
+#28 [node2 builder 4/7] COPY go.mod go.sum ./
+#28 CACHED
+
+#29 [node2 builder 3/7] WORKDIR /build
+#29 CACHED
+
+#30 [node2 builder 7/7] RUN go build -o node-sync .
+#30 CACHED
+
+#31 [node2 builder 5/7] RUN go mod download
+#31 CACHED
+
+#32 [node2 stage-1 5/8] COPY start-node.sh .
+#32 CACHED
+
+#33 [node2 stage-1 3/8] WORKDIR /app
+#33 CACHED
+
+#34 [node2 stage-1 4/8] COPY --from=builder /build/node-sync .
+#34 CACHED
+
+#35 [node1 stage-1 8/8] RUN chmod +x spoof-attack.sh
+#35 CACHED
+
+#36 [router builder 4/7] COPY go.mod go.sum ./
+#36 CACHED
+
+#37 [router builder 5/7] RUN go mod download
+#37 CACHED
+
+#38 [router builder 7/7] RUN go build -o router-monitor .
+#38 CACHED
+
+#39 [router stage-1 2/6] RUN apk add --no-cache     tcpdump     libpcap     iproute2     iputils     bash     ca-certificates
+#39 CACHED
+
+#40 [router builder 2/7] RUN apk add --no-cache git gcc musl-dev libpcap-dev
+#40 CACHED
+
+#41 [router stage-1 5/6] COPY start-router.sh .
+#41 CACHED
+
+#42 [router builder 6/7] COPY *.go ./
+#42 CACHED
+
+#43 [router stage-1 3/6] WORKDIR /app
+#43 CACHED
+
+#44 [router stage-1 4/6] COPY --from=builder /build/router-monitor .
+#44 CACHED
+
+#45 [router builder 3/7] WORKDIR /build
+#45 CACHED
+
+#46 [router stage-1 6/6] RUN chmod +x start-router.sh
+#46 CACHED
+
+#20 [dashboard] exporting to image
+#20 exporting attestation manifest sha256:537a29d8e1049358e1e2ee61d82350592d50bd913804dc50355bb6756ae571ed 0.1s done
+#20 exporting manifest list sha256:eef1f806880716e71aadc859a27601c9b7ea81a3d69d1e41cd96557b9e36842f
+#20 exporting manifest list sha256:eef1f806880716e71aadc859a27601c9b7ea81a3d69d1e41cd96557b9e36842f 0.1s done
+#20 naming to docker.io/library/blockchain-arp-dashboard:latest 0.0s done
+#20 unpacking to docker.io/library/blockchain-arp-dashboard:latest 0.1s done
+#20 DONE 0.5s
+
+#47 [node2 internal] load build context
+#47 transferring context: 191B 0.1s done
+#47 ...
+
+#48 [node3] exporting to image
+#48 exporting layers done
+#48 exporting manifest sha256:bcf615c97e395dcf5be9ccac982dc5b0864b1223319b5865d5062219f0fd2c2d 0.0s done
+#48 exporting config sha256:4a7cf53b1dcb7056eab026bc372fbc2dc2bd85fc35ddb8db9daa68c2ccbdba3b 0.0s done
+#48 exporting attestation manifest sha256:03e13eb4e4042da05b5af02aabd37fa5fa8f52a4121849cd217d59944f2a9f9e 0.3s done
+#48 exporting manifest list sha256:986a1ab33730967dddfae82cf6b8e7885d44825680a188ac02ef76f3c5b8e599 0.1s done
+#48 naming to docker.io/library/blockchain-arp-node3:latest 0.1s done
+#48 unpacking to docker.io/library/blockchain-arp-node3:latest 0.1s done
+#48 DONE 0.8s
+
+#49 [node1] exporting to image
+#49 exporting layers done
+#49 exporting manifest sha256:4acf9c3cad23954cb44c9cbeae5741a167f273a3797548d070982bbb19149f87 0.0s done
+#49 exporting config sha256:76926db43d8d72ab76d060885b5e20476faba6de67d48aea9ea79deab19bc687 0.0s done
+#49 exporting attestation manifest sha256:c5af29aa4594ebbf860a77889ff791c9ea5162aba23d48d236bb2d3cfdc15a62 0.2s done
+#49 exporting manifest list sha256:fe8c5bcb5bcbd4d26eef054fe4455f7d32b176d3f81c35a685b09280729e9953 0.2s done
+#49 naming to docker.io/library/blockchain-arp-node1:latest 0.0s done
+#49 unpacking to docker.io/library/blockchain-arp-node1:latest 0.1s done
+#49 DONE 0.8s
+
+#50 [router] exporting to image
+#50 exporting layers done
+#50 exporting manifest sha256:eaa643461a84d6b4fd335b6f44e079d57224624904b1292541d0aa403fa0f1fe 0.0s done
+#50 exporting config sha256:6e87135810889c71e52d362fd74654c9685221e0c8f474d6232abd5bd385c615 0.0s done
+#50 exporting attestation manifest sha256:c4e405eb77eeb6206b5233997108f3ae9c65b8d59c6a30b80c9a3ffa87468083 0.2s done
+#50 exporting manifest list sha256:8a112adbea1543294575c160c3e4ca12184c008ee390ffa770193ba769f549a8 0.2s done
+#50 naming to docker.io/library/blockchain-arp-router:latest 0.0s done
+#50 unpacking to docker.io/library/blockchain-arp-router:latest 0.1s done
+#50 DONE 0.8s
+
+#51 [node2] exporting to image
+#51 exporting layers done
+#51 exporting manifest sha256:faa277aeb02210db2a2a2a2e86118edc834e4d5916224569f416beacbaa792c8 0.0s done
+#51 exporting config sha256:5d18c766840f268594b778ad9a05cc41c150254380144e099fd4b04921fc35b8 0.0s done
+#51 exporting attestation manifest sha256:bdba6a796db5aab63b5ffd28cbf94f31d0dac1310d8b837ca46361023cba7953 0.3s done
+#51 exporting manifest list sha256:dff3bda98a3bde74fde7427869b582c0383c1e3ae165d811cb1de39e1625544d 0.1s done
+#51 naming to docker.io/library/blockchain-arp-node2:latest 0.0s done
+#51 unpacking to docker.io/library/blockchain-arp-node2:latest 0.1s done
+#51 DONE 0.8s
+
+#47 [node2 internal] load build context
+#47 ...
+
+#52 [dashboard] resolving provenance for metadata file
+#52 DONE 0.4s
+
+#53 [node2] resolving provenance for metadata file
+#53 DONE 0.1s
+
+#54 [router] resolving provenance for metadata file
+#54 DONE 0.2s
+
+#55 [node3] resolving provenance for metadata file
+#55 DONE 0.3s
+
+#56 [node1] resolving provenance for metadata file
+#56 DONE 0.0s
+
+#47 [node2 internal] load build context
+Waiting for recreated services to settle...
+Checking container status...
+NAME                   IMAGE                      COMMAND                  SERVICE     CREATED          STATUS          PORTS
+blockchain-dashboard   blockchain-arp-dashboard   "python app.py"          dashboard   37 seconds ago   Up 25 seconds   0.0.0.0:5000->5000/tcp, [::]:5000->5000/tcp
+blockchain-router      blockchain-arp-router      "bash /app/start-rou…"   router      27 seconds ago   Up 25 seconds   
+lan-node-1             blockchain-arp-node1       "bash /app/start-nod…"   node1       37 seconds ago   Up 25 seconds   
+lan-node-2             blockchain-arp-node2       "bash /app/start-nod…"   node2       37 seconds ago   Up 25 seconds   
+lan-node-3             blockchain-arp-node3       "bash /app/start-nod…"   node3       37 seconds ago   Up 25 seconds   
+blockchain-router                                                                                            Up 25 seconds   
+lan-node-3                                                                                                   Up 26 seconds   
+lan-node-1                                                                                                   Up 25 seconds   
+lan-node-2                                                                                                   Up 26 seconds   
+blockchain-dashboard                                                                                         Up 26 seconds   0.0.0.0:5000->5000/tcp, [::]:5000->5000/tcp
+dev-peer0.org1.example.com-arptracker_1.0-c0e7b0c09275200af40c285d80f8a2268c32c61fc84d9aa7438c30bc02ed5c0d   Up 36 minutes   
+dev-peer0.org2.example.com-arptracker_1.0-c0e7b0c09275200af40c285d80f8a2268c32c61fc84d9aa7438c30bc02ed5c0d   Up 36 minutes   
+peer0.org2.example.com                                                                                       Up 38 minutes   0.0.0.0:9051->9051/tcp, [::]:9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, [::]:9445->9445/tcp
+peer0.org1.example.com                                                                                       Up 38 minutes   0.0.0.0:7051->7051/tcp, [::]:7051->7051/tcp, 0.0.0.0:9444->9444/tcp, [::]:9444->9444/tcp
+orderer.example.com                                                                                          Up 38 minutes   0.0.0.0:7050->7050/tcp, [::]:7050->7050/tcp, 0.0.0.0:7053->7053/tcp, [::]:7053->7053/tcp, 0.0.0.0:9443->9443/tcp, [::]:9443->9443/tcp
+ca_orderer                                                                                                   Up 38 minutes   0.0.0.0:9054->9054/tcp, [::]:9054->9054/tcp, 7054/tcp, 0.0.0.0:19054->19054/tcp, [::]:19054->19054/tcp
+Establishing legitimate mapping 10.5.0.10 -> 02:42:0a:05:00:0a...
+Ledger learned legitimate mapping: 10.5.0.10 -> 02:42:0a:05:00:0a
+Dashboard before spoof: total=6 spoofing=0
+Launching spoof from node3: 10.5.0.10 -> 02:42:0a:05:00:0c
+============================================================
+  ARP SPOOFING ATTACK SIMULATION
+============================================================
+
+Target IP:  10.5.0.10
+Router IP:  10.5.0.1
+Source MAC: 02:42:0a:05:00:0c
+
+This will send a gratuitous ARP claiming:
+  '10.5.0.10 is at 02:42:0a:05:00:0c'
+
+The blockchain should detect this as spoofing.
+
+Sending spoofed ARP...
+ARPING 10.5.0.1 from 10.5.0.10 eth0
+Unicast reply from 10.5.0.1 [02:42:0A:05:00:01]  0.555ms
+Unicast reply from 10.5.0.1 [02:42:0A:05:00:01]  0.556ms
+Sent 3 probes (1 broadcast(s))
+Received 2 response(s)
+
+Attack packets sent.
+Check the dashboard for spoofing detection alerts.
+Spoofing counter increased: 0 -> 1
+Dashboard after spoof: total=11 spoofing=1
+Ledger protection verified: 10.5.0.10 still maps to 02:42:0a:05:00:0a
+Recent dashboard events:
+[{"eventType":"spoofing","hostname":"router","ipAddress":"10.5.0.10","macAddress":"02:42:0a:05:00:0c","message":"MAC CHANGED! 10.5.0.10: 02:42:0a:05:00:0a -> 02:42:0a:05:00:0c","previousMAC":"02:42:0a:05:00:0a","received_at":"2026-08-27T06:31:28.501130","recordedBy":"router","timestamp":"2026-08-27T06:31:26.439953972Z","trialId":"3a77baf9f69e26fbf9c7ae15de75be0b"},{"eventType":"match","hostname":"router","ipAddress":"10.5.0.1","macAddress":"02:42:0a:05:00:01","message":"Valid update: 10.5.0.1 -> 02:42:0a:05:00:01","received_at":"2026-08-27T06:31:26.439242","recordedBy":"router","timestamp":"2026-08-27T06:31:24.347849147Z","trialId":"7c51e68ff5d60954038da3bbdc2d7775"},{"eventType":"match","hostname":"router","ipAddress":"10.5.0.10","macAddress":"02:42:0a:05:00:0a","message":"Valid update: 10.5.0.10 -> 02:42:0a:05:00:0a","received_at":"2026-08-27T06:31:24.347149","recordedBy":"router","timestamp":"2026-08-27T06:31:22.262635165Z","trialId":"d72c49512e8f901f881dbf0aedd3dec8"},{"eventType":"match","hostname":"router","ipAddress":"10.5.0.1","macAddress":"02:42:0a:05:00:01","message":"Valid update: 10.5.0.1 -> 02:42:0a:05:00:01","received_at":"2026-08-27T06:31:22.262161","recordedBy":"router","timestamp":"2026-08-27T06:31:20.186826165Z","trialId":"c9fabf0cc0ee84b60735e98243c9ed53"},{"eventType":"match","hostname":"router","ipAddress":"10.5.0.10","macAddress":"02:42:0a:05:00:0a","message":"Valid update: 10.5.0.10 -> 02:42:0a:05:00:0a","received_at":"2026-08-27T06:31:20.186324","recordedBy":"router","timestamp":"2026-08-27T06:31:19.075471289Z","trialId":"837dffe60daa0c1e46a091d8eabab6f6"}]
+
+Recent router/node proof logs:
+lan-node-2  | 2026/08/27 06:31:20 BENCHMARK_EVENT stage=node_received trial=837dffe60daa0c1e46a091d8eabab6f6 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812280184
+lan-node-2  | 2026/08/27 06:31:20 BENCHMARK_EVENT stage=node_cache_updated trial=837dffe60daa0c1e46a091d8eabab6f6 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812280186
+lan-node-2  | 2026/08/27 06:31:22 BENCHMARK_EVENT stage=node_received trial=c9fabf0cc0ee84b60735e98243c9ed53 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812282260
+lan-node-2  | 2026/08/27 06:31:22 BENCHMARK_EVENT stage=node_cache_updated trial=c9fabf0cc0ee84b60735e98243c9ed53 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812282262
+lan-node-2  | 2026/08/27 06:31:24 BENCHMARK_EVENT stage=node_received trial=d72c49512e8f901f881dbf0aedd3dec8 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812284345
+lan-node-2  | 2026/08/27 06:31:24 BENCHMARK_EVENT stage=node_cache_updated trial=d72c49512e8f901f881dbf0aedd3dec8 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812284347
+lan-node-2  | 2026/08/27 06:31:26 BENCHMARK_EVENT stage=node_received trial=7c51e68ff5d60954038da3bbdc2d7775 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812286432
+lan-node-2  | 2026/08/27 06:31:26 BENCHMARK_EVENT stage=node_cache_updated trial=7c51e68ff5d60954038da3bbdc2d7775 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812286434
+lan-node-2  | 2026/08/27 06:31:28 BENCHMARK_EVENT stage=node_received trial=3a77baf9f69e26fbf9c7ae15de75be0b ip=10.5.0.10 mac=02:42:0a:05:00:0c ts=1787812288499
+lan-node-2  | 2026/08/27 06:31:28 [06:31:26] SPOOFING DETECTED!
+lan-node-3         | 2026/08/27 06:31:03 BENCHMARK_EVENT stage=node_received trial=e89be1ec94cf360f22a3e806dd2a9940 ip=10.5.0.11 mac=02:42:0a:05:00:0b ts=1787812263831
+lan-node-3         | 2026/08/27 06:31:03 BENCHMARK_EVENT stage=node_cache_updated trial=e89be1ec94cf360f22a3e806dd2a9940 ip=10.5.0.11 mac=02:42:0a:05:00:0b ts=1787812263833
+blockchain-router  | 2026/08/27 06:31:01 BENCHMARK_EVENT stage=router_captured trial=e89be1ec94cf360f22a3e806dd2a9940 ip=10.5.0.11 mac=02:42:0a:05:00:0b ts=1787812261753
+blockchain-router  | 2026/08/27 06:31:03 BENCHMARK_EVENT stage=fabric_submitted trial=e89be1ec94cf360f22a3e806dd2a9940 ip=10.5.0.11 mac=02:42:0a:05:00:0b ts=1787812263831
+blockchain-router  | 2026/08/27 06:31:03 Recorded to blockchain: 10.5.0.11 -> 02:42:0a:05:00:0b
+blockchain-router  | 2026/08/27 06:31:03 BENCHMARK_EVENT stage=router_captured trial=9c8e4532bb4eecf5d04244b277aa43ec ip=10.5.0.12 mac=02:42:0a:05:00:0c ts=1787812263834
+blockchain-router  | 2026/08/27 06:31:05 BENCHMARK_EVENT stage=fabric_submitted trial=9c8e4532bb4eecf5d04244b277aa43ec ip=10.5.0.12 mac=02:42:0a:05:00:0c ts=1787812265942
+blockchain-router  | 2026/08/27 06:31:05 Recorded to blockchain: 10.5.0.12 -> 02:42:0a:05:00:0c
+blockchain-router  | 2026/08/27 06:31:05 BENCHMARK_EVENT stage=router_captured trial=1867f13d3fb9e679c7032e208529693d ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812265945
+blockchain-router  | 2026/08/27 06:31:08 BENCHMARK_EVENT stage=fabric_submitted trial=1867f13d3fb9e679c7032e208529693d ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812268025
+lan-node-3         | 2026/08/27 06:31:05 BENCHMARK_EVENT stage=node_received trial=9c8e4532bb4eecf5d04244b277aa43ec ip=10.5.0.12 mac=02:42:0a:05:00:0c ts=1787812265936
+lan-node-3         | 2026/08/27 06:31:05 BENCHMARK_EVENT stage=node_cache_updated trial=9c8e4532bb4eecf5d04244b277aa43ec ip=10.5.0.12 mac=02:42:0a:05:00:0c ts=1787812265942
+lan-node-3         | 2026/08/27 06:31:08 BENCHMARK_EVENT stage=node_received trial=1867f13d3fb9e679c7032e208529693d ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812268020
+lan-node-3         | 2026/08/27 06:31:08 BENCHMARK_EVENT stage=node_cache_updated trial=1867f13d3fb9e679c7032e208529693d ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812268022
+lan-node-3         | 2026/08/27 06:31:10 BENCHMARK_EVENT stage=node_received trial=6d2c7257a72486f7fb3e3aa0895e080e ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812270103
+lan-node-3         | 2026/08/27 06:31:10 BENCHMARK_EVENT stage=node_cache_updated trial=6d2c7257a72486f7fb3e3aa0895e080e ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812270105
+lan-node-3         | 2026/08/27 06:31:12 BENCHMARK_EVENT stage=node_received trial=c53945b4268d35508d66b3ea5ce6b433 ip=10.5.0.2 mac=02:42:0a:05:00:02 ts=1787812272184
+lan-node-3         | 2026/08/27 06:31:12 BENCHMARK_EVENT stage=node_cache_updated trial=c53945b4268d35508d66b3ea5ce6b433 ip=10.5.0.2 mac=02:42:0a:05:00:02 ts=1787812272186
+lan-node-3         | 2026/08/27 06:31:19 BENCHMARK_EVENT stage=node_received trial=de97baf39c512b05879522ca5f7e0ad3 ip=10.5.0.254 mac=ce:0c:e1:84:32:c0 ts=1787812279072
+lan-node-3         | 2026/08/27 06:31:19 BENCHMARK_EVENT stage=node_cache_updated trial=de97baf39c512b05879522ca5f7e0ad3 ip=10.5.0.254 mac=ce:0c:e1:84:32:c0 ts=1787812279075
+lan-node-3         | 2026/08/27 06:31:20 BENCHMARK_EVENT stage=node_received trial=837dffe60daa0c1e46a091d8eabab6f6 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812280184
+lan-node-3         | 2026/08/27 06:31:20 BENCHMARK_EVENT stage=node_cache_updated trial=837dffe60daa0c1e46a091d8eabab6f6 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812280186
+lan-node-3         | 2026/08/27 06:31:22 BENCHMARK_EVENT stage=node_received trial=c9fabf0cc0ee84b60735e98243c9ed53 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812282260
+lan-node-3         | 2026/08/27 06:31:22 BENCHMARK_EVENT stage=node_cache_updated trial=c9fabf0cc0ee84b60735e98243c9ed53 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812282262
+lan-node-3         | 2026/08/27 06:31:24 BENCHMARK_EVENT stage=node_received trial=d72c49512e8f901f881dbf0aedd3dec8 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812284345
+lan-node-3         | 2026/08/27 06:31:24 BENCHMARK_EVENT stage=node_cache_updated trial=d72c49512e8f901f881dbf0aedd3dec8 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812284347
+lan-node-3         | 2026/08/27 06:31:26 BENCHMARK_EVENT stage=node_received trial=7c51e68ff5d60954038da3bbdc2d7775 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812286432
+lan-node-3         | 2026/08/27 06:31:26 BENCHMARK_EVENT stage=node_cache_updated trial=7c51e68ff5d60954038da3bbdc2d7775 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812286434
+lan-node-3         | 2026/08/27 06:31:28 BENCHMARK_EVENT stage=node_received trial=3a77baf9f69e26fbf9c7ae15de75be0b ip=10.5.0.10 mac=02:42:0a:05:00:0c ts=1787812288499
+lan-node-3         | 2026/08/27 06:31:28 [06:31:26] SPOOFING DETECTED!
+lan-node-1         | 2026/08/27 06:31:03 BENCHMARK_EVENT stage=node_received trial=e89be1ec94cf360f22a3e806dd2a9940 ip=10.5.0.11 mac=02:42:0a:05:00:0b ts=1787812263831
+lan-node-1         | 2026/08/27 06:31:03 BENCHMARK_EVENT stage=node_cache_updated trial=e89be1ec94cf360f22a3e806dd2a9940 ip=10.5.0.11 mac=02:42:0a:05:00:0b ts=1787812263833
+lan-node-1         | 2026/08/27 06:31:05 BENCHMARK_EVENT stage=node_received trial=9c8e4532bb4eecf5d04244b277aa43ec ip=10.5.0.12 mac=02:42:0a:05:00:0c ts=1787812265936
+lan-node-1         | 2026/08/27 06:31:05 BENCHMARK_EVENT stage=node_cache_updated trial=9c8e4532bb4eecf5d04244b277aa43ec ip=10.5.0.12 mac=02:42:0a:05:00:0c ts=1787812265952
+lan-node-1         | 2026/08/27 06:31:08 BENCHMARK_EVENT stage=node_received trial=1867f13d3fb9e679c7032e208529693d ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812268019
+lan-node-1         | 2026/08/27 06:31:08 BENCHMARK_EVENT stage=node_cache_updated trial=1867f13d3fb9e679c7032e208529693d ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812268020
+lan-node-1         | 2026/08/27 06:31:10 BENCHMARK_EVENT stage=node_received trial=6d2c7257a72486f7fb3e3aa0895e080e ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812270103
+lan-node-1         | 2026/08/27 06:31:10 BENCHMARK_EVENT stage=node_cache_updated trial=6d2c7257a72486f7fb3e3aa0895e080e ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812270105
+lan-node-1         | 2026/08/27 06:31:12 BENCHMARK_EVENT stage=node_received trial=c53945b4268d35508d66b3ea5ce6b433 ip=10.5.0.2 mac=02:42:0a:05:00:02 ts=1787812272184
+lan-node-1         | 2026/08/27 06:31:12 BENCHMARK_EVENT stage=node_cache_updated trial=c53945b4268d35508d66b3ea5ce6b433 ip=10.5.0.2 mac=02:42:0a:05:00:02 ts=1787812272187
+lan-node-1         | 2026/08/27 06:31:19 BENCHMARK_EVENT stage=node_received trial=de97baf39c512b05879522ca5f7e0ad3 ip=10.5.0.254 mac=ce:0c:e1:84:32:c0 ts=1787812279072
+lan-node-1         | 2026/08/27 06:31:19 BENCHMARK_EVENT stage=node_cache_updated trial=de97baf39c512b05879522ca5f7e0ad3 ip=10.5.0.254 mac=ce:0c:e1:84:32:c0 ts=1787812279074
+lan-node-1         | 2026/08/27 06:31:20 BENCHMARK_EVENT stage=node_received trial=837dffe60daa0c1e46a091d8eabab6f6 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812280184
+lan-node-1         | 2026/08/27 06:31:20 BENCHMARK_EVENT stage=node_cache_updated trial=837dffe60daa0c1e46a091d8eabab6f6 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812280186
+blockchain-router  | 2026/08/27 06:31:08 Recorded to blockchain: 10.5.0.10 -> 02:42:0a:05:00:0a
+blockchain-router  | 2026/08/27 06:31:08 BENCHMARK_EVENT stage=router_captured trial=6d2c7257a72486f7fb3e3aa0895e080e ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812268027
+blockchain-router  | 2026/08/27 06:31:10 BENCHMARK_EVENT stage=fabric_submitted trial=6d2c7257a72486f7fb3e3aa0895e080e ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812270103
+blockchain-router  | 2026/08/27 06:31:10 Recorded to blockchain: 10.5.0.1 -> 02:42:0a:05:00:01
+blockchain-router  | 2026/08/27 06:31:10 BENCHMARK_EVENT stage=router_captured trial=c53945b4268d35508d66b3ea5ce6b433 ip=10.5.0.2 mac=02:42:0a:05:00:02 ts=1787812270105
+blockchain-router  | 2026/08/27 06:31:12 BENCHMARK_EVENT stage=fabric_submitted trial=c53945b4268d35508d66b3ea5ce6b433 ip=10.5.0.2 mac=02:42:0a:05:00:02 ts=1787812272179
+blockchain-router  | 2026/08/27 06:31:12 Recorded to blockchain: 10.5.0.2 -> 02:42:0a:05:00:02
+blockchain-router  | 2026/08/27 06:31:16 BENCHMARK_EVENT stage=router_captured trial=de97baf39c512b05879522ca5f7e0ad3 ip=10.5.0.254 mac=ce:0c:e1:84:32:c0 ts=1787812276993
+blockchain-router  | 2026/08/27 06:31:19 BENCHMARK_EVENT stage=fabric_submitted trial=de97baf39c512b05879522ca5f7e0ad3 ip=10.5.0.254 mac=ce:0c:e1:84:32:c0 ts=1787812279072
+blockchain-router  | 2026/08/27 06:31:19 Recorded to blockchain: 10.5.0.254 -> ce:0c:e1:84:32:c0
+blockchain-router  | 2026/08/27 06:31:19 BENCHMARK_EVENT stage=router_captured trial=837dffe60daa0c1e46a091d8eabab6f6 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812279075
+blockchain-router  | 2026/08/27 06:31:20 BENCHMARK_EVENT stage=fabric_submitted trial=837dffe60daa0c1e46a091d8eabab6f6 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812280184
+blockchain-router  | 2026/08/27 06:31:20 Recorded to blockchain: 10.5.0.10 -> 02:42:0a:05:00:0a
+blockchain-router  | 2026/08/27 06:31:20 BENCHMARK_EVENT stage=router_captured trial=c9fabf0cc0ee84b60735e98243c9ed53 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812280186
+blockchain-router  | 2026/08/27 06:31:22 BENCHMARK_EVENT stage=fabric_submitted trial=c9fabf0cc0ee84b60735e98243c9ed53 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812282260
+blockchain-router  | 2026/08/27 06:31:22 Recorded to blockchain: 10.5.0.1 -> 02:42:0a:05:00:01
+blockchain-router  | 2026/08/27 06:31:22 BENCHMARK_EVENT stage=router_captured trial=d72c49512e8f901f881dbf0aedd3dec8 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812282262
+blockchain-router  | 2026/08/27 06:31:24 BENCHMARK_EVENT stage=fabric_submitted trial=d72c49512e8f901f881dbf0aedd3dec8 ip=10.5.0.10 mac=02:42:0a:05:00:0a ts=1787812284345
+blockchain-router  | 2026/08/27 06:31:24 Recorded to blockchain: 10.5.0.10 -> 02:42:0a:05:00:0a
+blockchain-router  | 2026/08/27 06:31:24 BENCHMARK_EVENT stage=router_captured trial=7c51e68ff5d60954038da3bbdc2d7775 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812284347
+blockchain-router  | 2026/08/27 06:31:26 BENCHMARK_EVENT stage=fabric_submitted trial=7c51e68ff5d60954038da3bbdc2d7775 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812286437
+blockchain-router  | 2026/08/27 06:31:26 Recorded to blockchain: 10.5.0.1 -> 02:42:0a:05:00:01
+blockchain-router  | 2026/08/27 06:31:26 BENCHMARK_EVENT stage=router_captured trial=3a77baf9f69e26fbf9c7ae15de75be0b ip=10.5.0.10 mac=02:42:0a:05:00:0c ts=1787812286439
+blockchain-router  | 2026/08/27 06:31:28 BENCHMARK_EVENT stage=fabric_submitted trial=3a77baf9f69e26fbf9c7ae15de75be0b ip=10.5.0.10 mac=02:42:0a:05:00:0c ts=1787812288499
+blockchain-router  | 2026/08/27 06:31:28 Recorded to blockchain: 10.5.0.10 -> 02:42:0a:05:00:0c
+blockchain-router  | 2026/08/27 06:31:28 BENCHMARK_EVENT stage=router_captured trial=4d870a48e07790a521d310dc48df0064 ip=10.5.0.1 mac=02:42:0a:05:00:01 ts=1787812288501
+PASS: end-to-end spoof detection and ledger protection verified
+Result file: /mnt/c/barp/Blockchain-ARP/benchmark/results/e2e_20260827T063030Z.txt
+
+Latest result artifacts:
+2026-08-27 01:58:37.9437383000 /mnt/c/barp/Blockchain-ARP/benchmark/results/baseline_20260827T055833Z.csv
+2026-08-27 01:58:46.0609002000 /mnt/c/barp/Blockchain-ARP/benchmark/results/raw_20260827T055839Z.log
+2026-08-27 01:59:46.3409738000 /mnt/c/barp/Blockchain-ARP/benchmark/results/e2e_20260827T055846Z.txt
+2026-08-27 01:59:46.4901916000 /mnt/c/barp/Blockchain-ARP/benchmark/results/run_20260827T055755Z.txt
+2026-08-27 02:08:22.5094642000 /mnt/c/barp/Blockchain-ARP/benchmark/results/latency_20260827T060000Z.csv
+2026-08-27 02:15:19.8316711000 /mnt/c/barp/Blockchain-ARP/benchmark/results/throughput_20260827T060822Z.csv
+2026-08-27 02:29:41.6398101000 /mnt/c/barp/Blockchain-ARP/benchmark/results/coldstart_20260827T061519Z.csv
+2026-08-27 02:30:22.7435810000 /mnt/c/barp/Blockchain-ARP/benchmark/results/baseline_20260827T062941Z.csv
+2026-08-27 02:30:24.3346602000 /mnt/c/barp/Blockchain-ARP/benchmark/results/README.md
+2026-08-27 02:30:30.2333030000 /mnt/c/barp/Blockchain-ARP/benchmark/results/raw_20260827T063024Z.log
+2026-08-27 02:31:30.2258729000 /mnt/c/barp/Blockchain-ARP/benchmark/results/e2e_20260827T063030Z.txt
+2026-08-27 02:31:30.2567093000 /mnt/c/barp/Blockchain-ARP/benchmark/results/run_20260827T055953Z.txt
+
+Figure artifacts:
+/mnt/c/barp/Blockchain-ARP/benchmark/figures/coldstart_vs_ledger.png
+/mnt/c/barp/Blockchain-ARP/benchmark/figures/latency_distribution.png
+/mnt/c/barp/Blockchain-ARP/benchmark/figures/latency_summary.png
+/mnt/c/barp/Blockchain-ARP/benchmark/figures/latency_vs_nodes.png
+/mnt/c/barp/Blockchain-ARP/benchmark/figures/protection_rate.png
+/mnt/c/barp/Blockchain-ARP/benchmark/figures/throughput_curve.png
+
+PASS: reproducible benchmark run completed
+Manifest: /mnt/c/barp/Blockchain-ARP/benchmark/results/run_20260827T055953Z.txt

@@ -1,0 +1,752 @@
+Fresh-start scale measurement RUN_ID=20260724T024533Z
+
+########## [02:45:33] Stop LAN + Fabric teardown ##########
+============================================================
+  Stopping Simulated LAN
+============================================================
+
+ Container lan-node-12  Stopping
+ Container lan-node-15  Stopping
+ Container blockchain-router  Stopping
+ Container lan-node-11  Stopping
+ Container lan-node-9  Stopping
+ Container lan-node-20  Stopping
+ Container lan-node-2  Stopping
+ Container lan-node-3  Stopping
+ Container lan-node-10  Stopping
+ Container lan-node-7  Stopping
+ Container lan-node-19  Stopping
+ Container lan-node-8  Stopping
+ Container lan-node-17  Stopping
+ Container lan-node-1  Stopping
+ Container lan-node-5  Stopping
+ Container lan-node-18  Stopping
+ Container lan-node-14  Stopping
+ Container lan-node-16  Stopping
+ Container lan-node-13  Stopping
+ Container lan-node-6  Stopping
+ Container lan-node-4  Stopping
+ Container lan-node-15  Stopped
+ Container lan-node-15  Removing
+ Container lan-node-15  Removed
+ Container lan-node-20  Stopped
+ Container lan-node-20  Removing
+ Container lan-node-20  Removed
+ Container lan-node-7  Stopped
+ Container lan-node-7  Removing
+ Container lan-node-7  Removed
+ Container lan-node-19  Stopped
+ Container lan-node-19  Removing
+ Container lan-node-19  Removed
+ Container lan-node-14  Stopped
+ Container lan-node-14  Removing
+ Container lan-node-14  Removed
+ Container lan-node-2  Stopped
+ Container lan-node-2  Removing
+ Container lan-node-2  Removed
+ Container lan-node-3  Stopped
+ Container lan-node-3  Removing
+ Container lan-node-3  Removed
+ Container lan-node-17  Stopped
+ Container lan-node-17  Removing
+ Container lan-node-17  Removed
+ Container blockchain-router  Stopped
+ Container blockchain-router  Removing
+ Container blockchain-router  Removed
+ Container blockchain-dashboard  Stopping
+ Container lan-node-12  Stopped
+ Container lan-node-12  Removing
+ Container lan-node-12  Removed
+ Container lan-node-5  Stopped
+ Container lan-node-5  Removing
+ Container lan-node-5  Removed
+ Container lan-node-9  Stopped
+ Container lan-node-9  Removing
+ Container lan-node-9  Removed
+ Container lan-node-11  Stopped
+ Container lan-node-11  Removing
+ Container lan-node-11  Removed
+ Container lan-node-13  Stopped
+ Container lan-node-13  Removing
+ Container lan-node-13  Removed
+ Container lan-node-8  Stopped
+ Container lan-node-8  Removing
+ Container lan-node-8  Removed
+ Container lan-node-1  Stopped
+ Container lan-node-1  Removing
+ Container lan-node-1  Removed
+ Container lan-node-6  Stopped
+ Container lan-node-6  Removing
+ Container lan-node-6  Removed
+ Container lan-node-10  Stopped
+ Container lan-node-10  Removing
+ Container lan-node-10  Removed
+ Container lan-node-18  Stopped
+ Container lan-node-18  Removing
+ Container lan-node-18  Removed
+ Container lan-node-16  Stopped
+ Container lan-node-16  Removing
+ Container lan-node-16  Removed
+ Container lan-node-4  Stopped
+ Container lan-node-4  Removing
+ Container lan-node-4  Removed
+ Container blockchain-dashboard  Stopped
+ Container blockchain-dashboard  Removing
+ Container blockchain-dashboard  Removed
+ Network blockchain-arp_simulated_lan  Removing
+ Network blockchain-arp_simulated_lan  Removed
+
+All simulated LAN containers stopped and removed.
+[0;34mUsing docker and docker compose[0m
+[0;34mStopping network[0m
+ Container orderer.example.com  Stopping
+ Container peer0.org2.example.com  Stopping
+ Container ca_orderer  Stopping
+ Container ca_org1  Stopping
+ Container ca_org2  Stopping
+ Container peer0.org1.example.com  Stopping
+ Container orderer.example.com  Stopped
+ Container orderer.example.com  Removing
+ Container peer0.org1.example.com  Stopped
+ Container peer0.org1.example.com  Removing
+ Container ca_orderer  Stopped
+ Container ca_orderer  Removing
+ Container peer0.org2.example.com  Stopped
+ Container ca_org2  Stopped
+ Container ca_org2  Removing
+ Container peer0.org2.example.com  Removing
+ Container ca_org1  Stopped
+ Container ca_org1  Removing
+ Container ca_org2  Removed
+ Container ca_org1  Removed
+ Container ca_orderer  Removed
+ Container orderer.example.com  Removed
+ Container peer0.org2.example.com  Removed
+ Container peer0.org1.example.com  Removed
+ Volume compose_peer0.org1.example.com  Removing
+ Volume compose_peer0.org2.example.com  Removing
+ Volume compose_orderer.example.com  Removing
+ Network fabric_test  Removing
+ Volume compose_peer0.org2.example.com  Removed
+ Volume compose_peer0.org1.example.com  Removed
+ Volume compose_orderer.example.com  Removed
+ Network fabric_test  Removed
+Error response from daemon: get docker_orderer.example.com: no such volume
+Error response from daemon: get docker_peer0.org1.example.com: no such volume
+Error response from daemon: get docker_peer0.org2.example.com: no such volume
+[0;34mRemoving remaining containers[0m
+72c40bdc6adf
+6efdd38653c9
+[0;34mRemoving generated chaincode docker images[0m
+Untagged: dev-peer0.org2.example.com-arptracker_1.0-40e7866b4b50c8eff59c577c366aa5cca547b5e57f9f11174c5dd697f9cfc220-5d6f54d7bdfd91b3427cd2a16c99dbe013772243b1068cca06ef982c5742d7d5:latest
+Deleted: sha256:1f724e62a6c5a6be39d2a4b815cfef8b00025ddb10a9fbd1b3498ac121647891
+Untagged: dev-peer0.org1.example.com-arptracker_1.0-40e7866b4b50c8eff59c577c366aa5cca547b5e57f9f11174c5dd697f9cfc220-78524bb7965324d7f1aa8f22c88a65e68e3c98928e46d0ea855822f49bba2937:latest
+Deleted: sha256:65c7b61116514fc5c622707aece5dbcb726693f428d9a52bc5f1464fb879b395
+
+########## [02:45:53] Fabric up + channel ##########
+[0;34mUsing docker and docker compose[0m
+[0;34mCreating channel 'mychannel'.[0m
+[0;34mIf network is not up, starting nodes with CLI timeout of '5' tries and CLI delay of '3' seconds and using database 'leveldb with crypto from 'Certificate Authorities'[0m
+[0;34mBringing up network[0m
+[0;34mLOCAL_VERSION=v2.5.0[0m
+[0;34mDOCKER_IMAGE_VERSION=v3.1.4[0m
+[1;33mLocal fabric binaries and docker images are out of sync. This may cause problems.[0m
+[0;34mCA_LOCAL_VERSION=v1.5.7[0m
+[0;34mCA_DOCKER_IMAGE_VERSION=v1.5.18[0m
+[1;33mLocal fabric-ca binaries and docker images are out of sync. This may cause problems.[0m
+[0;34mGenerating certificates using Fabric CA[0m
+ Network fabric_test  Creating
+ Network fabric_test  Created
+ Container ca_orderer  Creating
+ Container ca_org1  Creating
+ Container ca_org2  Creating
+ Container ca_orderer  Created
+ Container ca_org2  Created
+ Container ca_org1  Created
+ Container ca_orderer  Starting
+ Container ca_org1  Starting
+ Container ca_org2  Starting
+ Container ca_org2  Started
+ Container ca_org1  Started
+ Container ca_orderer  Started
++ fabric-ca-client getcainfo -u https://admin:adminpw@localhost:7054 --caname ca-org1 --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/07/23 22:45:58 [INFO] Configuration file location: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/fabric-ca-client-config.yaml
+2026/07/23 22:45:58 [INFO] TLS Enabled
+2026/07/23 22:45:58 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/cacerts/localhost-7054-ca-org1.pem
+2026/07/23 22:45:58 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/IssuerPublicKey
+2026/07/23 22:45:58 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/IssuerRevocationPublicKey
++ res=0
+[0;34mCreating Org1 Identities[0m
+[0;34mEnrolling the CA admin[0m
++ fabric-ca-client enroll -u https://admin:adminpw@localhost:7054 --caname ca-org1 --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/07/23 22:45:58 [INFO] Created a default configuration file at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/fabric-ca-client-config.yaml
+2026/07/23 22:45:58 [INFO] TLS Enabled
+2026/07/23 22:45:58 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:45:58 [INFO] encoded CSR
+2026/07/23 22:45:59 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/signcerts/cert.pem
+2026/07/23 22:45:59 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/cacerts/localhost-7054-ca-org1.pem
+2026/07/23 22:45:59 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/IssuerPublicKey
+2026/07/23 22:45:59 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/IssuerRevocationPublicKey
+[0;34mRegistering peer0[0m
++ fabric-ca-client register --caname ca-org1 --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/07/23 22:45:59 [INFO] Configuration file location: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/fabric-ca-client-config.yaml
+2026/07/23 22:45:59 [INFO] TLS Enabled
+2026/07/23 22:45:59 [INFO] TLS Enabled
+Password: peer0pw
+[0;34mRegistering user[0m
++ fabric-ca-client register --caname ca-org1 --id.name user1 --id.secret user1pw --id.type client --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/07/23 22:45:59 [INFO] Configuration file location: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/fabric-ca-client-config.yaml
+2026/07/23 22:45:59 [INFO] TLS Enabled
+2026/07/23 22:45:59 [INFO] TLS Enabled
+Password: user1pw
+[0;34mRegistering the org admin[0m
++ fabric-ca-client register --caname ca-org1 --id.name org1admin --id.secret org1adminpw --id.type admin --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/07/23 22:45:59 [INFO] Configuration file location: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/fabric-ca-client-config.yaml
+2026/07/23 22:45:59 [INFO] TLS Enabled
+2026/07/23 22:45:59 [INFO] TLS Enabled
+Password: org1adminpw
+[0;34mGenerating the peer0 msp[0m
++ fabric-ca-client enroll -u https://peer0:peer0pw@localhost:7054 --caname ca-org1 -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/07/23 22:46:00 [INFO] TLS Enabled
+2026/07/23 22:46:00 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:00 [INFO] encoded CSR
+2026/07/23 22:46:00 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:00 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/cacerts/localhost-7054-ca-org1.pem
+2026/07/23 22:46:00 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/IssuerPublicKey
+2026/07/23 22:46:00 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the peer0-tls certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://peer0:peer0pw@localhost:7054 --caname ca-org1 -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls --enrollment.profile tls --csr.hosts peer0.org1.example.com --csr.hosts localhost --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/07/23 22:46:00 [INFO] TLS Enabled
+2026/07/23 22:46:00 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:00 [INFO] encoded CSR
+2026/07/23 22:46:00 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/signcerts/cert.pem
+2026/07/23 22:46:00 [INFO] Stored TLS root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/tlscacerts/tls-localhost-7054-ca-org1.pem
+2026/07/23 22:46:00 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/IssuerPublicKey
+2026/07/23 22:46:00 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/IssuerRevocationPublicKey
+[0;34mGenerating the user msp[0m
++ fabric-ca-client enroll -u https://user1:user1pw@localhost:7054 --caname ca-org1 -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/07/23 22:46:00 [INFO] TLS Enabled
+2026/07/23 22:46:00 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:00 [INFO] encoded CSR
+2026/07/23 22:46:00 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:00 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/cacerts/localhost-7054-ca-org1.pem
+2026/07/23 22:46:00 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/IssuerPublicKey
+2026/07/23 22:46:00 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the org admin msp[0m
++ fabric-ca-client enroll -u https://org1admin:org1adminpw@localhost:7054 --caname ca-org1 -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/07/23 22:46:01 [INFO] TLS Enabled
+2026/07/23 22:46:01 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:01 [INFO] encoded CSR
+2026/07/23 22:46:01 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:01 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/cacerts/localhost-7054-ca-org1.pem
+2026/07/23 22:46:01 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/IssuerPublicKey
+2026/07/23 22:46:01 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/IssuerRevocationPublicKey
+[0;34mCreating Org2 Identities[0m
+[0;34mEnrolling the CA admin[0m
++ fabric-ca-client enroll -u https://admin:adminpw@localhost:8054 --caname ca-org2 --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/07/23 22:46:01 [INFO] Created a default configuration file at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/fabric-ca-client-config.yaml
+2026/07/23 22:46:01 [INFO] TLS Enabled
+2026/07/23 22:46:01 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:01 [INFO] encoded CSR
+2026/07/23 22:46:00 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:00 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/msp/cacerts/localhost-8054-ca-org2.pem
+2026/07/23 22:46:00 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/msp/IssuerPublicKey
+2026/07/23 22:46:00 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/msp/IssuerRevocationPublicKey
+[0;34mRegistering peer0[0m
++ fabric-ca-client register --caname ca-org2 --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/07/23 22:46:01 [INFO] Configuration file location: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/fabric-ca-client-config.yaml
+2026/07/23 22:46:01 [INFO] TLS Enabled
+2026/07/23 22:46:01 [INFO] TLS Enabled
+Password: peer0pw
+[0;34mRegistering user[0m
++ fabric-ca-client register --caname ca-org2 --id.name user1 --id.secret user1pw --id.type client --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/07/23 22:46:01 [INFO] Configuration file location: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/fabric-ca-client-config.yaml
+2026/07/23 22:46:01 [INFO] TLS Enabled
+2026/07/23 22:46:01 [INFO] TLS Enabled
+Password: user1pw
+[0;34mRegistering the org admin[0m
++ fabric-ca-client register --caname ca-org2 --id.name org2admin --id.secret org2adminpw --id.type admin --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/07/23 22:46:01 [INFO] Configuration file location: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/fabric-ca-client-config.yaml
+2026/07/23 22:46:01 [INFO] TLS Enabled
+2026/07/23 22:46:01 [INFO] TLS Enabled
+Password: org2adminpw
+[0;34mGenerating the peer0 msp[0m
++ fabric-ca-client enroll -u https://peer0:peer0pw@localhost:8054 --caname ca-org2 -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/07/23 22:46:01 [INFO] TLS Enabled
+2026/07/23 22:46:01 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:01 [INFO] encoded CSR
+2026/07/23 22:46:02 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:02 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp/cacerts/localhost-8054-ca-org2.pem
+2026/07/23 22:46:02 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp/IssuerPublicKey
+2026/07/23 22:46:02 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the peer0-tls certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://peer0:peer0pw@localhost:8054 --caname ca-org2 -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls --enrollment.profile tls --csr.hosts peer0.org2.example.com --csr.hosts localhost --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/07/23 22:46:02 [INFO] TLS Enabled
+2026/07/23 22:46:02 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:02 [INFO] encoded CSR
+2026/07/23 22:46:02 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/signcerts/cert.pem
+2026/07/23 22:46:02 [INFO] Stored TLS root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/tlscacerts/tls-localhost-8054-ca-org2.pem
+2026/07/23 22:46:02 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/IssuerPublicKey
+2026/07/23 22:46:02 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/IssuerRevocationPublicKey
+[0;34mGenerating the user msp[0m
++ fabric-ca-client enroll -u https://user1:user1pw@localhost:8054 --caname ca-org2 -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/07/23 22:46:02 [INFO] TLS Enabled
+2026/07/23 22:46:02 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:02 [INFO] encoded CSR
+2026/07/23 22:46:02 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:02 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/cacerts/localhost-8054-ca-org2.pem
+2026/07/23 22:46:02 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/IssuerPublicKey
+2026/07/23 22:46:02 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the org admin msp[0m
++ fabric-ca-client enroll -u https://org2admin:org2adminpw@localhost:8054 --caname ca-org2 -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/07/23 22:46:02 [INFO] TLS Enabled
+2026/07/23 22:46:02 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:02 [INFO] encoded CSR
+2026/07/23 22:46:03 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:03 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/cacerts/localhost-8054-ca-org2.pem
+2026/07/23 22:46:03 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/IssuerPublicKey
+2026/07/23 22:46:03 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/IssuerRevocationPublicKey
+[0;34mCreating Orderer Org Identities[0m
+[0;34mEnrolling the CA admin[0m
++ fabric-ca-client enroll -u https://admin:adminpw@localhost:9054 --caname ca-orderer --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:03 [INFO] Created a default configuration file at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/fabric-ca-client-config.yaml
+2026/07/23 22:46:03 [INFO] TLS Enabled
+2026/07/23 22:46:03 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:03 [INFO] encoded CSR
+2026/07/23 22:46:03 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:03 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/msp/cacerts/localhost-9054-ca-orderer.pem
+2026/07/23 22:46:03 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/msp/IssuerPublicKey
+2026/07/23 22:46:03 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/msp/IssuerRevocationPublicKey
+[0;34mRegistering orderer[0m
++ fabric-ca-client register --caname ca-orderer --id.name orderer --id.secret ordererpw --id.type orderer --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:03 [INFO] Configuration file location: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/fabric-ca-client-config.yaml
+2026/07/23 22:46:03 [INFO] TLS Enabled
+2026/07/23 22:46:03 [INFO] TLS Enabled
+Password: ordererpw
+[0;34mGenerating the orderer MSP[0m
++ fabric-ca-client enroll -u https://orderer:ordererpw@localhost:9054 --caname ca-orderer -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:03 [INFO] TLS Enabled
+2026/07/23 22:46:03 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:03 [INFO] encoded CSR
+2026/07/23 22:46:03 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:03 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/cacerts/localhost-9054-ca-orderer.pem
+2026/07/23 22:46:03 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/IssuerPublicKey
+2026/07/23 22:46:03 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the orderer TLS certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://orderer:ordererpw@localhost:9054 --caname ca-orderer -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls --enrollment.profile tls --csr.hosts orderer.example.com --csr.hosts localhost --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:04 [INFO] TLS Enabled
+2026/07/23 22:46:04 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:04 [INFO] encoded CSR
+2026/07/23 22:46:04 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/signcerts/cert.pem
+2026/07/23 22:46:04 [INFO] Stored TLS root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/tlscacerts/tls-localhost-9054-ca-orderer.pem
+2026/07/23 22:46:04 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/IssuerPublicKey
+2026/07/23 22:46:04 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/IssuerRevocationPublicKey
+[0;34mRegistering orderer2[0m
++ fabric-ca-client register --caname ca-orderer --id.name orderer2 --id.secret orderer2pw --id.type orderer --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:04 [INFO] Configuration file location: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/fabric-ca-client-config.yaml
+2026/07/23 22:46:04 [INFO] TLS Enabled
+2026/07/23 22:46:04 [INFO] TLS Enabled
+Password: orderer2pw
+[0;34mGenerating the orderer2 MSP[0m
++ fabric-ca-client enroll -u https://orderer2:orderer2pw@localhost:9054 --caname ca-orderer -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:04 [INFO] TLS Enabled
+2026/07/23 22:46:04 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:04 [INFO] encoded CSR
+2026/07/23 22:46:04 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:04 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp/cacerts/localhost-9054-ca-orderer.pem
+2026/07/23 22:46:04 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp/IssuerPublicKey
+2026/07/23 22:46:04 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the orderer2 TLS certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://orderer2:orderer2pw@localhost:9054 --caname ca-orderer -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls --enrollment.profile tls --csr.hosts orderer2.example.com --csr.hosts localhost --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:04 [INFO] TLS Enabled
+2026/07/23 22:46:04 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:04 [INFO] encoded CSR
+2026/07/23 22:46:05 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/signcerts/cert.pem
+2026/07/23 22:46:05 [INFO] Stored TLS root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/tlscacerts/tls-localhost-9054-ca-orderer.pem
+2026/07/23 22:46:05 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/IssuerPublicKey
+2026/07/23 22:46:05 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/IssuerRevocationPublicKey
+[0;34mRegistering orderer3[0m
++ fabric-ca-client register --caname ca-orderer --id.name orderer3 --id.secret orderer3pw --id.type orderer --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:05 [INFO] Configuration file location: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/fabric-ca-client-config.yaml
+2026/07/23 22:46:05 [INFO] TLS Enabled
+2026/07/23 22:46:05 [INFO] TLS Enabled
+Password: orderer3pw
+[0;34mGenerating the orderer3 MSP[0m
++ fabric-ca-client enroll -u https://orderer3:orderer3pw@localhost:9054 --caname ca-orderer -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/msp --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:05 [INFO] TLS Enabled
+2026/07/23 22:46:05 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:05 [INFO] encoded CSR
+2026/07/23 22:46:05 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:05 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/cacerts/localhost-9054-ca-orderer.pem
+2026/07/23 22:46:05 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/IssuerPublicKey
+2026/07/23 22:46:05 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the orderer3 TLS certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://orderer3:orderer3pw@localhost:9054 --caname ca-orderer -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls --enrollment.profile tls --csr.hosts orderer3.example.com --csr.hosts localhost --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:05 [INFO] TLS Enabled
+2026/07/23 22:46:05 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:05 [INFO] encoded CSR
+2026/07/23 22:46:05 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/signcerts/cert.pem
+2026/07/23 22:46:05 [INFO] Stored TLS root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/tlscacerts/tls-localhost-9054-ca-orderer.pem
+2026/07/23 22:46:05 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/IssuerPublicKey
+2026/07/23 22:46:05 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/IssuerRevocationPublicKey
+[0;34mRegistering orderer4[0m
++ fabric-ca-client register --caname ca-orderer --id.name orderer4 --id.secret orderer4pw --id.type orderer --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:06 [INFO] Configuration file location: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/fabric-ca-client-config.yaml
+2026/07/23 22:46:06 [INFO] TLS Enabled
+2026/07/23 22:46:06 [INFO] TLS Enabled
+Password: orderer4pw
+[0;34mGenerating the orderer4 MSP[0m
++ fabric-ca-client enroll -u https://orderer4:orderer4pw@localhost:9054 --caname ca-orderer -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/msp --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:06 [INFO] TLS Enabled
+2026/07/23 22:46:06 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:06 [INFO] encoded CSR
+2026/07/23 22:46:06 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:06 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/msp/cacerts/localhost-9054-ca-orderer.pem
+2026/07/23 22:46:06 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/msp/IssuerPublicKey
+2026/07/23 22:46:06 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the orderer4 TLS certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://orderer4:orderer4pw@localhost:9054 --caname ca-orderer -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/tls --enrollment.profile tls --csr.hosts orderer4.example.com --csr.hosts localhost --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:06 [INFO] TLS Enabled
+2026/07/23 22:46:06 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:06 [INFO] encoded CSR
+2026/07/23 22:46:06 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/signcerts/cert.pem
+2026/07/23 22:46:06 [INFO] Stored TLS root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/tlscacerts/tls-localhost-9054-ca-orderer.pem
+2026/07/23 22:46:06 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/IssuerPublicKey
+2026/07/23 22:46:06 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/IssuerRevocationPublicKey
+[0;34mRegistering the orderer admin[0m
++ fabric-ca-client register --caname ca-orderer --id.name ordererAdmin --id.secret ordererAdminpw --id.type admin --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:07 [INFO] Configuration file location: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/fabric-ca-client-config.yaml
+2026/07/23 22:46:07 [INFO] TLS Enabled
+2026/07/23 22:46:07 [INFO] TLS Enabled
+Password: ordererAdminpw
+[0;34mGenerating the admin msp[0m
++ fabric-ca-client enroll -u https://ordererAdmin:ordererAdminpw@localhost:9054 --caname ca-orderer -M /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp --tls.certfiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/07/23 22:46:07 [INFO] TLS Enabled
+2026/07/23 22:46:07 [INFO] generating key: &{A:ecdsa S:256}
+2026/07/23 22:46:07 [INFO] encoded CSR
+2026/07/23 22:46:07 [INFO] Stored client certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/cert.pem
+2026/07/23 22:46:07 [INFO] Stored root CA certificate at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp/cacerts/localhost-9054-ca-orderer.pem
+2026/07/23 22:46:07 [INFO] Stored Issuer public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp/IssuerPublicKey
+2026/07/23 22:46:07 [INFO] Stored Issuer revocation public key at /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating CCP files for Org1 and Org2[0m
+ Volume "compose_peer0.org2.example.com"  Creating
+ Volume "compose_peer0.org2.example.com"  Created
+ Volume "compose_orderer.example.com"  Creating
+ Volume "compose_orderer.example.com"  Created
+ Volume "compose_peer0.org1.example.com"  Creating
+ Volume "compose_peer0.org1.example.com"  Created
+time="2026-07-23T22:46:07-04:00" level=warning msg="Found orphan containers ([ca_org2 ca_org1 ca_orderer]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container peer0.org1.example.com  Creating
+ Container peer0.org2.example.com  Creating
+ Container orderer.example.com  Creating
+ Container peer0.org2.example.com  Created
+ Container peer0.org1.example.com  Created
+ Container orderer.example.com  Created
+ Container peer0.org1.example.com  Starting
+ Container peer0.org2.example.com  Starting
+ Container orderer.example.com  Starting
+ Container peer0.org2.example.com  Started
+ Container orderer.example.com  Started
+ Container peer0.org1.example.com  Started
+CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS                  PORTS                                                                                                                                   NAMES
+bb4a697292d8   hyperledger/fabric-orderer:latest   "orderer"                1 second ago     Up Less than a second   0.0.0.0:7050->7050/tcp, [::]:7050->7050/tcp, 0.0.0.0:7053->7053/tcp, [::]:7053->7053/tcp, 0.0.0.0:9443->9443/tcp, [::]:9443->9443/tcp   orderer.example.com
+d34061da6994   hyperledger/fabric-peer:latest      "peer node start"        1 second ago     Up Less than a second   0.0.0.0:9051->9051/tcp, [::]:9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, [::]:9445->9445/tcp                                      peer0.org2.example.com
+cd17c67d7ef1   hyperledger/fabric-peer:latest      "peer node start"        1 second ago     Up Less than a second   0.0.0.0:7051->7051/tcp, [::]:7051->7051/tcp, 0.0.0.0:9444->9444/tcp, [::]:9444->9444/tcp                                                peer0.org1.example.com
+7d1f27bd17e4   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   12 seconds ago   Up 12 seconds           0.0.0.0:8054->8054/tcp, [::]:8054->8054/tcp, 7054/tcp, 0.0.0.0:18054->18054/tcp, [::]:18054->18054/tcp                                  ca_org2
+d7526ed7d95d   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   12 seconds ago   Up 12 seconds           0.0.0.0:7054->7054/tcp, [::]:7054->7054/tcp, 0.0.0.0:17054->17054/tcp, [::]:17054->17054/tcp                                            ca_org1
+d04cb5ab8e9c   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   12 seconds ago   Up 12 seconds           0.0.0.0:9054->9054/tcp, [::]:9054->9054/tcp, 7054/tcp, 0.0.0.0:19054->19054/tcp, [::]:19054->19054/tcp                                  ca_orderer
+f74350931db7   c65479bcb12f                        "/bin/sh -c '#(nop) …"   31 minutes ago   Created                                                                                                                                                         objective_fermat
+166e48b75cc9   8d4bd13c2268                        "/bin/sh -c '#(nop) …"   31 minutes ago   Created                                                                                                                                                         tender_elgamal
+3d0a24842456   7ed56743f438                        "/bin/sh -c '#(nop) …"   31 minutes ago   Created                                                                                                                                                         thirsty_kirch
+b0fe25203fe2   65b06c40f3b6                        "/bin/sh -c '#(nop) …"   31 minutes ago   Created                                                                                                                                                         happy_brahmagupta
+8a21ab299062   44244737d1d4                        "/bin/sh -c '#(nop) …"   7 weeks ago      Created                                                                                                                                                         mystifying_ride
+04b683c79a50   5740f303a59a                        "/bin/sh -c '#(nop) …"   7 weeks ago      Created                                                                                                                                                         magical_pasteur
+d322ef0aad5c   c0b8e3eabe3c                        "/bin/sh -c '#(nop) …"   7 weeks ago      Created                                                                                                                                                         quirky_meninsky
+3a368ae84f27   b7af19e53a79                        "/bin/sh -c '#(nop) …"   7 weeks ago      Created                                                                                                                                                         heuristic_rubin
+a083411fdc8a   961da8095855                        "/bin/sh -c '#(nop) …"   7 weeks ago      Created                                                                                                                                                         wizardly_hugle
+a7f1ce1e509e   e9cc739f98b5                        "/bin/sh -c '#(nop) …"   7 weeks ago      Created                                                                                                                                                         magical_johnson
+1d969447641b   8cd6e39c4e81                        "/bin/sh -c '#(nop) …"   7 weeks ago      Created                                                                                                                                                         upbeat_greider
+1cbba210e750   fe83c3439f9c                        "/bin/sh -c '#(nop) …"   7 weeks ago      Created                                                                                                                                                         practical_poitras
+eaf0520e0d91   6e5be3430210                        "/bin/sh -c '#(nop) …"   7 weeks ago      Created                                                                                                                                                         thirsty_antonelli
+1a65c50271af   ea0c78c3c1f0                        "/bin/sh -c '#(nop) …"   7 weeks ago      Created                                                                                                                                                         gallant_galileo
+db8351a7a3be   6246586e90c5                        "/bin/sh -c '#(nop) …"   7 weeks ago      Created                                                                                                                                                         friendly_spence
+0e7cc8b05ea0   ba00bc6fb1bc                        "/bin/sh -c '#(nop) …"   7 weeks ago      Created                                                                                                                                                         dazzling_antonelli
+f1d6cd139da9   fc85d29d1120                        "/bin/sh -c '#(nop) …"   3 months ago     Created                                                                                                                                                         fervent_beaver
+fa5762875d31   170ed7967ace                        "/bin/sh -c '#(nop) …"   3 months ago     Created                                                                                                                                                         unruffled_allen
+d15767ad04cf   c31df0eb77d3                        "/bin/sh -c '#(nop) …"   3 months ago     Created                                                                                                                                                         priceless_kirch
+a397e222f90b   0faa84e8411c                        "/bin/sh -c '#(nop) …"   3 months ago     Created                                                                                                                                                         xenodochial_ritchie
+[0;34mUsing docker and docker compose[0m
+[0;34mGenerating channel genesis block 'mychannel.block'[0m
+[0;34mUsing organization 1[0m
+/mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/../bin/configtxgen
++ '[' 0 -eq 1 ']'
++ configtxgen -profile ChannelUsingRaft -outputBlock ./channel-artifacts/mychannel.block -channelID mychannel
+[34m2026-07-23 22:46:08.861 EDT 0001 INFO[0m [common.tools.configtxgen] [34;1mmain[0m -> Loading configuration
+[34m2026-07-23 22:46:08.874 EDT 0002 INFO[0m [common.tools.configtxgen.localconfig] [34;1mcompleteInitialization[0m -> orderer type: etcdraft
+[34m2026-07-23 22:46:08.874 EDT 0003 INFO[0m [common.tools.configtxgen.localconfig] [34;1mcompleteInitialization[0m -> Orderer.EtcdRaft.Options unset, setting to tick_interval:"500ms" election_tick:10 heartbeat_tick:1 max_inflight_blocks:5 snapshot_interval_size:16777216 
+[34m2026-07-23 22:46:08.874 EDT 0004 INFO[0m [common.tools.configtxgen.localconfig] [34;1mLoad[0m -> Loaded configuration: /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/configtx/configtx.yaml
+[34m2026-07-23 22:46:08.960 EDT 0005 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Generating genesis block
+[34m2026-07-23 22:46:08.960 EDT 0006 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Creating application channel genesis block
+[34m2026-07-23 22:46:08.960 EDT 0007 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Writing genesis block
++ res=0
+[0;34mCreating channel mychannel[0m
+[0;34mAdding orderers[0m
++ . scripts/orderer.sh mychannel
++ '[' 0 -eq 1 ']'
++ res=0
+Status: 201
+{
+	"name": "mychannel",
+	"url": "/participation/v1/channels/mychannel",
+	"consensusRelation": "consenter",
+	"status": "active",
+	"height": 1
+}
+
+[0;32mChannel 'mychannel' created[0m
+[0;34mJoining org1 peer to the channel...[0m
+[0;34mUsing organization 1[0m
++ peer channel join -b ./channel-artifacts/mychannel.block
++ res=0
+[34m2026-07-23 22:46:15.336 EDT 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-07-23 22:46:15.395 EDT 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[0;34mJoining org2 peer to the channel...[0m
+[0;34mUsing organization 2[0m
++ peer channel join -b ./channel-artifacts/mychannel.block
++ res=0
+[34m2026-07-23 22:46:18.616 EDT 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-07-23 22:46:18.669 EDT 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[0;34mSetting anchor peer for org1...[0m
+[0;34mUsing organization 1[0m
+[0;34mFetching channel config for channel mychannel[0m
+[0;34mUsing organization 1[0m
+[0;34mFetching the most recent configuration block for the channel[0m
+++ peer channel fetch config /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_block.pb -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com -c mychannel --tls --cafile /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
+[34m2026-07-23 22:46:18.886 EDT 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-07-23 22:46:18.888 EDT 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[34m2026-07-23 22:46:18.888 EDT 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 0
+[34m2026-07-23 22:46:18.889 EDT 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[0;34mDecoding config block to JSON and isolating config to /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/Org1MSPconfig.json[0m
+++ configtxlator proto_decode --input /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_block.pb --type common.Block --output /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_block.json
+++ jq '.data.data[0].payload.data.config' /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_block.json
+++ res=0
+[0;34mGenerating anchor peer update transaction for Org1 on channel mychannel[0m
+++ jq '.channel_group.groups.Application.groups.Org1MSP.values += {"AnchorPeers":{"mod_policy": "Admins","value":{"anchor_peers": [{"host": "peer0.org1.example.com","port": 7051}]},"version": "0"}}' /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/Org1MSPconfig.json
+++ res=0
+++ configtxlator proto_encode --input /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/Org1MSPconfig.json --type common.Config --output /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/original_config.pb
+++ configtxlator proto_encode --input /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/Org1MSPmodified_config.json --type common.Config --output /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/modified_config.pb
+++ configtxlator compute_update --channel_id mychannel --original /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/original_config.pb --updated /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/modified_config.pb --output /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_update.pb
+++ configtxlator proto_decode --input /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_update.pb --type common.ConfigUpdate --output /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_update.json
+++ jq .
++++ cat /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_update.json
+++ echo '{"payload":{"header":{"channel_header":{"channel_id":"mychannel", "type":2}},"data":{"config_update":{' '"channel_id":' '"mychannel",' '"isolated_data":' '{},' '"read_set":' '{' '"groups":' '{' '"Application":' '{' '"groups":' '{' '"Org1MSP":' '{' '"groups":' '{},' '"mod_policy":' '"",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '}' '},' '"values":' '{' '"MSP":' '{' '"mod_policy":' '"",' '"value":' null, '"version":' '"0"' '}' '},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '},' '"write_set":' '{' '"groups":' '{' '"Application":' '{' '"groups":' '{' '"Org1MSP":' '{' '"groups":' '{},' '"mod_policy":' '"Admins",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '}' '},' '"values":' '{' '"AnchorPeers":' '{' '"mod_policy":' '"Admins",' '"value":' '{' '"anchor_peers":' '[' '{' '"host":' '"peer0.org1.example.com",' '"port":' 7051 '}' ']' '},' '"version":' '"0"' '},' '"MSP":' '{' '"mod_policy":' '"",' '"value":' null, '"version":' '"0"' '}' '},' '"version":' '"1"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '}}}}'
+++ configtxlator proto_encode --input /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_update_in_envelope.json --type common.Envelope --output /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/Org1MSPanchors.tx
+[34m2026-07-23 22:46:19.473 EDT 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-07-23 22:46:19.495 EDT 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[0;32mAnchor peer set for org 'Org1MSP' on channel 'mychannel'[0m
+[0;34mSetting anchor peer for org2...[0m
+[0;34mUsing organization 2[0m
+[0;34mFetching channel config for channel mychannel[0m
+[0;34mUsing organization 2[0m
+[0;34mFetching the most recent configuration block for the channel[0m
+++ peer channel fetch config /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_block.pb -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com -c mychannel --tls --cafile /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
+[34m2026-07-23 22:46:19.718 EDT 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-07-23 22:46:19.720 EDT 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 1
+[34m2026-07-23 22:46:19.721 EDT 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 1
+[34m2026-07-23 22:46:19.721 EDT 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 1
+[0;34mDecoding config block to JSON and isolating config to /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/Org2MSPconfig.json[0m
+++ configtxlator proto_decode --input /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_block.pb --type common.Block --output /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_block.json
+++ jq '.data.data[0].payload.data.config' /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_block.json
+++ res=0
+[0;34mGenerating anchor peer update transaction for Org2 on channel mychannel[0m
+++ jq '.channel_group.groups.Application.groups.Org2MSP.values += {"AnchorPeers":{"mod_policy": "Admins","value":{"anchor_peers": [{"host": "peer0.org2.example.com","port": 9051}]},"version": "0"}}' /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/Org2MSPconfig.json
+++ res=0
+++ configtxlator proto_encode --input /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/Org2MSPconfig.json --type common.Config --output /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/original_config.pb
+++ configtxlator proto_encode --input /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/Org2MSPmodified_config.json --type common.Config --output /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/modified_config.pb
+++ configtxlator compute_update --channel_id mychannel --original /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/original_config.pb --updated /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/modified_config.pb --output /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_update.pb
+++ configtxlator proto_decode --input /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_update.pb --type common.ConfigUpdate --output /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_update.json
+++ jq .
++++ cat /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_update.json
+++ echo '{"payload":{"header":{"channel_header":{"channel_id":"mychannel", "type":2}},"data":{"config_update":{' '"channel_id":' '"mychannel",' '"isolated_data":' '{},' '"read_set":' '{' '"groups":' '{' '"Application":' '{' '"groups":' '{' '"Org2MSP":' '{' '"groups":' '{},' '"mod_policy":' '"",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '}' '},' '"values":' '{' '"MSP":' '{' '"mod_policy":' '"",' '"value":' null, '"version":' '"0"' '}' '},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '},' '"write_set":' '{' '"groups":' '{' '"Application":' '{' '"groups":' '{' '"Org2MSP":' '{' '"groups":' '{},' '"mod_policy":' '"Admins",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '}' '},' '"values":' '{' '"AnchorPeers":' '{' '"mod_policy":' '"Admins",' '"value":' '{' '"anchor_peers":' '[' '{' '"host":' '"peer0.org2.example.com",' '"port":' 9051 '}' ']' '},' '"version":' '"0"' '},' '"MSP":' '{' '"mod_policy":' '"",' '"value":' null, '"version":' '"0"' '}' '},' '"version":' '"1"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '}}}}'
+++ configtxlator proto_encode --input /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/config_update_in_envelope.json --type common.Envelope --output /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/channel-artifacts/Org2MSPanchors.tx
+[34m2026-07-23 22:46:20.305 EDT 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-07-23 22:46:20.327 EDT 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[0;32mAnchor peer set for org 'Org2MSP' on channel 'mychannel'[0m
+[0;32mChannel 'mychannel' joined[0m
+
+########## [02:46:20] Deploy chaincode ##########
+[0;34mUsing docker and docker compose[0m
+[0;34mdeploying chaincode on channel 'mychannel'[0m
+executing with the following
+- CHANNEL_NAME: [0;32mmychannel[0m
+- CC_NAME: [0;32marptracker[0m
+- CC_SRC_PATH: [0;32m/mnt/c/Users/Perky/OneDrive/Desktop/barp/Blockchain-ARP/chaincode[0m
+- CC_SRC_LANGUAGE: [0;32mgo[0m
+- CC_VERSION: [0;32m1.0[0m
+- CC_SEQUENCE: [0;32mauto[0m
+- CC_END_POLICY: [0;32mNA[0m
+- CC_COLL_CONFIG: [0;32mNA[0m
+- CC_INIT_FCN: [0;32mNA[0m
+- DELAY: [0;32m3[0m
+- MAX_RETRY: [0;32m5[0m
+- VERBOSE: [0;32mfalse[0m
+executing with the following
+- CC_NAME: [0;32marptracker[0m
+- CC_SRC_PATH: [0;32m/mnt/c/Users/Perky/OneDrive/Desktop/barp/Blockchain-ARP/chaincode[0m
+- CC_SRC_LANGUAGE: [0;32mgo[0m
+- CC_VERSION: [0;32m1.0[0m
+[0;34mVendoring Go dependencies at /mnt/c/Users/Perky/OneDrive/Desktop/barp/Blockchain-ARP/chaincode[0m
+/mnt/c/Users/Perky/OneDrive/Desktop/barp/Blockchain-ARP/chaincode /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network
+/mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network
+[0;32mFinished vendoring Go dependencies[0m
++ '[' false = true ']'
++ peer lifecycle chaincode package arptracker.tar.gz --path /mnt/c/Users/Perky/OneDrive/Desktop/barp/Blockchain-ARP/chaincode --lang golang --label arptracker_1.0
++ res=0
+[0;32mChaincode is packaged[0m
+[0;34mInstalling chaincode on peer0.org1...[0m
+[0;34mUsing organization 1[0m
++ peer lifecycle chaincode queryinstalled --output json
++ jq -r 'try (.installed_chaincodes[].package_id)'
++ grep '^arptracker_1.0:40e7866b4b50c8eff59c577c366aa5cca547b5e57f9f11174c5dd697f9cfc220$'
++ test 1 -ne 0
++ peer lifecycle chaincode install arptracker.tar.gz
++ res=0
+[34m2026-07-23 22:46:56.991 EDT 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:40e7866b4b50c8eff59c577c366aa5cca547b5e57f9f11174c5dd697f9cfc220\022\016arptracker_1.0" > 
+[34m2026-07-23 22:46:56.991 EDT 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:40e7866b4b50c8eff59c577c366aa5cca547b5e57f9f11174c5dd697f9cfc220
+[0;32mChaincode is installed on peer0.org1[0m
+[0;34mInstall chaincode on peer0.org2...[0m
+[0;34mUsing organization 2[0m
++ peer lifecycle chaincode queryinstalled --output json
++ jq -r 'try (.installed_chaincodes[].package_id)'
++ grep '^arptracker_1.0:40e7866b4b50c8eff59c577c366aa5cca547b5e57f9f11174c5dd697f9cfc220$'
++ test 1 -ne 0
++ peer lifecycle chaincode install arptracker.tar.gz
++ res=0
+[34m2026-07-23 22:47:09.365 EDT 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:40e7866b4b50c8eff59c577c366aa5cca547b5e57f9f11174c5dd697f9cfc220\022\016arptracker_1.0" > 
+[34m2026-07-23 22:47:09.365 EDT 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:40e7866b4b50c8eff59c577c366aa5cca547b5e57f9f11174c5dd697f9cfc220
+[0;32mChaincode is installed on peer0.org2[0m
+++ peer lifecycle chaincode querycommitted --channelID mychannel --name arptracker
+++ sed -n '/Version:/{s/.*Sequence: //; s/, Endorsement Plugin:.*$//; p;}'
+Error: query failed with status: 404 - namespace arptracker is not defined
++ COMMITTED_CC_SEQUENCE=
++ res=0
+[0;34mUsing organization 1[0m
++ peer lifecycle chaincode queryinstalled --output json
++ jq -r 'try (.installed_chaincodes[].package_id)'
++ grep '^arptracker_1.0:40e7866b4b50c8eff59c577c366aa5cca547b5e57f9f11174c5dd697f9cfc220$'
++ res=0
+arptracker_1.0:40e7866b4b50c8eff59c577c366aa5cca547b5e57f9f11174c5dd697f9cfc220
+[0;32mQuery installed successful on peer0.org1 on channel[0m
+[0;34mUsing organization 1[0m
++ peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --channelID mychannel --name arptracker --version 1.0 --package-id arptracker_1.0:40e7866b4b50c8eff59c577c366aa5cca547b5e57f9f11174c5dd697f9cfc220 --sequence 1
++ res=0
+[34m2026-07-23 22:47:12.087 EDT 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [28812fb9890dbf0e1fbc2fb7b547455a18126bf436bae09aac8d2cf770b24fb8] committed with status (VALID) at localhost:7051
+[0;32mChaincode definition approved on peer0.org1 on channel 'mychannel'[0m
+[0;34mUsing organization 1[0m
+[0;34mChecking the commit readiness of the chaincode definition on peer0.org1 on channel 'mychannel'...[0m
+[0;34mAttempting to check the commit readiness of the chaincode definition on peer0.org1, Retry after 3 seconds.[0m
++ peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name arptracker --version 1.0 --sequence 1 --output json
++ res=0
+{
+	"approvals": {
+		"Org1MSP": true,
+		"Org2MSP": false
+	}
+}
+[0;34mChecking the commit readiness of the chaincode definition successful on peer0.org1 on channel 'mychannel'[0m
+[0;34mUsing organization 2[0m
+[0;34mChecking the commit readiness of the chaincode definition on peer0.org2 on channel 'mychannel'...[0m
+[0;34mAttempting to check the commit readiness of the chaincode definition on peer0.org2, Retry after 3 seconds.[0m
++ peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name arptracker --version 1.0 --sequence 1 --output json
++ res=0
+{
+	"approvals": {
+		"Org1MSP": true,
+		"Org2MSP": false
+	}
+}
+[0;34mChecking the commit readiness of the chaincode definition successful on peer0.org2 on channel 'mychannel'[0m
+[0;34mUsing organization 2[0m
++ peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --channelID mychannel --name arptracker --version 1.0 --package-id arptracker_1.0:40e7866b4b50c8eff59c577c366aa5cca547b5e57f9f11174c5dd697f9cfc220 --sequence 1
++ res=0
+[34m2026-07-23 22:47:20.869 EDT 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [87fcc30d6eb69ac07a832470a489e307d3ec006f0c63c304d1930792b8297d23] committed with status (VALID) at localhost:9051
+[0;32mChaincode definition approved on peer0.org2 on channel 'mychannel'[0m
+[0;34mUsing organization 1[0m
+[0;34mChecking the commit readiness of the chaincode definition on peer0.org1 on channel 'mychannel'...[0m
+[0;34mAttempting to check the commit readiness of the chaincode definition on peer0.org1, Retry after 3 seconds.[0m
++ peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name arptracker --version 1.0 --sequence 1 --output json
++ res=0
+{
+	"approvals": {
+		"Org1MSP": true,
+		"Org2MSP": true
+	}
+}
+[0;34mChecking the commit readiness of the chaincode definition successful on peer0.org1 on channel 'mychannel'[0m
+[0;34mUsing organization 2[0m
+[0;34mChecking the commit readiness of the chaincode definition on peer0.org2 on channel 'mychannel'...[0m
+[0;34mAttempting to check the commit readiness of the chaincode definition on peer0.org2, Retry after 3 seconds.[0m
++ peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name arptracker --version 1.0 --sequence 1 --output json
++ res=0
+{
+	"approvals": {
+		"Org1MSP": true,
+		"Org2MSP": true
+	}
+}
+[0;34mChecking the commit readiness of the chaincode definition successful on peer0.org2 on channel 'mychannel'[0m
+[0;34mUsing organization 1[0m
+[0;34mUsing organization 2[0m
++ peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --channelID mychannel --name arptracker --peerAddresses localhost:7051 --tlsRootCertFiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem --peerAddresses localhost:9051 --tlsRootCertFiles /mnt/c/Users/Perky/OneDrive/Desktop/barp/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/tlsca/tlsca.org2.example.com-cert.pem --version 1.0 --sequence 1
++ res=0
+[34m2026-07-23 22:47:29.956 EDT 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [b403a05498ea74d6efbfbd60e4119a317ef896dd4adafac520e6cecdd489ea3c] committed with status (VALID) at localhost:7051
+[34m2026-07-23 22:47:29.963 EDT 0002 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [b403a05498ea74d6efbfbd60e4119a317ef896dd4adafac520e6cecdd489ea3c] committed with status (VALID) at localhost:9051
+[0;32mChaincode definition committed on channel 'mychannel'[0m
+[0;34mUsing organization 1[0m
+[0;34mQuerying chaincode definition on peer0.org1 on channel 'mychannel'...[0m
+[0;34mAttempting to Query committed status on peer0.org1, Retry after 3 seconds.[0m
++ peer lifecycle chaincode querycommitted --channelID mychannel --name arptracker
++ res=0
+Committed chaincode definition for chaincode 'arptracker' on channel 'mychannel':
+Version: 1.0, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true]
+[0;32mQuery chaincode definition successful on peer0.org1 on channel 'mychannel'[0m
+[0;34mUsing organization 2[0m
+[0;34mQuerying chaincode definition on peer0.org2 on channel 'mychannel'...[0m
+[0;34mAttempting to Query committed status on peer0.org2, Retry after 3 seconds.[0m
++ peer lifecycle chaincode querycommitted --channelID mychannel --name arptracker
++ res=0
+Committed chaincode definition for chaincode 'arptracker' on channel 'mychannel':
+Version: 1.0, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true]
+[0;32mQuery chaincode definition successful on peer0.org2 on channel 'mychannel'[0m
+[0;34mChaincode initialization is not required[0m
+
+########## [02:47:36] Populate to 50 bindings ##########
+  reached 50 (>= 50)
+  scale=50 entries=50 mean_value_B=240.7 world_state_logical_B=12677 ( KB) stateLeveldb_KB=116 blockstore_KB=404 total_KB=640   scale=50 entries=50 mean_value_B=240.7 world_state_logical_B=12677 ( KB) stateLeveldb_KB=116 blockstore_KB=404 total_KB=640
+
+########## [02:47:39] Populate to 100 bindings ##########
+  reached 100 (>= 100)
+  scale=100 entries=100 mean_value_B=240.8 world_state_logical_B=25375 ( KB) stateLeveldb_KB=144 blockstore_KB=688 total_KB=956   scale=100 entries=100 mean_value_B=240.8 world_state_logical_B=25375 ( KB) stateLeveldb_KB=144 blockstore_KB=688 total_KB=956
+
+########## [02:47:42] Populate to 250 bindings ##########
+  reached 250 (>= 250)
+  scale=250 entries=250 mean_value_B=241.5 world_state_logical_B=63757 ( KB) stateLeveldb_KB=236 blockstore_KB=1552 total_KB=1932   scale=250 entries=250 mean_value_B=241.5 world_state_logical_B=63757 ( KB) stateLeveldb_KB=236 blockstore_KB=1552 total_KB=1932
+
+########## [02:47:46] Populate to 500 bindings ##########
+  reached 500 (>= 500)
+  scale=500 entries=500 mean_value_B=241.5 world_state_logical_B=127513 ( KB) stateLeveldb_KB=392 blockstore_KB=2984 total_KB=3540   scale=500 entries=500 mean_value_B=241.5 world_state_logical_B=127513 ( KB) stateLeveldb_KB=392 blockstore_KB=2984 total_KB=3540
+
+########## [02:47:54] Populate to 1000 bindings ##########
+  reached 1000 (>= 1000)
+  scale=1000 entries=1000 mean_value_B=241.5 world_state_logical_B=255025 ( KB) stateLeveldb_KB=696 blockstore_KB=5848 total_KB=6760   scale=1000 entries=1000 mean_value_B=241.5 world_state_logical_B=255025 ( KB) stateLeveldb_KB=696 blockstore_KB=5848 total_KB=6760
+
+########## [02:48:09] DONE ##########
+CSV:  /mnt/c/Users/Perky/OneDrive/Desktop/barp/Blockchain-ARP/benchmark/results/ledgersize_scale_20260724T024533Z.csv
+LOG:  /mnt/c/Users/Perky/OneDrive/Desktop/barp/Blockchain-ARP/benchmark/results/cleanroom_scale_20260724T024533Z.txt
+----- CSV -----
+scale,entries,mean_value_bytes,world_state_logical_bytes,stateLeveldb_KB,blockstore_chains_KB,total_ledgersData_KB
+50,50,240.7,12677,116,404,640
+100,100,240.8,25375,144,688,956
+250,250,241.5,63757,236,1552,1932
+500,500,241.5,127513,392,2984,3540
+1000,1000,241.5,255025,696,5848,6760

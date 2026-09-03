@@ -1,0 +1,886 @@
+============================================================
+Blockchain-ARP N-peer endorsement benchmark
+Run ID: 20260902T171046Z   Node counts: 3 5 7 9   Trials: 500
+============================================================
+
+------------------------------------------------------------
+N=3: tearing down ANY previous network (container names collide across N)
+------------------------------------------------------------
+N=3: generating network config
+generated crypto-config.yaml, configtx.yaml, docker-compose.yaml for N=3 in /home/mogadmin/blockchain-arp-bench/n-org-network/n3
+N=3: bringing up network (crypto, channel, chaincode)
+== cryptogen ==
+org1.example.com
+org2.example.com
+org3.example.com
+== configtxgen ==
+[34m2026-09-02 17:10:46.768 UTC 0001 INFO[0m [common.tools.configtxgen] [34;1mmain[0m -> Loading configuration
+[34m2026-09-02 17:10:46.771 UTC 0002 INFO[0m [common.tools.configtxgen.localconfig] [34;1mcompleteInitialization[0m -> orderer type: etcdraft
+[34m2026-09-02 17:10:46.771 UTC 0003 INFO[0m [common.tools.configtxgen.localconfig] [34;1mcompleteInitialization[0m -> Orderer.EtcdRaft.Options unset, setting to tick_interval:"500ms" election_tick:10 heartbeat_tick:1 max_inflight_blocks:5 snapshot_interval_size:16777216 
+[34m2026-09-02 17:10:46.771 UTC 0004 INFO[0m [common.tools.configtxgen.localconfig] [34;1mLoad[0m -> Loaded configuration: /home/mogadmin/blockchain-arp-bench/n-org-network/n3/configtx.yaml
+[34m2026-09-02 17:10:46.772 UTC 0005 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Generating genesis block
+[34m2026-09-02 17:10:46.772 UTC 0006 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Creating application channel genesis block
+[34m2026-09-02 17:10:46.773 UTC 0007 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Writing genesis block
+== docker compose up ==
+ Network narp Creating 
+ Network narp Created 
+ Volume narp_peer0.org1.example.com Creating 
+ Volume narp_peer0.org1.example.com Created 
+ Volume narp_peer0.org2.example.com Creating 
+ Volume narp_peer0.org2.example.com Created 
+ Volume narp_peer0.org3.example.com Creating 
+ Volume narp_peer0.org3.example.com Created 
+ Volume narp_orderer.example.com Creating 
+ Volume narp_orderer.example.com Created 
+ Container orderer.example.com Creating 
+ Container peer0.org2.example.com Creating 
+ Container peer0.org1.example.com Creating 
+ Container peer0.org3.example.com Creating 
+ Container peer0.org2.example.com Created 
+ Container peer0.org3.example.com Created 
+ Container peer0.org1.example.com Created 
+ Container orderer.example.com Created 
+ Container peer0.org1.example.com Starting 
+ Container peer0.org2.example.com Starting 
+ Container peer0.org3.example.com Starting 
+ Container orderer.example.com Starting 
+ Container orderer.example.com Started 
+ Container peer0.org3.example.com Started 
+ Container peer0.org1.example.com Started 
+ Container peer0.org2.example.com Started 
+== orderer joins channel ==
+Status: 201
+{
+	"name": "mychannel",
+	"url": "/participation/v1/channels/mychannel",
+	"consensusRelation": "consenter",
+	"status": "active",
+	"height": 1
+}
+
+== waiting for peers to come up ==
+== peers join channel ==
+[34m2026-09-02 17:11:15.132 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:11:15.144 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 17:11:15.181 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:11:15.192 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 17:11:15.228 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:11:15.240 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+== set anchor peers ==
+[34m2026-09-02 17:11:15.275 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:11:15.277 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[34m2026-09-02 17:11:15.277 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 0
+[34m2026-09-02 17:11:15.277 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[34m2026-09-02 17:11:15.372 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:11:15.381 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 17:11:15.419 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:11:15.420 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 1
+[34m2026-09-02 17:11:15.420 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 1
+[34m2026-09-02 17:11:15.421 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 1
+[34m2026-09-02 17:11:15.514 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:11:15.523 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 17:11:15.558 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:11:15.560 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 2
+[34m2026-09-02 17:11:15.560 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 2
+[34m2026-09-02 17:11:15.561 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 2
+[34m2026-09-02 17:11:15.661 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:11:15.671 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+== package chaincode ==
+== install on every peer ==
+[34m2026-09-02 17:11:16.771 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:11:16.771 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 17:11:17.124 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:11:17.124 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 17:11:17.475 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:11:17.475 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+Package ID: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+Signature policy: AND('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')
+== approve for every org ==
+[34m2026-09-02 17:11:19.565 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [a8ea70aebcb3af505152d591dd006fc7ce228fe7df0a577322d9d0557f6a7f46] committed with status (VALID) at localhost:7051
+[34m2026-09-02 17:11:21.617 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [24921508eca5289088e91a07e149de98a651905a155d70d86e8ad3f85d21177b] committed with status (VALID) at localhost:8051
+[34m2026-09-02 17:11:23.670 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [900b7dfe33e79d9c5325aa90e25f089b6ff6cc2405d124d95b2a4d07efe5bcd6] committed with status (VALID) at localhost:9051
+== commit chaincode definition ==
+{
+	"approvals": {
+		"Org1MSP": true,
+		"Org2MSP": true,
+		"Org3MSP": true
+	}
+}
+[34m2026-09-02 17:11:25.841 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [b3ed93e0e8125e7928ae20c221ea3e8d9206d3bb3a50a6a9f19a2d141e1e7f5c] committed with status (VALID) at localhost:9051
+[34m2026-09-02 17:11:25.872 UTC 0002 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [b3ed93e0e8125e7928ae20c221ea3e8d9206d3bb3a50a6a9f19a2d141e1e7f5c] committed with status (VALID) at localhost:7051
+[34m2026-09-02 17:11:25.872 UTC 0003 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [b3ed93e0e8125e7928ae20c221ea3e8d9206d3bb3a50a6a9f19a2d141e1e7f5c] committed with status (VALID) at localhost:8051
+Committed chaincode definition for chaincode 'arptracker' on channel 'mychannel':
+Version: 1.0, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true, Org3MSP: true]
+PASS: N=3 org network is up, channel joined, chaincode committed
+N=3: running endorsement benchmark (500 trials)
+endorsement nodes=3: n=500 mean=2012.31ms p50=2012.27ms p95=2013.53ms p99=2014.30ms
+wrote results/endorsement_20260902T171126Z.csv
+N=3: done
+
+------------------------------------------------------------
+N=5: tearing down ANY previous network (container names collide across N)
+------------------------------------------------------------
+ Container peer0.org1.example.com Stopping 
+ Container peer0.org2.example.com Stopping 
+ Container peer0.org3.example.com Stopping 
+ Container orderer.example.com Stopping 
+ Container orderer.example.com Stopped 
+ Container orderer.example.com Removing 
+ Container orderer.example.com Removed 
+ Container peer0.org3.example.com Stopped 
+ Container peer0.org3.example.com Removing 
+ Container peer0.org3.example.com Removed 
+ Container peer0.org1.example.com Stopped 
+ Container peer0.org1.example.com Removing 
+ Container peer0.org1.example.com Removed 
+ Container peer0.org2.example.com Stopped 
+ Container peer0.org2.example.com Removing 
+ Container peer0.org2.example.com Removed 
+ Volume narp_peer0.org1.example.com Removing 
+ Volume narp_peer0.org2.example.com Removing 
+ Volume narp_peer0.org3.example.com Removing 
+ Volume narp_orderer.example.com Removing 
+ Network narp Removing 
+ Volume narp_peer0.org1.example.com Removed 
+ Volume narp_peer0.org2.example.com Removed 
+ Volume narp_peer0.org3.example.com Removed 
+ Volume narp_orderer.example.com Removed 
+ Network narp Removed 
+N=5: generating network config
+generated crypto-config.yaml, configtx.yaml, docker-compose.yaml for N=5 in /home/mogadmin/blockchain-arp-bench/n-org-network/n5
+N=5: bringing up network (crypto, channel, chaincode)
+== cryptogen ==
+org1.example.com
+org2.example.com
+org3.example.com
+org4.example.com
+org5.example.com
+== configtxgen ==
+[34m2026-09-02 17:28:13.181 UTC 0001 INFO[0m [common.tools.configtxgen] [34;1mmain[0m -> Loading configuration
+[34m2026-09-02 17:28:13.184 UTC 0002 INFO[0m [common.tools.configtxgen.localconfig] [34;1mcompleteInitialization[0m -> orderer type: etcdraft
+[34m2026-09-02 17:28:13.184 UTC 0003 INFO[0m [common.tools.configtxgen.localconfig] [34;1mcompleteInitialization[0m -> Orderer.EtcdRaft.Options unset, setting to tick_interval:"500ms" election_tick:10 heartbeat_tick:1 max_inflight_blocks:5 snapshot_interval_size:16777216 
+[34m2026-09-02 17:28:13.184 UTC 0004 INFO[0m [common.tools.configtxgen.localconfig] [34;1mLoad[0m -> Loaded configuration: /home/mogadmin/blockchain-arp-bench/n-org-network/n5/configtx.yaml
+[34m2026-09-02 17:28:13.186 UTC 0005 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Generating genesis block
+[34m2026-09-02 17:28:13.186 UTC 0006 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Creating application channel genesis block
+[34m2026-09-02 17:28:13.186 UTC 0007 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Writing genesis block
+== docker compose up ==
+ Network narp Creating 
+ Network narp Created 
+ Volume narp_peer0.org2.example.com Creating 
+ Volume narp_peer0.org2.example.com Created 
+ Volume narp_peer0.org3.example.com Creating 
+ Volume narp_peer0.org3.example.com Created 
+ Volume narp_peer0.org4.example.com Creating 
+ Volume narp_peer0.org4.example.com Created 
+ Volume narp_peer0.org5.example.com Creating 
+ Volume narp_peer0.org5.example.com Created 
+ Volume narp_orderer.example.com Creating 
+ Volume narp_orderer.example.com Created 
+ Volume narp_peer0.org1.example.com Creating 
+ Volume narp_peer0.org1.example.com Created 
+ Container peer0.org3.example.com Creating 
+ Container peer0.org5.example.com Creating 
+ Container peer0.org4.example.com Creating 
+ Container orderer.example.com Creating 
+ Container peer0.org1.example.com Creating 
+ Container peer0.org2.example.com Creating 
+ Container peer0.org1.example.com Created 
+ Container peer0.org2.example.com Created 
+ Container peer0.org5.example.com Created 
+ Container peer0.org3.example.com Created 
+ Container peer0.org4.example.com Created 
+ Container orderer.example.com Created 
+ Container peer0.org5.example.com Starting 
+ Container peer0.org1.example.com Starting 
+ Container orderer.example.com Starting 
+ Container peer0.org2.example.com Starting 
+ Container peer0.org3.example.com Starting 
+ Container peer0.org4.example.com Starting 
+ Container peer0.org2.example.com Started 
+ Container orderer.example.com Started 
+ Container peer0.org4.example.com Started 
+ Container peer0.org3.example.com Started 
+ Container peer0.org5.example.com Started 
+ Container peer0.org1.example.com Started 
+== orderer joins channel ==
+Status: 201
+{
+	"name": "mychannel",
+	"url": "/participation/v1/channels/mychannel",
+	"consensusRelation": "consenter",
+	"status": "active",
+	"height": 1
+}
+
+== waiting for peers to come up ==
+== peers join channel ==
+[34m2026-09-02 17:28:41.582 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:41.596 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 17:28:41.630 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:41.645 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 17:28:41.681 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:41.694 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 17:28:41.730 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:41.743 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 17:28:41.778 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:41.792 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+== set anchor peers ==
+[34m2026-09-02 17:28:41.827 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:41.829 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[34m2026-09-02 17:28:41.829 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 0
+[34m2026-09-02 17:28:41.830 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[34m2026-09-02 17:28:41.928 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:41.941 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 17:28:41.979 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:41.981 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 1
+[34m2026-09-02 17:28:41.981 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 1
+[34m2026-09-02 17:28:41.982 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 1
+[34m2026-09-02 17:28:42.081 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:42.092 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 17:28:42.130 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:42.132 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 2
+[34m2026-09-02 17:28:42.132 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 2
+[34m2026-09-02 17:28:42.134 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 2
+[34m2026-09-02 17:28:42.231 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:42.242 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 17:28:42.281 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:42.283 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 3
+[34m2026-09-02 17:28:42.283 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 3
+[34m2026-09-02 17:28:42.284 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 3
+[34m2026-09-02 17:28:42.380 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:42.391 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 17:28:42.430 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:42.432 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 4
+[34m2026-09-02 17:28:42.432 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 4
+[34m2026-09-02 17:28:42.433 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 4
+[34m2026-09-02 17:28:42.531 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:28:42.541 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+== package chaincode ==
+== install on every peer ==
+[34m2026-09-02 17:28:43.606 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:28:43.606 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 17:28:43.956 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:28:43.956 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 17:28:44.297 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:28:44.297 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 17:28:56.053 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:28:56.053 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 17:29:07.693 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:29:07.693 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+Package ID: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+Signature policy: AND('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer','Org4MSP.peer','Org5MSP.peer')
+== approve for every org ==
+[34m2026-09-02 17:29:09.782 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [1679ccb1dbe478d2e36b8931ec6c40fdf44c863329ca737cbfe16d0c88edf9c2] committed with status (VALID) at localhost:7051
+[34m2026-09-02 17:29:11.836 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [e80132bee327cbde25b66948d9c7b4250c0d4d2a1d690af1f7315347cfd8255d] committed with status (VALID) at localhost:8051
+[34m2026-09-02 17:29:13.886 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [6971f260b9f2167ff781790c83067ef99243ffb53beb6326a1fbb88c56af71b2] committed with status (VALID) at localhost:9051
+[34m2026-09-02 17:29:15.936 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [acc387665c2c273de17dee5aade85a4ab55e9dfa41ec3913d491a48f6d398935] committed with status (VALID) at localhost:10051
+[34m2026-09-02 17:29:17.987 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [21ba41ffa427329a35bed2cfd1ab5b82836849e89457f6862f1753d4778f9b79] committed with status (VALID) at localhost:11051
+== commit chaincode definition ==
+{
+	"approvals": {
+		"Org1MSP": true,
+		"Org2MSP": true,
+		"Org3MSP": true,
+		"Org4MSP": true,
+		"Org5MSP": true
+	}
+}
+[34m2026-09-02 17:29:20.165 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [b07f51c801627d435970ccf92b49fc462769524e008445b34d343ab296dcf826] committed with status (VALID) at localhost:9051
+[34m2026-09-02 17:29:20.167 UTC 0002 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [b07f51c801627d435970ccf92b49fc462769524e008445b34d343ab296dcf826] committed with status (VALID) at localhost:11051
+[34m2026-09-02 17:29:20.174 UTC 0003 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [b07f51c801627d435970ccf92b49fc462769524e008445b34d343ab296dcf826] committed with status (VALID) at localhost:8051
+[34m2026-09-02 17:29:20.178 UTC 0004 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [b07f51c801627d435970ccf92b49fc462769524e008445b34d343ab296dcf826] committed with status (VALID) at localhost:7051
+[34m2026-09-02 17:29:20.179 UTC 0005 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [b07f51c801627d435970ccf92b49fc462769524e008445b34d343ab296dcf826] committed with status (VALID) at localhost:10051
+Committed chaincode definition for chaincode 'arptracker' on channel 'mychannel':
+Version: 1.0, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true, Org3MSP: true, Org4MSP: true, Org5MSP: true]
+PASS: N=5 org network is up, channel joined, chaincode committed
+N=5: running endorsement benchmark (500 trials)
+endorsement nodes=5: n=500 mean=2012.82ms p50=2012.83ms p95=2013.97ms p99=2014.58ms
+wrote results/endorsement_20260902T172920Z.csv
+N=5: done
+
+------------------------------------------------------------
+N=7: tearing down ANY previous network (container names collide across N)
+------------------------------------------------------------
+ Container peer0.org3.example.com Stopping 
+ Container peer0.org5.example.com Stopping 
+ Container orderer.example.com Stopping 
+ Container peer0.org1.example.com Stopping 
+ Container peer0.org2.example.com Stopping 
+ Container peer0.org4.example.com Stopping 
+ Container orderer.example.com Stopped 
+ Container orderer.example.com Removing 
+ Container orderer.example.com Removed 
+ Container peer0.org4.example.com Stopped 
+ Container peer0.org4.example.com Removing 
+ Container peer0.org4.example.com Removed 
+ Container peer0.org1.example.com Stopped 
+ Container peer0.org1.example.com Removing 
+ Container peer0.org1.example.com Removed 
+ Container peer0.org2.example.com Stopped 
+ Container peer0.org2.example.com Removing 
+ Container peer0.org2.example.com Removed 
+ Container peer0.org3.example.com Stopped 
+ Container peer0.org3.example.com Removing 
+ Container peer0.org3.example.com Removed 
+ Container peer0.org5.example.com Stopped 
+ Container peer0.org5.example.com Removing 
+ Container peer0.org5.example.com Removed 
+ Volume narp_peer0.org1.example.com Removing 
+ Volume narp_peer0.org5.example.com Removing 
+ Volume narp_peer0.org4.example.com Removing 
+ Volume narp_peer0.org2.example.com Removing 
+ Volume narp_peer0.org3.example.com Removing 
+ Volume narp_orderer.example.com Removing 
+ Network narp Removing 
+ Volume narp_peer0.org1.example.com Removed 
+ Volume narp_peer0.org5.example.com Removed 
+ Volume narp_peer0.org4.example.com Removed 
+ Volume narp_orderer.example.com Removed 
+ Volume narp_peer0.org2.example.com Removed 
+ Volume narp_peer0.org3.example.com Removed 
+ Network narp Removed 
+N=7: generating network config
+generated crypto-config.yaml, configtx.yaml, docker-compose.yaml for N=7 in /home/mogadmin/blockchain-arp-bench/n-org-network/n7
+N=7: bringing up network (crypto, channel, chaincode)
+== cryptogen ==
+org1.example.com
+org2.example.com
+org3.example.com
+org4.example.com
+org5.example.com
+org6.example.com
+org7.example.com
+== configtxgen ==
+[34m2026-09-02 17:46:07.863 UTC 0001 INFO[0m [common.tools.configtxgen] [34;1mmain[0m -> Loading configuration
+[34m2026-09-02 17:46:07.867 UTC 0002 INFO[0m [common.tools.configtxgen.localconfig] [34;1mcompleteInitialization[0m -> orderer type: etcdraft
+[34m2026-09-02 17:46:07.867 UTC 0003 INFO[0m [common.tools.configtxgen.localconfig] [34;1mcompleteInitialization[0m -> Orderer.EtcdRaft.Options unset, setting to tick_interval:"500ms" election_tick:10 heartbeat_tick:1 max_inflight_blocks:5 snapshot_interval_size:16777216 
+[34m2026-09-02 17:46:07.867 UTC 0004 INFO[0m [common.tools.configtxgen.localconfig] [34;1mLoad[0m -> Loaded configuration: /home/mogadmin/blockchain-arp-bench/n-org-network/n7/configtx.yaml
+[34m2026-09-02 17:46:07.870 UTC 0005 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Generating genesis block
+[34m2026-09-02 17:46:07.870 UTC 0006 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Creating application channel genesis block
+[34m2026-09-02 17:46:07.870 UTC 0007 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Writing genesis block
+== docker compose up ==
+ Network narp Creating 
+ Network narp Created 
+ Volume narp_peer0.org3.example.com Creating 
+ Volume narp_peer0.org3.example.com Created 
+ Volume narp_peer0.org1.example.com Creating 
+ Volume narp_peer0.org1.example.com Created 
+ Volume narp_peer0.org4.example.com Creating 
+ Volume narp_peer0.org4.example.com Created 
+ Volume narp_peer0.org6.example.com Creating 
+ Volume narp_peer0.org6.example.com Created 
+ Volume narp_peer0.org7.example.com Creating 
+ Volume narp_peer0.org7.example.com Created 
+ Volume narp_peer0.org2.example.com Creating 
+ Volume narp_peer0.org2.example.com Created 
+ Volume narp_peer0.org5.example.com Creating 
+ Volume narp_peer0.org5.example.com Created 
+ Volume narp_orderer.example.com Creating 
+ Volume narp_orderer.example.com Created 
+ Container peer0.org3.example.com Creating 
+ Container peer0.org7.example.com Creating 
+ Container peer0.org1.example.com Creating 
+ Container peer0.org2.example.com Creating 
+ Container peer0.org6.example.com Creating 
+ Container orderer.example.com Creating 
+ Container peer0.org5.example.com Creating 
+ Container peer0.org4.example.com Creating 
+ Container orderer.example.com Created 
+ Container peer0.org4.example.com Created 
+ Container peer0.org3.example.com Created 
+ Container peer0.org2.example.com Created 
+ Container peer0.org5.example.com Created 
+ Container peer0.org6.example.com Created 
+ Container peer0.org1.example.com Created 
+ Container peer0.org7.example.com Created 
+ Container peer0.org4.example.com Starting 
+ Container orderer.example.com Starting 
+ Container peer0.org1.example.com Starting 
+ Container peer0.org3.example.com Starting 
+ Container peer0.org6.example.com Starting 
+ Container peer0.org2.example.com Starting 
+ Container peer0.org5.example.com Starting 
+ Container peer0.org7.example.com Starting 
+ Container peer0.org5.example.com Started 
+ Container peer0.org7.example.com Started 
+ Container peer0.org4.example.com Started 
+ Container peer0.org6.example.com Started 
+ Container peer0.org1.example.com Started 
+ Container peer0.org3.example.com Started 
+ Container peer0.org2.example.com Started 
+ Container orderer.example.com Started 
+== orderer joins channel ==
+Status: 201
+{
+	"name": "mychannel",
+	"url": "/participation/v1/channels/mychannel",
+	"consensusRelation": "consenter",
+	"status": "active",
+	"height": 1
+}
+
+== waiting for peers to come up ==
+== peers join channel ==
+[34m2026-09-02 17:46:36.361 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:36.377 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 17:46:36.412 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:36.430 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 17:46:36.464 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:36.482 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 17:46:36.516 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:36.533 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 17:46:36.568 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:36.586 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 17:46:36.621 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:36.637 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 17:46:36.673 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:36.689 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+== set anchor peers ==
+[34m2026-09-02 17:46:36.725 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:36.727 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[34m2026-09-02 17:46:36.727 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 0
+[34m2026-09-02 17:46:36.728 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[34m2026-09-02 17:46:36.865 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:36.881 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 17:46:36.924 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:36.925 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 1
+[34m2026-09-02 17:46:36.925 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 1
+[34m2026-09-02 17:46:36.927 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 1
+[34m2026-09-02 17:46:37.029 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:37.042 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 17:46:37.083 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:37.085 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 2
+[34m2026-09-02 17:46:37.085 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 2
+[34m2026-09-02 17:46:37.086 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 2
+[34m2026-09-02 17:46:37.189 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:37.202 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 17:46:37.245 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:37.247 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 3
+[34m2026-09-02 17:46:37.247 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 3
+[34m2026-09-02 17:46:37.248 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 3
+[34m2026-09-02 17:46:37.367 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:37.382 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 17:46:37.428 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:37.430 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 4
+[34m2026-09-02 17:46:37.430 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 4
+[34m2026-09-02 17:46:37.432 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 4
+[34m2026-09-02 17:46:37.533 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:37.547 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 17:46:37.591 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:37.593 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 5
+[34m2026-09-02 17:46:37.593 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 5
+[34m2026-09-02 17:46:37.593 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 5
+[34m2026-09-02 17:46:37.697 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:37.710 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 17:46:37.755 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:37.757 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 6
+[34m2026-09-02 17:46:37.757 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 6
+[34m2026-09-02 17:46:37.758 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 6
+[34m2026-09-02 17:46:37.862 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 17:46:37.876 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+== package chaincode ==
+== install on every peer ==
+[34m2026-09-02 17:46:38.935 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:46:38.935 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 17:46:39.275 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:46:39.275 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 17:46:39.618 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:46:39.618 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 17:46:39.958 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:46:39.958 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 17:46:40.299 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:46:40.299 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 17:46:51.967 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:46:51.967 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 17:47:03.603 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 17:47:03.604 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+Package ID: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+Signature policy: AND('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer','Org4MSP.peer','Org5MSP.peer','Org6MSP.peer','Org7MSP.peer')
+== approve for every org ==
+[34m2026-09-02 17:47:05.696 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [b86a795d7197cd54480b149da42084097accbfed1a457f7af7f824fa6e6467b1] committed with status (VALID) at localhost:7051
+[34m2026-09-02 17:47:07.752 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [8b70f7cbbf2be2094e8243d0d3033c8f69b7a1b02d03c36e6ac90c11196c10f8] committed with status (VALID) at localhost:8051
+[34m2026-09-02 17:47:09.806 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [dcd3efe7890561deff83ba2c3f98c359bad9269750835f221f5c4a223e6f3a26] committed with status (VALID) at localhost:9051
+[34m2026-09-02 17:47:11.862 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [1040d52dce2c20b0e905eae008f591291c46d60dada7469669d51e26e6629d7b] committed with status (VALID) at localhost:10051
+[34m2026-09-02 17:47:13.916 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [da3cd6b20fa24ab257eaac647aefe5d2da5fe8c111c7150aa7ff1b0b84fb16ee] committed with status (VALID) at localhost:11051
+[34m2026-09-02 17:47:15.972 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [e47fd7f39e0eeb1eaf6bb29bff10773670d3966576c1375b1ac17d0980decf8e] committed with status (VALID) at localhost:12051
+[34m2026-09-02 17:47:18.027 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [2a624cf3548f1dc1f8673091d9b26d4088e1db302659d87aacd46276080b7598] committed with status (VALID) at localhost:13051
+== commit chaincode definition ==
+{
+	"approvals": {
+		"Org1MSP": true,
+		"Org2MSP": true,
+		"Org3MSP": true,
+		"Org4MSP": true,
+		"Org5MSP": true,
+		"Org6MSP": true,
+		"Org7MSP": true
+	}
+}
+[34m2026-09-02 17:47:20.224 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [d955ce1aa2b84d8919ba61c4a124ca0dfa7ac25c25f2e22e5083b21bdd82d021] committed with status (VALID) at localhost:11051
+[34m2026-09-02 17:47:20.224 UTC 0002 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [d955ce1aa2b84d8919ba61c4a124ca0dfa7ac25c25f2e22e5083b21bdd82d021] committed with status (VALID) at localhost:13051
+[34m2026-09-02 17:47:20.224 UTC 0003 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [d955ce1aa2b84d8919ba61c4a124ca0dfa7ac25c25f2e22e5083b21bdd82d021] committed with status (VALID) at localhost:10051
+[34m2026-09-02 17:47:20.225 UTC 0004 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [d955ce1aa2b84d8919ba61c4a124ca0dfa7ac25c25f2e22e5083b21bdd82d021] committed with status (VALID) at localhost:8051
+[34m2026-09-02 17:47:20.227 UTC 0005 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [d955ce1aa2b84d8919ba61c4a124ca0dfa7ac25c25f2e22e5083b21bdd82d021] committed with status (VALID) at localhost:12051
+[34m2026-09-02 17:47:20.253 UTC 0006 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [d955ce1aa2b84d8919ba61c4a124ca0dfa7ac25c25f2e22e5083b21bdd82d021] committed with status (VALID) at localhost:7051
+[34m2026-09-02 17:47:20.258 UTC 0007 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [d955ce1aa2b84d8919ba61c4a124ca0dfa7ac25c25f2e22e5083b21bdd82d021] committed with status (VALID) at localhost:9051
+Committed chaincode definition for chaincode 'arptracker' on channel 'mychannel':
+Version: 1.0, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true, Org3MSP: true, Org4MSP: true, Org5MSP: true, Org6MSP: true, Org7MSP: true]
+PASS: N=7 org network is up, channel joined, chaincode committed
+N=7: running endorsement benchmark (500 trials)
+endorsement nodes=7: n=500 mean=2014.81ms p50=2014.75ms p95=2016.05ms p99=2018.67ms
+wrote results/endorsement_20260902T174720Z.csv
+N=7: done
+
+------------------------------------------------------------
+N=9: tearing down ANY previous network (container names collide across N)
+------------------------------------------------------------
+ Container orderer.example.com Stopping 
+ Container peer0.org2.example.com Stopping 
+ Container peer0.org7.example.com Stopping 
+ Container peer0.org1.example.com Stopping 
+ Container peer0.org4.example.com Stopping 
+ Container peer0.org3.example.com Stopping 
+ Container peer0.org5.example.com Stopping 
+ Container peer0.org6.example.com Stopping 
+ Container orderer.example.com Stopped 
+ Container orderer.example.com Removing 
+ Container orderer.example.com Removed 
+ Container peer0.org4.example.com Stopped 
+ Container peer0.org4.example.com Removing 
+ Container peer0.org4.example.com Removed 
+ Container peer0.org3.example.com Stopped 
+ Container peer0.org3.example.com Removing 
+ Container peer0.org3.example.com Removed 
+ Container peer0.org2.example.com Stopped 
+ Container peer0.org2.example.com Removing 
+ Container peer0.org2.example.com Removed 
+ Container peer0.org5.example.com Stopped 
+ Container peer0.org5.example.com Removing 
+ Container peer0.org5.example.com Removed 
+ Container peer0.org7.example.com Stopped 
+ Container peer0.org7.example.com Removing 
+ Container peer0.org7.example.com Removed 
+ Container peer0.org1.example.com Stopped 
+ Container peer0.org1.example.com Removing 
+ Container peer0.org1.example.com Removed 
+ Container peer0.org6.example.com Stopped 
+ Container peer0.org6.example.com Removing 
+ Container peer0.org6.example.com Removed 
+ Volume narp_peer0.org2.example.com Removing 
+ Volume narp_peer0.org5.example.com Removing 
+ Volume narp_peer0.org4.example.com Removing 
+ Volume narp_orderer.example.com Removing 
+ Volume narp_peer0.org1.example.com Removing 
+ Volume narp_peer0.org6.example.com Removing 
+ Volume narp_peer0.org3.example.com Removing 
+ Volume narp_peer0.org7.example.com Removing 
+ Network narp Removing 
+ Volume narp_peer0.org2.example.com Removed 
+ Volume narp_orderer.example.com Removed 
+ Volume narp_peer0.org4.example.com Removed 
+ Volume narp_peer0.org7.example.com Removed 
+ Volume narp_peer0.org5.example.com Removed 
+ Volume narp_peer0.org6.example.com Removed 
+ Volume narp_peer0.org1.example.com Removed 
+ Volume narp_peer0.org3.example.com Removed 
+ Network narp Removed 
+N=9: generating network config
+generated crypto-config.yaml, configtx.yaml, docker-compose.yaml for N=9 in /home/mogadmin/blockchain-arp-bench/n-org-network/n9
+N=9: bringing up network (crypto, channel, chaincode)
+== cryptogen ==
+org1.example.com
+org2.example.com
+org3.example.com
+org4.example.com
+org5.example.com
+org6.example.com
+org7.example.com
+org8.example.com
+org9.example.com
+== configtxgen ==
+[34m2026-09-02 18:04:09.098 UTC 0001 INFO[0m [common.tools.configtxgen] [34;1mmain[0m -> Loading configuration
+[34m2026-09-02 18:04:09.103 UTC 0002 INFO[0m [common.tools.configtxgen.localconfig] [34;1mcompleteInitialization[0m -> orderer type: etcdraft
+[34m2026-09-02 18:04:09.103 UTC 0003 INFO[0m [common.tools.configtxgen.localconfig] [34;1mcompleteInitialization[0m -> Orderer.EtcdRaft.Options unset, setting to tick_interval:"500ms" election_tick:10 heartbeat_tick:1 max_inflight_blocks:5 snapshot_interval_size:16777216 
+[34m2026-09-02 18:04:09.103 UTC 0004 INFO[0m [common.tools.configtxgen.localconfig] [34;1mLoad[0m -> Loaded configuration: /home/mogadmin/blockchain-arp-bench/n-org-network/n9/configtx.yaml
+[34m2026-09-02 18:04:09.106 UTC 0005 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Generating genesis block
+[34m2026-09-02 18:04:09.106 UTC 0006 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Creating application channel genesis block
+[34m2026-09-02 18:04:09.107 UTC 0007 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Writing genesis block
+== docker compose up ==
+ Network narp Creating 
+ Network narp Created 
+ Volume narp_peer0.org7.example.com Creating 
+ Volume narp_peer0.org7.example.com Created 
+ Volume narp_peer0.org2.example.com Creating 
+ Volume narp_peer0.org2.example.com Created 
+ Volume narp_orderer.example.com Creating 
+ Volume narp_orderer.example.com Created 
+ Volume narp_peer0.org9.example.com Creating 
+ Volume narp_peer0.org9.example.com Created 
+ Volume narp_peer0.org5.example.com Creating 
+ Volume narp_peer0.org5.example.com Created 
+ Volume narp_peer0.org1.example.com Creating 
+ Volume narp_peer0.org1.example.com Created 
+ Volume narp_peer0.org6.example.com Creating 
+ Volume narp_peer0.org6.example.com Created 
+ Volume narp_peer0.org4.example.com Creating 
+ Volume narp_peer0.org4.example.com Created 
+ Volume narp_peer0.org3.example.com Creating 
+ Volume narp_peer0.org3.example.com Created 
+ Volume narp_peer0.org8.example.com Creating 
+ Volume narp_peer0.org8.example.com Created 
+ Container peer0.org5.example.com Creating 
+ Container peer0.org7.example.com Creating 
+ Container peer0.org6.example.com Creating 
+ Container peer0.org3.example.com Creating 
+ Container peer0.org4.example.com Creating 
+ Container peer0.org2.example.com Creating 
+ Container peer0.org1.example.com Creating 
+ Container peer0.org9.example.com Creating 
+ Container orderer.example.com Creating 
+ Container peer0.org8.example.com Creating 
+ Container peer0.org5.example.com Created 
+ Container orderer.example.com Created 
+ Container peer0.org9.example.com Created 
+ Container peer0.org7.example.com Created 
+ Container peer0.org6.example.com Created 
+ Container peer0.org3.example.com Created 
+ Container peer0.org8.example.com Created 
+ Container peer0.org2.example.com Created 
+ Container peer0.org4.example.com Created 
+ Container peer0.org1.example.com Created 
+ Container peer0.org8.example.com Starting 
+ Container peer0.org4.example.com Starting 
+ Container peer0.org9.example.com Starting 
+ Container peer0.org6.example.com Starting 
+ Container peer0.org2.example.com Starting 
+ Container orderer.example.com Starting 
+ Container peer0.org7.example.com Starting 
+ Container peer0.org5.example.com Starting 
+ Container peer0.org3.example.com Starting 
+ Container peer0.org1.example.com Starting 
+ Container orderer.example.com Started 
+ Container peer0.org1.example.com Started 
+ Container peer0.org7.example.com Started 
+ Container peer0.org9.example.com Started 
+ Container peer0.org4.example.com Started 
+ Container peer0.org5.example.com Started 
+ Container peer0.org3.example.com Started 
+ Container peer0.org6.example.com Started 
+ Container peer0.org8.example.com Started 
+ Container peer0.org2.example.com Started 
+== orderer joins channel ==
+Status: 201
+{
+	"name": "mychannel",
+	"url": "/participation/v1/channels/mychannel",
+	"consensusRelation": "consenter",
+	"status": "active",
+	"height": 1
+}
+
+== waiting for peers to come up ==
+== peers join channel ==
+[34m2026-09-02 18:04:37.674 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:37.693 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 18:04:37.728 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:37.748 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 18:04:37.784 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:37.805 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 18:04:37.839 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:37.859 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 18:04:37.895 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:37.916 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 18:04:37.952 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:37.973 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 18:04:38.009 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:38.030 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 18:04:38.064 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:38.083 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[34m2026-09-02 18:04:38.118 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:38.137 UTC 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+== set anchor peers ==
+[34m2026-09-02 18:04:38.172 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:38.175 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[34m2026-09-02 18:04:38.175 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 0
+[34m2026-09-02 18:04:38.176 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[34m2026-09-02 18:04:38.297 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:38.314 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 18:04:38.360 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:38.362 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 1
+[34m2026-09-02 18:04:38.362 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 1
+[34m2026-09-02 18:04:38.363 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 1
+[34m2026-09-02 18:04:38.473 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:38.488 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 18:04:38.535 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:38.537 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 2
+[34m2026-09-02 18:04:38.537 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 2
+[34m2026-09-02 18:04:38.538 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 2
+[34m2026-09-02 18:04:38.647 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:38.662 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 18:04:38.713 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:38.714 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 3
+[34m2026-09-02 18:04:38.714 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 3
+[34m2026-09-02 18:04:38.715 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 3
+[34m2026-09-02 18:04:38.827 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:38.843 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 18:04:38.896 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:38.899 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 4
+[34m2026-09-02 18:04:38.899 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 4
+[34m2026-09-02 18:04:38.900 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 4
+[34m2026-09-02 18:04:39.009 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:39.026 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 18:04:39.080 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:39.082 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 5
+[34m2026-09-02 18:04:39.082 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 5
+[34m2026-09-02 18:04:39.083 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 5
+[34m2026-09-02 18:04:39.193 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:39.209 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 18:04:39.267 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:39.269 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 6
+[34m2026-09-02 18:04:39.269 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 6
+[34m2026-09-02 18:04:39.270 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 6
+[34m2026-09-02 18:04:39.381 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:39.398 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 18:04:39.452 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:39.455 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 7
+[34m2026-09-02 18:04:39.455 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 7
+[34m2026-09-02 18:04:39.457 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 7
+[34m2026-09-02 18:04:39.569 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:39.586 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[34m2026-09-02 18:04:39.645 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:39.648 UTC 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 8
+[34m2026-09-02 18:04:39.648 UTC 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 8
+[34m2026-09-02 18:04:39.649 UTC 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 8
+[34m2026-09-02 18:04:39.761 UTC 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-09-02 18:04:39.776 UTC 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+== package chaincode ==
+== install on every peer ==
+[34m2026-09-02 18:04:40.865 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 18:04:40.865 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 18:04:41.203 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 18:04:41.203 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 18:04:41.544 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 18:04:41.544 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 18:04:41.887 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 18:04:41.887 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 18:04:42.231 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 18:04:42.231 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 18:04:42.568 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 18:04:42.568 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 18:04:42.915 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 18:04:42.915 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 18:04:54.692 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 18:04:54.692 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+[34m2026-09-02 18:05:06.452 UTC 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nOarptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd\022\016arptracker_1.0" > 
+[34m2026-09-02 18:05:06.452 UTC 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+Package ID: arptracker_1.0:6392261362a6941cae06b9c53f8351df20026ca9ad62f1a850a7a49b001bc2fd
+Signature policy: AND('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer','Org4MSP.peer','Org5MSP.peer','Org6MSP.peer','Org7MSP.peer','Org8MSP.peer','Org9MSP.peer')
+== approve for every org ==
+[34m2026-09-02 18:05:08.543 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [aafacb13d283154fb2df1e4a508d1af29503475a93c89c33bd76b8ea8e5908c8] committed with status (VALID) at localhost:7051
+[34m2026-09-02 18:05:10.599 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [404aee26c2cb78c1e97604534306bd0de651f87334721309cec2706051b076ba] committed with status (VALID) at localhost:8051
+[34m2026-09-02 18:05:12.662 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [9284ccadbd6441eb97fbae3b0bddfcbd4a8873fee7724c81490f04eb5a8c5ec1] committed with status (VALID) at localhost:9051
+[34m2026-09-02 18:05:14.724 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [9b5a3f5157985cea4255d0179d5c48135d6c1cc0f9429ff1ca0f960e62bce376] committed with status (VALID) at localhost:10051
+[34m2026-09-02 18:05:16.782 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [3c41c667c5f449653b598d4309e6f8e97319d81011eb1ed51471194c33b5b9e3] committed with status (VALID) at localhost:11051
+[34m2026-09-02 18:05:18.844 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [e43322e9877f5d90f003629b89f2955f803b14e004911e2fe646f0a7a8b71c77] committed with status (VALID) at localhost:12051
+[34m2026-09-02 18:05:20.900 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [9e876153255efbe32e5410a7cb1b9beff60f73ae45e30e997d114f807f3bee5e] committed with status (VALID) at localhost:13051
+[34m2026-09-02 18:05:22.961 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [59a8ab570bbe61951312cd51913833810206b9707db22d29cc406e91c065151a] committed with status (VALID) at localhost:14051
+[34m2026-09-02 18:05:25.017 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [5c1508329f661beee46c3977b47c9d6cbebf2c04ff9d67d4dd04dc901857302e] committed with status (VALID) at localhost:15051
+== commit chaincode definition ==
+{
+	"approvals": {
+		"Org1MSP": true,
+		"Org2MSP": true,
+		"Org3MSP": true,
+		"Org4MSP": true,
+		"Org5MSP": true,
+		"Org6MSP": true,
+		"Org7MSP": true,
+		"Org8MSP": true,
+		"Org9MSP": true
+	}
+}
+[34m2026-09-02 18:05:27.235 UTC 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [9107e4794528102dbe5a319f0defe600a9633d655ea5de0807bdc320070ad466] committed with status (VALID) at localhost:8051
+[34m2026-09-02 18:05:27.237 UTC 0002 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [9107e4794528102dbe5a319f0defe600a9633d655ea5de0807bdc320070ad466] committed with status (VALID) at localhost:12051
+[34m2026-09-02 18:05:27.240 UTC 0003 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [9107e4794528102dbe5a319f0defe600a9633d655ea5de0807bdc320070ad466] committed with status (VALID) at localhost:10051
+[34m2026-09-02 18:05:27.243 UTC 0004 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [9107e4794528102dbe5a319f0defe600a9633d655ea5de0807bdc320070ad466] committed with status (VALID) at localhost:13051
+[34m2026-09-02 18:05:27.252 UTC 0005 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [9107e4794528102dbe5a319f0defe600a9633d655ea5de0807bdc320070ad466] committed with status (VALID) at localhost:14051
+[34m2026-09-02 18:05:27.254 UTC 0006 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [9107e4794528102dbe5a319f0defe600a9633d655ea5de0807bdc320070ad466] committed with status (VALID) at localhost:15051
+[34m2026-09-02 18:05:27.262 UTC 0007 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [9107e4794528102dbe5a319f0defe600a9633d655ea5de0807bdc320070ad466] committed with status (VALID) at localhost:11051
+[34m2026-09-02 18:05:27.273 UTC 0008 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [9107e4794528102dbe5a319f0defe600a9633d655ea5de0807bdc320070ad466] committed with status (VALID) at localhost:9051
+[34m2026-09-02 18:05:27.277 UTC 0009 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [9107e4794528102dbe5a319f0defe600a9633d655ea5de0807bdc320070ad466] committed with status (VALID) at localhost:7051
+Committed chaincode definition for chaincode 'arptracker' on channel 'mychannel':
+Version: 1.0, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true, Org3MSP: true, Org4MSP: true, Org5MSP: true, Org6MSP: true, Org7MSP: true, Org8MSP: true, Org9MSP: true]
+PASS: N=9 org network is up, channel joined, chaincode committed
+N=9: running endorsement benchmark (500 trials)
+endorsement nodes=9: n=500 mean=2015.75ms p50=2015.70ms p95=2017.12ms p99=2020.02ms
+wrote results/endorsement_20260902T180527Z.csv
+N=9: done
+
+Tearing down last network (/home/mogadmin/blockchain-arp-bench/n-org-network/n9)
+ Container peer0.org9.example.com Stopping 
+ Container peer0.org4.example.com Stopping 
+ Container orderer.example.com Stopping 
+ Container peer0.org3.example.com Stopping 
+ Container peer0.org7.example.com Stopping 
+ Container peer0.org5.example.com Stopping 
+ Container peer0.org1.example.com Stopping 
+ Container peer0.org2.example.com Stopping 
+ Container peer0.org8.example.com Stopping 
+ Container peer0.org6.example.com Stopping 
+ Container orderer.example.com Stopped 
+ Container orderer.example.com Removing 
+ Container orderer.example.com Removed 
+ Container peer0.org9.example.com Stopped 
+ Container peer0.org9.example.com Removing 
+ Container peer0.org9.example.com Removed 
+ Container peer0.org5.example.com Stopped 
+ Container peer0.org5.example.com Removing 
+ Container peer0.org5.example.com Removed 
+ Container peer0.org2.example.com Stopped 
+ Container peer0.org2.example.com Removing 
+ Container peer0.org2.example.com Removed 
+ Container peer0.org4.example.com Stopped 
+ Container peer0.org4.example.com Removing 
+ Container peer0.org4.example.com Removed 
+ Container peer0.org6.example.com Stopped 
+ Container peer0.org6.example.com Removing 
+ Container peer0.org6.example.com Removed 
+ Container peer0.org7.example.com Stopped 
+ Container peer0.org7.example.com Removing 
+ Container peer0.org7.example.com Removed 
+ Container peer0.org3.example.com Stopped 
+ Container peer0.org3.example.com Removing 
+ Container peer0.org3.example.com Removed 
+ Container peer0.org1.example.com Stopped 
+ Container peer0.org1.example.com Removing 
+ Container peer0.org1.example.com Removed 
+ Container peer0.org8.example.com Stopped 
+ Container peer0.org8.example.com Removing 
+ Container peer0.org8.example.com Removed 
+ Volume narp_orderer.example.com Removing 
+ Volume narp_peer0.org1.example.com Removing 
+ Volume narp_peer0.org7.example.com Removing 
+ Network narp Removing 
+ Volume narp_peer0.org9.example.com Removing 
+ Volume narp_peer0.org5.example.com Removing 
+ Volume narp_peer0.org2.example.com Removing 
+ Volume narp_peer0.org8.example.com Removing 
+ Volume narp_peer0.org6.example.com Removing 
+ Volume narp_peer0.org3.example.com Removing 
+ Volume narp_peer0.org4.example.com Removing 
+ Volume narp_peer0.org1.example.com Removed 
+ Volume narp_orderer.example.com Removed 
+ Volume narp_peer0.org7.example.com Removed 
+ Volume narp_peer0.org6.example.com Removed 
+ Volume narp_peer0.org8.example.com Removed 
+ Volume narp_peer0.org9.example.com Removed 
+ Volume narp_peer0.org2.example.com Removed 
+ Volume narp_peer0.org4.example.com Removed 
+ Volume narp_peer0.org3.example.com Removed 
+ Volume narp_peer0.org5.example.com Removed 
+ Network narp Removed 
+
+Combining endorsement CSVs
+Combined CSV: /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/full_endorsement_20260902T171046Z.csv
+PASS: endorsement benchmark suite complete

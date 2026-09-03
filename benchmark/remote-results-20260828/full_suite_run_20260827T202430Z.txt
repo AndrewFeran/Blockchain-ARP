@@ -1,0 +1,196 @@
+============================================================
+Blockchain-ARP FULL SUITE run
+Run ID: 20260827T202430Z
+Node counts: 3,5,7,9   Trials: 500
+Manifest: /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/full_suite_run_20260827T202430Z.txt
+============================================================
+
+------------------------------------------------------------
+Node count: 3
+------------------------------------------------------------
+ Container blockchain-dashboard Running 
+ Container lan-node-1 Running 
+ Container lan-node-3 Running 
+ Container lan-node-2 Running 
+ Container blockchain-router Running 
+Waiting 30s for node subscriptions...
+Requested 3 LAN nodes, found 3 running
+Running latency (nodes=3, trials=500)...
+latency nodes=3: n=500 mean=16753.35ms p50=2015.00ms p95=32552.16ms p99=32610.22ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/latency_20260827T202500Z.csv
+Running throughput (max-rate=100)...
+throughput rate=1/s: n=10 mean=2013.50ms p50=2014.00ms p95=2015.00ms p99=2015.00ms
+throughput rate=11/s: n=10 mean=2013.40ms p50=2013.00ms p95=2015.00ms p99=2015.00ms
+throughput rate=21/s: n=10 mean=1954.00ms p50=1922.00ms p95=2023.00ms p99=2023.00ms
+throughput rate=31/s: n=10 mean=2013.50ms p50=2013.00ms p95=2015.00ms p99=2015.00ms
+throughput rate=41/s: n=10 mean=2013.40ms p50=2013.00ms p95=2015.00ms p99=2015.00ms
+throughput rate=51/s: n=10 mean=1965.10ms p50=1925.00ms p95=2021.00ms p99=2021.00ms
+throughput rate=61/s: n=10 mean=2012.30ms p50=2012.00ms p95=2014.00ms p99=2014.00ms
+throughput rate=71/s: n=10 mean=2014.10ms p50=2013.00ms p95=2023.00ms p99=2023.00ms
+throughput rate=81/s: n=10 mean=1963.70ms p50=1923.00ms p95=2014.00ms p99=2014.00ms
+throughput rate=91/s: n=10 mean=2013.30ms p50=2013.00ms p95=2016.00ms p99=2016.00ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/throughput_20260827T224459Z.csv
+Running coldstart (sizes=10,50,100,250 trials=500)...
+coldstart ledger=10: n=500 mean=1263.34ms p50=1264.81ms p95=1278.14ms p99=1279.20ms
+coldstart ledger=50: n=500 mean=1344.20ms p50=1345.67ms p95=1360.51ms p99=1364.28ms
+coldstart ledger=100: n=500 mean=1449.71ms p50=1450.01ms p95=1463.98ms p99=1465.16ms
+coldstart ledger=250: n=500 mean=1754.36ms p50=1756.57ms p95=1773.44ms p99=1775.27ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/coldstart_20260827T224830Z.csv
+Running baseline (trials=500)...
+baseline protected path: n=500 mean=16771.22ms p50=2024.00ms p95=32588.51ms p99=32679.63ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/baseline_20260827T230329Z.csv
+Node count 3 complete.
+
+------------------------------------------------------------
+Node count: 5
+------------------------------------------------------------
+ Container lan-node-4 Creating 
+ Container blockchain-dashboard Running 
+ Container lan-node-1 Running 
+ Container lan-node-5 Creating 
+ Container blockchain-router Running 
+ Container lan-node-2 Running 
+ Container lan-node-3 Running 
+ Container lan-node-4 Created 
+ Container lan-node-5 Created 
+ Container lan-node-4 Starting 
+ Container lan-node-5 Starting 
+ Container lan-node-4 Started 
+ Container lan-node-5 Started 
+Waiting 30s for node subscriptions...
+Requested 5 LAN nodes, found 5 running
+Running latency (nodes=5, trials=500)...
+latency nodes=5: n=500 mean=16704.44ms p50=2034.00ms p95=32571.74ms p99=32722.49ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/latency_20260828T012419Z.csv
+Running throughput (max-rate=100)...
+throughput rate=1/s: n=10 mean=1977.30ms p50=2014.00ms p95=2016.00ms p99=2016.00ms
+throughput rate=11/s: n=10 mean=1816.40ms p50=2012.00ms p95=2014.00ms p99=2014.00ms
+throughput rate=21/s: n=10 mean=2013.30ms p50=2013.00ms p95=2014.00ms p99=2014.00ms
+throughput rate=31/s: n=10 mean=1733.70ms p50=2012.00ms p95=2015.00ms p99=2015.00ms
+throughput rate=41/s: n=10 mean=1956.20ms p50=2011.00ms p95=2014.00ms p99=2014.00ms
+throughput rate=51/s: n=10 mean=1816.10ms p50=2012.00ms p95=2014.00ms p99=2014.00ms
+throughput rate=61/s: n=10 mean=1846.80ms p50=1917.00ms p95=2016.00ms p99=2016.00ms
+throughput rate=71/s: n=10 mean=1989.70ms p50=2014.00ms p95=2015.00ms p99=2015.00ms
+throughput rate=81/s: n=10 mean=1880.70ms p50=2013.00ms p95=2015.00ms p99=2015.00ms
+throughput rate=91/s: n=10 mean=1757.30ms p50=2014.00ms p95=2015.00ms p99=2015.00ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/throughput_20260828T034420Z.csv
+Running coldstart (sizes=10,50,100,250 trials=500)...
+coldstart ledger=10: n=500 mean=3782.64ms p50=3783.28ms p95=3816.52ms p99=3828.68ms
+coldstart ledger=50: n=500 mean=3780.50ms p50=3780.21ms p95=3813.74ms p99=3824.01ms
+coldstart ledger=100: n=500 mean=3784.45ms p50=3784.97ms p95=3813.82ms p99=3825.32ms
+coldstart ledger=250: n=500 mean=3781.53ms p50=3778.36ms p95=3817.28ms p99=3829.77ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/coldstart_20260828T034755Z.csv
+Running baseline (trials=500)...
+baseline protected path: n=500 mean=16717.22ms p50=2015.00ms p95=32773.33ms p99=32844.95ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/baseline_20260828T040125Z.csv
+Node count 5 complete.
+
+------------------------------------------------------------
+Node count: 7
+------------------------------------------------------------
+ Container blockchain-dashboard Running 
+ Container lan-node-6 Creating 
+ Container lan-node-4 Running 
+ Container lan-node-1 Running 
+ Container lan-node-3 Running 
+ Container lan-node-2 Running 
+ Container lan-node-7 Creating 
+ Container blockchain-router Running 
+ Container lan-node-5 Running 
+ Container lan-node-7 Created 
+ Container lan-node-6 Created 
+ Container lan-node-7 Starting 
+ Container lan-node-6 Starting 
+ Container lan-node-6 Started 
+ Container lan-node-7 Started 
+Waiting 30s for node subscriptions...
+Requested 7 LAN nodes, found 7 running
+Running latency (nodes=7, trials=500)...
+latency nodes=7: n=500 mean=16673.73ms p50=2015.00ms p95=32812.13ms p99=32987.78ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/latency_20260828T062230Z.csv
+Running throughput (max-rate=100)...
+throughput rate=1/s: n=10 mean=1600.90ms p50=1560.00ms p95=2016.00ms p99=2016.00ms
+throughput rate=11/s: n=10 mean=1535.50ms p50=1568.00ms p95=2014.00ms p99=2014.00ms
+throughput rate=21/s: n=10 mean=1705.20ms p50=1569.00ms p95=2016.00ms p99=2016.00ms
+throughput rate=31/s: n=10 mean=1695.20ms p50=1625.00ms p95=2016.00ms p99=2016.00ms
+throughput rate=41/s: n=10 mean=2013.50ms p50=2013.00ms p95=2015.00ms p99=2015.00ms
+throughput rate=51/s: n=10 mean=1487.20ms p50=1522.00ms p95=2014.00ms p99=2014.00ms
+throughput rate=61/s: n=10 mean=1942.30ms p50=2015.00ms p95=2015.00ms p99=2015.00ms
+throughput rate=71/s: n=10 mean=1838.40ms p50=2014.00ms p95=2017.00ms p99=2017.00ms
+throughput rate=81/s: n=10 mean=1586.10ms p50=1644.00ms p95=2014.00ms p99=2014.00ms
+throughput rate=91/s: n=10 mean=2014.50ms p50=2014.00ms p95=2016.00ms p99=2016.00ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/throughput_20260828T084307Z.csv
+Running coldstart (sizes=10,50,100,250 trials=500)...
+coldstart ledger=10: n=500 mean=4794.26ms p50=4792.83ms p95=4829.56ms p99=4844.02ms
+coldstart ledger=50: n=500 mean=4796.13ms p50=4794.48ms p95=4833.52ms p99=4848.27ms
+coldstart ledger=100: n=500 mean=4795.07ms p50=4795.18ms p95=4829.38ms p99=4854.58ms
+coldstart ledger=250: n=500 mean=4793.04ms p50=4792.35ms p95=4829.74ms p99=4846.00ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/coldstart_20260828T084653Z.csv
+Running baseline (trials=500)...
+baseline protected path: n=500 mean=16673.24ms p50=2016.00ms p95=33030.24ms p99=33171.42ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/baseline_20260828T090059Z.csv
+Node count 7 complete.
+
+------------------------------------------------------------
+Node count: 9
+------------------------------------------------------------
+ Container lan-node-4 Running 
+ Container lan-node-1 Running 
+ Container blockchain-dashboard Running 
+ Container lan-node-7 Running 
+ Container lan-node-5 Running 
+ Container lan-node-8 Creating 
+ Container blockchain-router Running 
+ Container lan-node-9 Creating 
+ Container lan-node-3 Running 
+ Container lan-node-2 Running 
+ Container lan-node-6 Running 
+ Container lan-node-9 Created 
+ Container lan-node-8 Created 
+ Container lan-node-9 Starting 
+ Container lan-node-8 Starting 
+ Container lan-node-8 Started 
+ Container lan-node-9 Started 
+Waiting 30s for node subscriptions...
+Requested 9 LAN nodes, found 9 running
+Running latency (nodes=9, trials=500)...
+latency nodes=9: n=500 mean=16634.09ms p50=2017.00ms p95=33137.78ms p99=33297.59ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/latency_20260828T112252Z.csv
+Running throughput (max-rate=100)...
+throughput rate=1/s: n=10 mean=1778.60ms p50=2015.00ms p95=2020.00ms p99=2020.00ms
+throughput rate=11/s: n=10 mean=1116.90ms p50=1125.00ms p95=1567.00ms p99=1567.00ms
+throughput rate=21/s: n=10 mean=2016.70ms p50=2017.00ms p95=2018.00ms p99=2018.00ms
+throughput rate=31/s: n=10 mean=1342.20ms p50=1285.00ms p95=2018.00ms p99=2018.00ms
+throughput rate=41/s: n=10 mean=1626.70ms p50=2013.00ms p95=2014.00ms p99=2014.00ms
+throughput rate=51/s: n=10 mean=1788.50ms p50=2014.00ms p95=2016.00ms p99=2016.00ms
+throughput rate=61/s: n=10 mean=1409.30ms p50=1361.00ms p95=2016.00ms p99=2016.00ms
+throughput rate=71/s: n=10 mean=1815.10ms p50=2014.00ms p95=2015.00ms p99=2015.00ms
+throughput rate=81/s: n=10 mean=1175.10ms p50=1178.00ms p95=1557.00ms p99=1557.00ms
+throughput rate=91/s: n=10 mean=1926.60ms p50=2016.00ms p95=2018.00ms p99=2018.00ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/throughput_20260828T134435Z.csv
+Running coldstart (sizes=10,50,100,250 trials=500)...
+coldstart ledger=10: n=500 mean=5809.87ms p50=5808.64ms p95=5853.04ms p99=5869.12ms
+coldstart ledger=50: n=500 mean=5810.04ms p50=5809.44ms p95=5851.35ms p99=5871.84ms
+coldstart ledger=100: n=500 mean=5808.60ms p50=5805.47ms p95=5850.77ms p99=5871.70ms
+coldstart ledger=250: n=500 mean=5806.36ms p50=5804.53ms p95=5844.75ms p99=5869.00ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/coldstart_20260828T134850Z.csv
+Running baseline (trials=500)...
+baseline protected path: n=500 mean=16617.93ms p50=2019.00ms p95=33249.89ms p99=33560.50ms
+wrote /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/baseline_20260828T140204Z.csv
+Node count 9 complete.
+
+Regenerating figures/analysis...
+Traceback (most recent call last):
+  File "/home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/analyze.py", line 12, in <module>
+    import matplotlib.pyplot as plt
+ModuleNotFoundError: No module named 'matplotlib'
+Traceback (most recent call last):
+  File "/home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/analyze.py", line 12, in <module>
+    import matplotlib.pyplot as plt
+ModuleNotFoundError: No module named 'matplotlib'
+
+PASS: full suite run complete
+Combined latency:    /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/full_latency_20260827T202430Z.csv
+Combined throughput: /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/full_throughput_20260827T202430Z.csv
+Combined coldstart:  /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/full_coldstart_20260827T202430Z.csv
+Combined baseline:   /home/mogadmin/blockchain-arp-bench/Blockchain-ARP/benchmark/results/full_baseline_20260827T202430Z.csv

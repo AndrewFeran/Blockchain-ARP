@@ -1,0 +1,6 @@
+scale,entries,mean_value_bytes,world_state_logical_bytes,stateLeveldb_KB,blockstore_chains_KB,total_ledgersData_KB
+50,50,240.7,12677,116,404,640
+100,100,240.8,25375,144,688,956
+250,250,241.5,63757,236,1552,1932
+500,500,241.5,127513,392,2984,3540
+1000,1000,241.5,255025,696,5848,6760

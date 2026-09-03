@@ -1,0 +1,50 @@
+============================================================
+Blockchain-ARP reproducible benchmark run
+Run ID: 20260827T055641Z
+============================================================
+Repository: /mnt/c/barp/Blockchain-ARP
+Fabric test network: /mnt/c/barp/Blockchain-ARP/../fabric-samples/test-network
+Results directory: /mnt/c/barp/Blockchain-ARP/benchmark/results
+Figures directory: /mnt/c/barp/Blockchain-ARP/benchmark/figures
+Peer endpoint: localhost:7051
+Gateway peer: peer0.org1.example.com
+Channel: mychannel
+Chaincode: arptracker
+Benchmark event timeout: 20s
+Matplotlib backend: Agg
+Benchmark profile: smoke
+Command timeout: 45m
+
+Python: Python 3.12.3
+Go: go version go1.23.4 linux/amd64
+Docker: Docker version 29.7.2, build a7dcaa6
+
+Container snapshot:
+blockchain-router                                                                                            Up 59 seconds   
+lan-node-2                                                                                                   Up 59 seconds   
+lan-node-3                                                                                                   Up 59 seconds   
+lan-node-1                                                                                                   Up 59 seconds   
+blockchain-dashboard                                                                                         Up 59 seconds   0.0.0.0:5000->5000/tcp, [::]:5000->5000/tcp
+dev-peer0.org1.example.com-arptracker_1.0-c0e7b0c09275200af40c285d80f8a2268c32c61fc84d9aa7438c30bc02ed5c0d   Up 2 minutes    
+dev-peer0.org2.example.com-arptracker_1.0-c0e7b0c09275200af40c285d80f8a2268c32c61fc84d9aa7438c30bc02ed5c0d   Up 2 minutes    
+peer0.org2.example.com                                                                                       Up 4 minutes    0.0.0.0:9051->9051/tcp, [::]:9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, [::]:9445->9445/tcp
+peer0.org1.example.com                                                                                       Up 4 minutes    0.0.0.0:7051->7051/tcp, [::]:7051->7051/tcp, 0.0.0.0:9444->9444/tcp, [::]:9444->9444/tcp
+orderer.example.com                                                                                          Up 4 minutes    0.0.0.0:7050->7050/tcp, [::]:7050->7050/tcp, 0.0.0.0:7053->7053/tcp, [::]:7053->7053/tcp, 0.0.0.0:9443->9443/tcp, [::]:9443->9443/tcp
+ca_orderer                                                                                                   Up 4 minutes    0.0.0.0:9054->9054/tcp, [::]:9054->9054/tcp, 7054/tcp, 0.0.0.0:19054->19054/tcp, [::]:19054->19054/tcp
+
+Running benchmark package tests...
+ok  	benchmark	0.005s
+
+Running smoke benchmark suite...
+latency nodes=3: n=1 mean=2081.00ms p50=2081.00ms p95=2081.00ms p99=2081.00ms
+wrote /mnt/c/barp/Blockchain-ARP/benchmark/results/latency_20260827T055653Z.csv
+throughput rate=1/s: n=1 mean=2097.00ms p50=2097.00ms p95=2097.00ms p99=2097.00ms
+wrote /mnt/c/barp/Blockchain-ARP/benchmark/results/throughput_20260827T055658Z.csv
+coldstart ledger=10: n=1 mean=42.13ms p50=42.13ms p95=42.13ms p99=42.13ms
+wrote /mnt/c/barp/Blockchain-ARP/benchmark/results/coldstart_20260827T055702Z.csv
+baseline protected path: n=1 mean=2093.00ms p50=2093.00ms p95=2093.00ms p99=2093.00ms
+wrote /mnt/c/barp/Blockchain-ARP/benchmark/results/baseline_20260827T055723Z.csv
+Traceback (most recent call last):
+  File "/mnt/c/barp/Blockchain-ARP/benchmark/analyze.py", line 12, in <module>
+    import matplotlib.pyplot as plt
+ModuleNotFoundError: No module named 'matplotlib'

@@ -1,0 +1,260 @@
+============================================================
+Blockchain-ARP end-to-end verification
+Run ID: 20260827T054201Z
+============================================================
+Preparing quiet base topology...
+#1 [internal] load local bake definitions
+#1 reading from stdin 2.31kB done
+#1 DONE 0.0s
+
+#2 [node1 internal] load build definition from Dockerfile
+#2 transferring dockerfile: 867B 0.0s done
+#2 DONE 0.1s
+
+#3 [router internal] load build definition from Dockerfile
+#3 transferring dockerfile: 825B 0.0s done
+#3 DONE 0.1s
+
+#4 [dashboard internal] load build definition from Dockerfile
+#4 transferring dockerfile: 345B 0.0s done
+#4 DONE 0.1s
+
+#5 [node3 internal] load metadata for docker.io/library/golang:1.23-alpine
+#5 ...
+
+#6 [node1 internal] load metadata for docker.io/library/alpine:latest
+#6 DONE 0.2s
+
+#7 [dashboard internal] load metadata for docker.io/library/python:3.11-slim
+#7 DONE 0.3s
+
+#8 [dashboard internal] load .dockerignore
+#8 transferring context: 2B 0.0s done
+#8 DONE 0.1s
+
+#5 [node2 internal] load metadata for docker.io/library/golang:1.23-alpine
+#5 DONE 0.4s
+
+#9 [node2 internal] load .dockerignore
+#9 transferring context: 2B 0.0s done
+#9 DONE 0.1s
+
+#10 [dashboard 1/7] FROM docker.io/library/python:3.11-slim@sha256:be1575ed968de893bd54f4c56315ff7c4736ce522c1bca08fd521731aafc0d76
+#10 resolve docker.io/library/python:3.11-slim@sha256:be1575ed968de893bd54f4c56315ff7c4736ce522c1bca08fd521731aafc0d76 0.1s done
+#10 DONE 0.1s
+
+#11 [router internal] load .dockerignore
+#11 transferring context: 2B 0.0s done
+#11 DONE 0.1s
+
+#12 [dashboard internal] load build context
+#12 transferring context: 293B 0.1s done
+#12 DONE 0.1s
+
+#13 [node1 internal] load build context
+#13 DONE 0.0s
+
+#14 [router internal] load build context
+#14 DONE 0.0s
+
+#15 [dashboard 3/7] COPY requirements.txt .
+#15 CACHED
+
+#16 [dashboard 4/7] RUN pip install --no-cache-dir -r requirements.txt
+#16 CACHED
+
+#17 [dashboard 6/7] COPY templates/ templates/
+#17 CACHED
+
+#18 [dashboard 2/7] WORKDIR /app
+#18 CACHED
+
+#19 [dashboard 5/7] COPY app.py .
+#19 CACHED
+
+#20 [dashboard 7/7] COPY static/ static/
+#20 CACHED
+
+#21 [dashboard] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:9787fa18d791c6c6310d9541a87445288f4ba80538d9a399d6b3aab50a0033ab 0.0s done
+#21 exporting config sha256:285ee44f922db20fec14f53b9cc7b01de2a93212649a56996d4d870740f586bb
+#21 exporting config sha256:285ee44f922db20fec14f53b9cc7b01de2a93212649a56996d4d870740f586bb 0.0s done
+#21 exporting attestation manifest sha256:9ef30e66d106c0959b6c9095b08b10127d467e3be9e1eacbf2dc767d2a7a4287
+#21 ...
+
+#22 [node3 stage-1 1/8] FROM docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+#22 resolve docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b 0.1s done
+#22 DONE 0.2s
+
+#23 [router builder 1/7] FROM docker.io/library/golang:1.23-alpine@sha256:383395b794dffa5b53012a212365d40c8e37109a626ca30d6151c8348d380b5f
+#23 resolve docker.io/library/golang:1.23-alpine@sha256:383395b794dffa5b53012a212365d40c8e37109a626ca30d6151c8348d380b5f 0.1s done
+#23 DONE 0.2s
+
+#13 [node3 internal] load build context
+#13 transferring context: 191B 0.1s done
+#13 DONE 0.1s
+
+#21 [dashboard] exporting to image
+#21 exporting attestation manifest sha256:9ef30e66d106c0959b6c9095b08b10127d467e3be9e1eacbf2dc767d2a7a4287 0.1s done
+#21 exporting manifest list sha256:5a86d67764f65bf7eecd3ec531fe99e44a0261bb6b8f942d7a65a6b0ee8b68cc 0.1s done
+#21 naming to docker.io/library/blockchain-arp-dashboard:latest
+#21 naming to docker.io/library/blockchain-arp-dashboard:latest 0.0s done
+#21 unpacking to docker.io/library/blockchain-arp-dashboard:latest 0.0s done
+#21 DONE 0.3s
+
+#14 [router internal] load build context
+#14 transferring context: 168B 0.1s done
+#14 DONE 0.1s
+
+#24 [node3 builder 6/7] COPY *.go ./
+#24 CACHED
+
+#25 [node3 stage-1 4/8] COPY --from=builder /build/node-sync .
+#25 CACHED
+
+#26 [node3 builder 4/7] COPY go.mod go.sum ./
+#26 CACHED
+
+#27 [node3 stage-1 6/8] RUN chmod +x start-node.sh
+#27 CACHED
+
+#28 [node3 builder 5/7] RUN go mod download
+#28 CACHED
+
+#29 [node3 builder 7/7] RUN go build -o node-sync .
+#29 CACHED
+
+#30 [node3 builder 2/7] RUN apk add --no-cache git gcc musl-dev
+#30 CACHED
+
+#31 [node3 stage-1 5/8] COPY start-node.sh .
+#31 CACHED
+
+#32 [node3 stage-1 3/8] WORKDIR /app
+#32 CACHED
+
+#33 [node3 builder 3/7] WORKDIR /build
+#33 CACHED
+
+#34 [node3 stage-1 2/8] RUN apk add --no-cache     iproute2     iputils     net-tools     bash     ca-certificates     curl
+#34 CACHED
+
+#35 [node3 stage-1 7/8] COPY spoof-attack.sh .
+#35 CACHED
+
+#36 [router builder 2/7] RUN apk add --no-cache git gcc musl-dev libpcap-dev
+#36 CACHED
+
+#37 [router builder 7/7] RUN go build -o router-monitor .
+#37 CACHED
+
+#38 [router builder 5/7] RUN go mod download
+#38 CACHED
+
+#39 [router builder 3/7] WORKDIR /build
+#39 CACHED
+
+#40 [router stage-1 4/6] COPY --from=builder /build/router-monitor .
+#40 CACHED
+
+#41 [router stage-1 2/6] RUN apk add --no-cache     tcpdump     libpcap     iproute2     iputils     bash     ca-certificates
+#41 CACHED
+
+#42 [router builder 4/7] COPY go.mod go.sum ./
+#42 CACHED
+
+#43 [router stage-1 3/6] WORKDIR /app
+#43 CACHED
+
+#44 [router builder 6/7] COPY *.go ./
+#44 CACHED
+
+#45 [router stage-1 5/6] COPY start-router.sh .
+#45 CACHED
+
+#46 [node3 stage-1 8/8] RUN chmod +x spoof-attack.sh
+#46 CACHED
+
+#47 [router stage-1 6/6] RUN chmod +x start-router.sh
+#47 CACHED
+
+#48 [node1] exporting to image
+#48 exporting layers done
+#48 exporting manifest sha256:4acf9c3cad23954cb44c9cbeae5741a167f273a3797548d070982bbb19149f87 0.0s done
+#48 exporting config sha256:76926db43d8d72ab76d060885b5e20476faba6de67d48aea9ea79deab19bc687 0.0s done
+#48 exporting attestation manifest sha256:9e6179c7e2fbc874af82f91136af33d429f9b0c98b4f03493261f835bcb7707c
+#48 exporting attestation manifest sha256:9e6179c7e2fbc874af82f91136af33d429f9b0c98b4f03493261f835bcb7707c 0.2s done
+#48 exporting manifest list sha256:79f09a138d5d51d5e3e25a673fd335fe9ecc393677992ceb6fd5edaa6ba296aa
+#48 exporting manifest list sha256:79f09a138d5d51d5e3e25a673fd335fe9ecc393677992ceb6fd5edaa6ba296aa 0.2s done
+#48 naming to docker.io/library/blockchain-arp-node1:latest 0.0s done
+#48 unpacking to docker.io/library/blockchain-arp-node1:latest
+#48 unpacking to docker.io/library/blockchain-arp-node1:latest 0.1s done
+#48 DONE 0.8s
+
+#49 [router] exporting to image
+#49 exporting layers done
+#49 exporting manifest sha256:eaa643461a84d6b4fd335b6f44e079d57224624904b1292541d0aa403fa0f1fe 0.0s done
+#49 exporting config sha256:6e87135810889c71e52d362fd74654c9685221e0c8f474d6232abd5bd385c615 0.0s done
+#49 exporting attestation manifest sha256:5d871bd742dde1486f25baa77dcf0f1748f2e8b753ac28e82b5c1b0956cf7d2c 0.2s done
+#49 exporting manifest list sha256:b26e9efaf0ac6ff5178e3d19daad7931af1c9f2ae54ded11352f2d42e101cb6f 0.1s done
+#49 naming to docker.io/library/blockchain-arp-router:latest 0.1s done
+#49 unpacking to docker.io/library/blockchain-arp-router:latest 0.1s done
+#49 DONE 0.8s
+
+#50 [node3] exporting to image
+#50 exporting layers done
+#50 exporting manifest sha256:bcf615c97e395dcf5be9ccac982dc5b0864b1223319b5865d5062219f0fd2c2d 0.0s done
+#50 exporting config sha256:4a7cf53b1dcb7056eab026bc372fbc2dc2bd85fc35ddb8db9daa68c2ccbdba3b 0.0s done
+#50 exporting attestation manifest sha256:b233705946d7a89c064133cb540bcef00fe6770bfec34cef90ef4de0b64ce64c 0.2s done
+#50 exporting manifest list sha256:4c8f0b18ec0b2545be8dd6aecebff47fcf9e7468509353237c9b5d6bf122ff46 0.1s done
+#50 naming to docker.io/library/blockchain-arp-node3:latest 0.0s done
+#50 unpacking to docker.io/library/blockchain-arp-node3:latest 0.1s done
+#50 DONE 0.8s
+
+#51 [node2] exporting to image
+#51 exporting layers done
+#51 exporting manifest sha256:faa277aeb02210db2a2a2a2e86118edc834e4d5916224569f416beacbaa792c8 0.0s done
+#51 exporting config sha256:5d18c766840f268594b778ad9a05cc41c150254380144e099fd4b04921fc35b8 0.0s done
+#51 exporting attestation manifest sha256:8ebd05ecf23e082f102c2f43f8e8987984abe2a317e31de3a385a22bc1800201 0.2s done
+#51 exporting manifest list sha256:0c9cec136c3756c0973685439009d4fd3887a9a027ec48063880c853e8d00878 0.2s done
+#51 naming to docker.io/library/blockchain-arp-node2:latest 0.0s done
+#51 unpacking to docker.io/library/blockchain-arp-node2:latest 0.1s done
+#51 DONE 0.8s
+
+#52 [dashboard] resolving provenance for metadata file
+#52 DONE 0.2s
+
+#53 [node3] resolving provenance for metadata file
+#53 DONE 0.1s
+
+#54 [node2] resolving provenance for metadata file
+#54 DONE 0.2s
+
+#55 [router] resolving provenance for metadata file
+#55 DONE 0.2s
+
+#56 [node1] resolving provenance for metadata file
+#56 DONE 0.0s
+Waiting for recreated services to settle...
+Checking container status...
+NAME                   IMAGE                      COMMAND                  SERVICE     CREATED          STATUS          PORTS
+blockchain-dashboard   blockchain-arp-dashboard   "python app.py"          dashboard   37 seconds ago   Up 25 seconds   0.0.0.0:5000->5000/tcp, [::]:5000->5000/tcp
+blockchain-router      blockchain-arp-router      "bash /app/start-rou…"   router      26 seconds ago   Up 25 seconds   
+lan-node-1             blockchain-arp-node1       "bash /app/start-nod…"   node1       37 seconds ago   Up 25 seconds   
+lan-node-2             blockchain-arp-node2       "bash /app/start-nod…"   node2       37 seconds ago   Up 25 seconds   
+lan-node-3             blockchain-arp-node3       "bash /app/start-nod…"   node3       37 seconds ago   Up 25 seconds   
+blockchain-router                                                                                            Up 25 seconds   
+lan-node-2                                                                                                   Up 26 seconds   
+lan-node-3                                                                                                   Up 26 seconds   
+lan-node-1                                                                                                   Up 26 seconds   
+blockchain-dashboard                                                                                         Up 26 seconds   0.0.0.0:5000->5000/tcp, [::]:5000->5000/tcp
+dev-peer0.org2.example.com-arptracker_1.0-755486668f127dc2897bf6d5caa8bb72cddb1f51a456a2a4af3a1d2c2d50bd79   Up 2 minutes    
+dev-peer0.org1.example.com-arptracker_1.0-755486668f127dc2897bf6d5caa8bb72cddb1f51a456a2a4af3a1d2c2d50bd79   Up 2 minutes    
+orderer.example.com                                                                                          Up 4 minutes    0.0.0.0:7050->7050/tcp, [::]:7050->7050/tcp, 0.0.0.0:7053->7053/tcp, [::]:7053->7053/tcp, 0.0.0.0:9443->9443/tcp, [::]:9443->9443/tcp
+peer0.org1.example.com                                                                                       Up 4 minutes    0.0.0.0:7051->7051/tcp, [::]:7051->7051/tcp, 0.0.0.0:9444->9444/tcp, [::]:9444->9444/tcp
+peer0.org2.example.com                                                                                       Up 4 minutes    0.0.0.0:9051->9051/tcp, [::]:9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, [::]:9445->9445/tcp
+ca_orderer                                                                                                   Up 4 minutes    0.0.0.0:9054->9054/tcp, [::]:9054->9054/tcp, 7054/tcp, 0.0.0.0:19054->19054/tcp, [::]:19054->19054/tcp
+Establishing legitimate mapping 10.5.0.10 -> 02:42:0a:05:00:0a...
+Observed current MAC for 10.5.0.10: <none>
+FAIL: ledger did not learn legitimate MAC 02:42:0a:05:00:0a for 10.5.0.10
