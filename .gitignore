@@ -4,3 +4,7 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 *.pem
+*.exe
+/benchmark/benchmark
+/chaincode/arp-chaincode
+/router/router

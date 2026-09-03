@@ -2,14 +2,21 @@ package main
 
 import (
 	"context"
-	"crypto/rand"
+	"crypto/ecdsa"
+	cryptorand "crypto/rand"
+	"crypto/sha256"
 	"crypto/x509"
+	"encoding/asn1"
+	"encoding/base64"
 	"encoding/csv"
 	"encoding/hex"
+	"encoding/json"
+	"encoding/pem"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"math"
+	"math/big"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -77,6 +84,10 @@ func main() {
 		err = runColdStart(session.contract, os.Args[2:])
 	case "baseline":
 		err = runBaseline(session.contract, os.Args[2:])
+	case "endorse":
+		err = runEndorsement(session.contract, os.Args[2:])
+	case "endorse-throughput":
+		err = runEndorseThroughput(session.contract, os.Args[2:])
 	case "all":
 		err = runLatency(session.contract, []string{"--nodes", "5,10,15,20", "--trials", "30"})
 		if err == nil {
@@ -270,6 +281,89 @@ func runBaseline(contract *client.Contract, args []string) error {
 	return writer.Error()
 }
 
+// runEndorsement measures real multi-peer endorsement/commit latency directly
+// (SubmitTransaction's own round-trip time: propose, broadcast to every other
+// peer, all verify signatures and endorse, order, commit) against an N-org
+// Fabric network with an all-peers-must-endorse policy. No downstream watcher
+// containers are needed for this metric.
+func runEndorsement(contract *client.Contract, args []string) error {
+	fs := newFlagSet("endorse")
+	nodes := fs.Int("nodes", 3, "org count label for this run")
+	trials := fs.Int("trials", 500, "trial count")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+
+	path := resultPath("endorsement")
+	file, writer, err := newCSV(path, []string{"node_count", "trial", "trial_id", "ip", "mac", "commit_latency_ms"})
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	samples := make([]float64, 0, *trials)
+	for trial := 1; trial <= *trials; trial++ {
+		ip := fmt.Sprintf("10.254.%d.%d", *nodes+trial/256, trial%256)
+		mac := deterministicMAC("endorsement", *nodes, trial)
+		trialID, elapsed, err := submitARPEvent(contract, ip, mac, "endorsement-bench")
+		if err != nil {
+			return fmt.Errorf("trial %d: %v", trial, err)
+		}
+		elapsedMS := elapsedMs(elapsed)
+		samples = append(samples, elapsedMS)
+		writer.Write([]string{itoa(*nodes), itoa(trial), trialID, ip, mac, ftoa(elapsedMS)})
+	}
+	writer.Flush()
+	printSummary(fmt.Sprintf("endorsement nodes=%d", *nodes), summarize(samples))
+	log.Printf("wrote %s", path)
+	return writer.Error()
+}
+
+// runEndorseThroughput sweeps submission rate against the N-org endorsement
+// network, timing each SubmitTransaction directly (same metric as
+// runEndorsement, just under increasing load).
+func runEndorseThroughput(contract *client.Contract, args []string) error {
+	fs := newFlagSet("endorse-throughput")
+	nodes := fs.Int("nodes", 3, "org count label for this run")
+	maxRate := fs.Int("max-rate", 100, "maximum events per second")
+	step := fs.Int("step", 10, "rate step")
+	events := fs.Int("events", 10, "events per rate")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+
+	path := resultPath("endorsethroughput")
+	file, writer, err := newCSV(path, []string{"node_count", "rate_per_sec", "event", "trial_id", "commit_latency_ms"})
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	for rate := 1; rate <= *maxRate; rate += *step {
+		interval := time.Second / time.Duration(rate)
+		samples := make([]float64, 0, *events)
+		for event := 1; event <= *events; event++ {
+			loopStart := time.Now()
+			ip := fmt.Sprintf("10.253.%d.%d", rate, event)
+			mac := deterministicMAC("endorsethroughput", rate, event)
+			trialID, elapsed, err := submitARPEvent(contract, ip, mac, "endorsement-throughput-bench")
+			if err != nil {
+				return fmt.Errorf("rate %d event %d: %v", rate, event, err)
+			}
+			elapsedMS := elapsedMs(elapsed)
+			samples = append(samples, elapsedMS)
+			writer.Write([]string{itoa(*nodes), itoa(rate), itoa(event), trialID, ftoa(elapsedMS)})
+			if remaining := interval - time.Since(loopStart); remaining > 0 {
+				time.Sleep(remaining)
+			}
+		}
+		printSummary(fmt.Sprintf("endorsethroughput nodes=%d rate=%d/s", *nodes, rate), summarize(samples))
+	}
+	writer.Flush()
+	log.Printf("wrote %s", path)
+	return writer.Error()
+}
+
 func parseCommonFlags(args []string, defaultList string, defaultTrials int) (string, int, error) {
 	fs := newFlagSet("benchmark")
 	nodes := fs.String("nodes", defaultList, "comma-separated node counts")
@@ -298,16 +392,108 @@ func prepopulateLedger(contract *client.Contract, size int) error {
 	return nil
 }
 
+// ---------------------------------------------------------------------------
+// Section IV stub observations — mirrors DHCPObservation / SwitchObservation
+// in the chaincode. Private keys match the public keys embedded there.
+// ---------------------------------------------------------------------------
+
+const stubDHCPPrivateKeyPEM = `-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgj7Es4NtY7dWBCpXu
+6NawD+9SpBFvO85UerOqIqPgFL+hRANCAAQuMsYkDBRTQGue0Fu//yxziDOpJf5d
+9GO4gyKpUDKqg7bpZKxZdH2cqjNFRV3xQmCZCSKB5vdqtB0MiGNkxf1P
+-----END PRIVATE KEY-----`
+
+const stubSwitchPrivateKeyPEM = `-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgJQ3c8Kpj9Mrf27Va
+fgmbAW1qcAksDAkAZ11P5p9NuhyhRANCAAS77LosTfIucmyZMLOiOLt7Ia0X94pO
+pFGSUCocg0BabxVkGE/dlmMfezE7inlmtumlNZF7BGm3OkDZm4bIHs1e
+-----END PRIVATE KEY-----`
+
+type stubDHCPObservation struct {
+	IPAddress   string `json:"ipAddress"`
+	MACAddress  string `json:"macAddress"`
+	Subnet      string `json:"subnet"`
+	LeaseExpiry int64  `json:"leaseExpiry"`
+	Signature   string `json:"signature"`
+}
+
+type stubSwitchObservation struct {
+	MACAddress string `json:"macAddress"`
+	Port       string `json:"port"`
+	VLAN       string `json:"vlan"`
+	Timestamp  int64  `json:"timestamp"`
+	Signature  string `json:"signature"`
+}
+
+// signObsContent signs content with the PKCS8 ECDSA private key and returns
+// a base64-encoded ASN.1 DER (r, s) signature.
+func signObsContent(privKeyPEM, content string) string {
+	block, _ := pem.Decode([]byte(privKeyPEM))
+	if block == nil {
+		log.Fatalf("failed to decode private key PEM")
+	}
+	priv, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+	if err != nil {
+		log.Fatalf("failed to parse private key: %v", err)
+	}
+	ecPriv := priv.(*ecdsa.PrivateKey)
+	hash := sha256.Sum256([]byte(content))
+	r, s, err := ecdsa.Sign(cryptorand.Reader, ecPriv, hash[:])
+	if err != nil {
+		log.Fatalf("failed to sign observation: %v", err)
+	}
+	derBytes, err := asn1.Marshal(struct{ R, S *big.Int }{r, s})
+	if err != nil {
+		log.Fatalf("failed to marshal signature: %v", err)
+	}
+	return base64.StdEncoding.EncodeToString(derBytes)
+}
+
+func makeStubDHCPObsJSON(ip, mac string) string {
+	obs := stubDHCPObservation{
+		IPAddress:   ip,
+		MACAddress:  mac,
+		Subnet:      "10.5.0.0/24",
+		LeaseExpiry: time.Now().Add(24 * time.Hour).Unix(),
+	}
+	content := "dhcp|" + obs.IPAddress + "|" + obs.MACAddress + "|" + obs.Subnet + "|" + strconv.FormatInt(obs.LeaseExpiry, 10)
+	obs.Signature = signObsContent(stubDHCPPrivateKeyPEM, content)
+	b, err := json.Marshal(obs)
+	if err != nil {
+		log.Fatalf("failed to marshal DHCP observation: %v", err)
+	}
+	return string(b)
+}
+
+func makeStubSwitchObsJSON(mac string) string {
+	obs := stubSwitchObservation{
+		MACAddress: mac,
+		Port:       "GigabitEthernet0/1",
+		VLAN:       "100",
+		Timestamp:  time.Now().Unix(),
+	}
+	content := "switch|" + obs.MACAddress + "|" + obs.Port + "|" + obs.VLAN + "|" + strconv.FormatInt(obs.Timestamp, 10)
+	obs.Signature = signObsContent(stubSwitchPrivateKeyPEM, content)
+	b, err := json.Marshal(obs)
+	if err != nil {
+		log.Fatalf("failed to marshal switch observation: %v", err)
+	}
+	return string(b)
+}
+
 func submitARPEvent(contract *client.Contract, ip, mac, hostname string) (string, time.Duration, error) {
 	trialID := newTrialID()
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
+	dhcpObsJSON := makeStubDHCPObsJSON(ip, mac)
+	switchObsJSON := makeStubSwitchObsJSON(mac)
+
 	start := time.Now()
 	_, err := contract.SubmitWithContext(
 		ctx,
-		"RecordARPEntry",
-		client.WithArguments(ip, mac, "bench0", hostname, "dynamic", "reachable", "benchmark"),
+		"RegisterBinding",
+		client.WithArguments(dhcpObsJSON, switchObsJSON),
 		client.WithTransient(map[string][]byte{"trialID": []byte(trialID)}),
 	)
 	return trialID, time.Since(start), err
@@ -625,7 +811,7 @@ func deterministicMAC(parts ...interface{}) string {
 
 func newTrialID() string {
 	var b [16]byte
-	if _, err := rand.Read(b[:]); err != nil {
+	if _, err := cryptorand.Read(b[:]); err != nil {
 		return fmt.Sprintf("%d", time.Now().UnixNano())
 	}
 	return hex.EncodeToString(b[:])
